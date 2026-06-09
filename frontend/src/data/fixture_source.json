@@ -1,0 +1,85 @@
+{
+  "source": "placeholder_wc2026_groups_v1",
+  "is_official": false,
+  "is_placeholder": true,
+  "description": "Placeholder WC 2026 group-stage fixtures derived from the placeholder group draw in oracle/sim/groups.py. NOT the official FIFA 2026 schedule. Kickoff times, venues, and host cities are all null. Update with official data when available.",
+  "generated": "2026-06-08",
+  "total_fixtures": 72,
+  "total_groups": 12,
+  "teams_per_group": 4,
+  "how_to_update": "When the official FIFA schedule is available: (1) update each fixture kickoff_at (ISO-8601 UTC), venue, city, host_country; (2) set is_placeholder to false on updated rows; (3) set source to official_fifa_2026; (4) run make ingest-fixtures; (5) run make simulate blend capture-odds export-web build-frontend.",
+  "groups": {
+    "A": [
+      "england",
+      "romania",
+      "senegal",
+      "united_states"
+    ],
+    "B": [
+      "france",
+      "mexico",
+      "morocco",
+      "south_korea"
+    ],
+    "C": [
+      "canada",
+      "germany",
+      "japan",
+      "nigeria"
+    ],
+    "D": [
+      "argentina",
+      "cote_divoire",
+      "iraq",
+      "portugal"
+    ],
+    "E": [
+      "australia",
+      "brazil",
+      "cameroon",
+      "spain"
+    ],
+    "F": [
+      "colombia",
+      "egypt",
+      "netherlands",
+      "saudi_arabia"
+    ],
+    "G": [
+      "italy",
+      "jordan",
+      "south_africa",
+      "uruguay"
+    ],
+    "H": [
+      "belgium",
+      "ecuador",
+      "mali",
+      "uzbekistan"
+    ],
+    "I": [
+      "croatia",
+      "new_zealand",
+      "tanzania",
+      "venezuela"
+    ],
+    "J": [
+      "austria",
+      "chile",
+      "costa_rica",
+      "denmark"
+    ],
+    "K": [
+      "honduras",
+      "poland",
+      "turkey",
+      "ukraine"
+    ],
+    "L": [
+      "iran",
+      "panama",
+      "serbia",
+      "switzerland"
+    ]
+  }
+}

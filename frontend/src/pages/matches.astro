@@ -7,7 +7,24 @@ import { loadJson } from '../utils/load';
 import { formatTeamName } from '../utils/format';
 import type { BlendedPrediction } from '../types';
 
-const predictions = loadJson<BlendedPrediction[]>('blended_predictions.json', []);
+interface FixtureSource {
+  source: string | null;
+  is_official: boolean;
+  is_placeholder: boolean;
+  description: string;
+  total_fixtures: number;
+  total_groups: number;
+}
+
+const predictions  = loadJson<BlendedPrediction[]>('blended_predictions.json', []);
+const fixtureSource = loadJson<FixtureSource>('fixture_source.json', {
+  source: null,
+  is_official: false,
+  is_placeholder: true,
+  description: '',
+  total_fixtures: 0,
+  total_groups: 0,
+});
 
 // Group matches by group letter
 const byGroup: Record<string, BlendedPrediction[]> = {};
@@ -16,6 +33,9 @@ for (const m of predictions) {
   byGroup[m.group].push(m);
 }
 const groups = Object.keys(byGroup).sort();
+
+const isPlaceholder = fixtureSource.is_placeholder !== false;
+const sourceLabel   = fixtureSource.source ?? 'unknown';
 ---
 <Layout title="Matches" description="Group-stage match probabilities">
   <div class="space-y-8">
@@ -27,6 +47,30 @@ const groups = Object.keys(byGroup).sort();
         Matches without market data use model-only predictions.
       </p>
     </div>
+
+    <!-- Fixture data status banner -->
+    {isPlaceholder ? (
+      <div class="rounded-xl border border-amber-800/50 bg-amber-950/40 px-4 py-3 text-sm">
+        <p class="font-semibold text-amber-400">Placeholder fixture data</p>
+        <p class="mt-1 text-amber-300/80">
+          Groups and matchups are derived from a placeholder draw, not the official
+          FIFA 2026 schedule. Source: <code class="text-amber-200">{sourceLabel}</code>.
+          Probabilities will update automatically once <code class="text-amber-200">data/seed/wc2026_fixtures.json</code> is
+          replaced with official data and the pipeline is rerun.
+        </p>
+      </div>
+    ) : (
+      <div class="rounded-xl border border-emerald-800/50 bg-emerald-950/40 px-4 py-3 text-sm">
+        <p class="font-semibold text-emerald-400">Official fixture data</p>
+        <p class="mt-1 text-emerald-300/80">
+          Groups reflect the official FIFA 2026 schedule.
+          Source: <code class="text-emerald-200">{sourceLabel}</code>.
+          {fixtureSource.total_fixtures > 0 && (
+            <> {fixtureSource.total_fixtures} group-stage fixtures across {fixtureSource.total_groups} groups.</>
+          )}
+        </p>
+      </div>
+    )}
 
     <Disclaimer compact />
 
@@ -56,6 +100,11 @@ const groups = Object.keys(byGroup).sort();
           <section>
             <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4">
               Group {g}
+              {isPlaceholder && (
+                <span class="ml-2 text-xs font-normal text-amber-600 normal-case tracking-normal">
+                  placeholder
+                </span>
+              )}
             </h2>
             <div class="space-y-3">
               {byGroup[g].map((m) => (
