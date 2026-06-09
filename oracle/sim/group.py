@@ -44,18 +44,23 @@ def simulate_group(
     rng: random.Random,
     *,
     dc_grids: dict[tuple[str, str], np.ndarray] | None = None,
+    known_results: dict[tuple[str, str], tuple[int, int]] | None = None,
 ) -> list[dict[str, Any]]:
     """Simulate a group of 4 teams and return standings (sorted 1st→4th).
 
     Args:
-        teams:    4 canonical team IDs.
-        elo:      Fitted EloRatings with a .predict(home, away) method.
-                  Used only when dc_grids is None or a matchup key is absent.
-        rng:      Seeded random.Random for reproducibility.
-        dc_grids: Optional dict of pre-normalised flat DC probability arrays
-                  keyed by (home_team_id, away_team_id).  When present and the
-                  key exists, scorelines are sampled from the DC joint
-                  distribution.  Missing keys fall back to Elo surrogate goals.
+        teams:         4 canonical team IDs.
+        elo:           Fitted EloRatings with a .predict(home, away) method.
+                       Used only when dc_grids is None or a matchup key is absent.
+        rng:           Seeded random.Random for reproducibility.
+        dc_grids:      Optional dict of pre-normalised flat DC probability arrays
+                       keyed by (home_team_id, away_team_id).  When present and
+                       the key exists, scorelines are sampled from the DC joint
+                       distribution.  Missing keys fall back to Elo surrogate goals.
+        known_results: Optional dict mapping (home_team, away_team) → (home_goals,
+                       away_goals) for already-finished matches.  Keyed by fixture
+                       home/away designation; bidirectional lookup handles reversed
+                       combinations() ordering automatically.
 
     Returns:
         List of 4 dicts ordered best→worst, each with:
@@ -69,7 +74,10 @@ def simulate_group(
     }
 
     for home, away in combinations(teams, 2):
-        if dc_grids is not None and (home, away) in dc_grids:
+        known = _get_known_result(home, away, known_results)
+        if known is not None:
+            gf_h, gf_a = known
+        elif dc_grids is not None and (home, away) in dc_grids:
             gf_h, gf_a = _dc_sample(dc_grids[(home, away)], rng)
         else:
             # ⚠️ Surrogate fallback — tiebreaks degenerate within each points tier.
@@ -92,6 +100,22 @@ def simulate_group(
     for pos, row in enumerate(sorted_rows, start=1):
         row["position"] = pos
     return sorted_rows
+
+
+def _get_known_result(
+    home: str,
+    away: str,
+    known_results: dict[tuple[str, str], tuple[int, int]] | None,
+) -> tuple[int, int] | None:
+    """Look up a known result bidirectionally, flipping goals if order is reversed."""
+    if known_results is None:
+        return None
+    if (home, away) in known_results:
+        return known_results[(home, away)]
+    if (away, home) in known_results:
+        ag, hg = known_results[(away, home)]
+        return hg, ag  # flip: home/away swapped from fixture designation
+    return None
 
 
 def _sample_outcome(p_home: float, p_draw: float, p_away: float, rng: random.Random) -> str:

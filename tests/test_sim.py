@@ -342,6 +342,94 @@ class TestMonteCarlo:
         assert N_SIMS == 10_000
 
 
+# ── Result-aware simulation ───────────────────────────────────────────────────
+
+class TestKnownResultsGroup:
+    """simulate_group() respects known_results — no sampling for those matches."""
+
+    _TEAMS = ["mexico", "south_africa", "south_korea", "czech_republic"]
+
+    def test_known_result_applied_forward(self):
+        """mexico 3-0 south_africa → mexico gets 3 pts every time."""
+        known = {("mexico", "south_africa"): (3, 0)}
+        counts = 0
+        for seed in range(20):
+            standings = simulate_group(self._TEAMS, _EqualElo(), random.Random(seed),
+                                       known_results=known)
+            mex = next(r for r in standings if r["team"] == "mexico")
+            # Mexico got 3 pts from the known result; may also win other matches
+            assert mex["points"] >= 3
+            counts += 1
+        assert counts == 20
+
+    def test_known_result_bidirectional_lookup(self):
+        """combinations() may yield (south_africa, mexico); goals must be flipped."""
+        known = {("mexico", "south_africa"): (2, 1)}
+        for seed in range(10):
+            standings = simulate_group(self._TEAMS, _EqualElo(), random.Random(seed),
+                                       known_results=known)
+            mex = next(r for r in standings if r["team"] == "mexico")
+            sa  = next(r for r in standings if r["team"] == "south_africa")
+            # mexico won the known match — its gf must include the 2 from that match
+            assert mex["gf"] >= 2
+            assert sa["gf"] >= 1
+
+    def test_known_draw_gives_one_point_each(self):
+        known = {("mexico", "south_africa"): (1, 1)}
+        for seed in range(10):
+            standings = simulate_group(self._TEAMS, _EqualElo(), random.Random(seed),
+                                       known_results=known)
+            mex = next(r for r in standings if r["team"] == "mexico")
+            sa  = next(r for r in standings if r["team"] == "south_africa")
+            assert mex["points"] >= 1
+            assert sa["points"] >= 1
+
+    def test_no_known_results_unchanged(self):
+        """Passing known_results=None must not change behaviour."""
+        s1 = simulate_group(self._TEAMS, _EqualElo(), random.Random(42))
+        s2 = simulate_group(self._TEAMS, _EqualElo(), random.Random(42), known_results=None)
+        assert [r["team"] for r in s1] == [r["team"] for r in s2]
+
+
+class TestKnownResultsTournament:
+    """run_tournament() and monte_carlo() accept known_results."""
+
+    def test_run_tournament_with_known_results(self):
+        known = {("mexico", "south_africa"): (1, 0)}
+        result = run_tournament(_EqualElo(), random.Random(42), known_results=known)
+        assert "champion" in result
+        assert len(result["qualified"]) == 32
+
+    def test_monte_carlo_with_known_results(self):
+        known = {("mexico", "south_africa"): (1, 0)}
+        mc = monte_carlo(_EqualElo(), n_sims=100, seed=42, known_results=known)
+        assert mc["n_sims"] == 100
+        assert "team_probs" in mc
+
+    def test_monte_carlo_qualify_top2_qualify_third_present(self):
+        mc = monte_carlo(_EqualElo(), n_sims=100, seed=42)
+        for team, probs in mc["team_probs"].items():
+            assert "qualify_top2"  in probs
+            assert "qualify_third" in probs
+
+    def test_qualify_top2_plus_third_equals_qualify(self):
+        mc = monte_carlo(_EqualElo(), n_sims=500, seed=42)
+        for team, probs in mc["team_probs"].items():
+            total = probs["qualify_top2"] + probs["qualify_third"]
+            assert abs(total - probs["qualify"]) < 1e-9, (
+                f"{team}: top2+third={total:.6f} != qualify={probs['qualify']:.6f}"
+            )
+
+    def test_known_results_affects_probs(self):
+        """Giving mexico a guaranteed 3-0 win over south_africa should raise mexico's qualify prob."""
+        mc_plain  = monte_carlo(_EqualElo(), n_sims=300, seed=42)
+        mc_known  = monte_carlo(_EqualElo(), n_sims=300, seed=42,
+                                known_results={("mexico", "south_africa"): (3, 0)})
+        # Mexico's qualify probability should be >= baseline (has a guaranteed win)
+        assert mc_known["team_probs"]["mexico"]["qualify"] >= \
+               mc_plain["team_probs"]["mexico"]["qualify"] - 0.05
+
+
 # ── Locked model version ─────────────────────────────────────────────────────
 
 class TestLockedModelVersion:

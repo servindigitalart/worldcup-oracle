@@ -1,13 +1,8 @@
 """
-WC 2026 group draw — placeholder fallback + fixture-derived loader.
+WC 2026 group draw — official draw + fixture-derived loader.
 
-⚠️  WC2026_GROUPS is NOT the official draw.
-    The real draw is unknown at time of writing (knowledge cutoff Aug 2025).
-    It satisfies FIFA structural constraints as a reasonable placeholder:
-      - 48 teams across 12 groups of 4 (groups A–L)
-      - USA, Mexico, Canada in separate groups (host-nation rule)
-      - Max 2 UEFA teams per group
-      - No two teams from the same non-UEFA confederation in the same group
+WC2026_GROUPS reflects the official FIFA 2026 World Cup draw (December 5, 2025,
+Kennedy Center, Washington D.C.).
 
 load_groups() is the preferred runtime API.
   - When data/seed/wc2026_fixtures.json exists and has a complete group-stage
@@ -16,12 +11,10 @@ load_groups() is the preferred runtime API.
   - Always returns (groups_dict, fixture_meta) so callers can propagate
     placeholder/official status into artifacts.
 
-How to update once the official draw is known:
-  1. Update data/seed/wc2026_fixtures.json with the real team assignments,
-     setting is_placeholder=false and source='official_fifa_2026'.
+To regenerate after any fixture update:
+  1. Update data/seed/wc2026_fixtures.json.
   2. Run `make ingest-fixtures` to reload DuckDB.
   3. Run `make simulate blend capture-odds export-web` to regenerate artifacts.
-  4. Optionally update WC2026_GROUPS here to match (kept for offline fallback).
 """
 from __future__ import annotations
 
@@ -33,22 +26,23 @@ _LOG = logging.getLogger(__name__)
 
 _SEED_PATH = Path(__file__).parent.parent.parent / "data" / "seed" / "wc2026_fixtures.json"
 
-# ── Hardcoded placeholder (offline fallback) ──────────────────────────────────
-# Group name → list of canonical team IDs (4 per group, order preserved)
+# ── Official draw (offline fallback) ─────────────────────────────────────────
+# Official FIFA 2026 World Cup draw — December 5, 2025.
+# 3 CONCACAF hosts (USA, Mexico, Canada) seeded into separate groups per FIFA rule.
+# Group name → list of canonical team IDs (4 per group, order = first-appearance in fixtures)
 WC2026_GROUPS: dict[str, list[str]] = {
-    # 3 CONCACAF host nations seeded into separate groups (A, B, C) — FIFA rule.
-    "A": ["united_states", "england",     "romania",      "senegal"],
-    "B": ["mexico",        "france",      "south_korea",  "morocco"],
-    "C": ["canada",        "germany",     "japan",        "nigeria"],
-    "D": ["argentina",     "portugal",    "iraq",         "cote_divoire"],
-    "E": ["brazil",        "spain",       "australia",    "cameroon"],
-    "F": ["colombia",      "netherlands", "saudi_arabia", "egypt"],
-    "G": ["uruguay",       "italy",       "jordan",       "south_africa"],
-    "H": ["ecuador",       "belgium",     "uzbekistan",   "mali"],
-    "I": ["venezuela",     "croatia",     "new_zealand",  "tanzania"],
-    "J": ["chile",         "austria",     "costa_rica",   "denmark"],
-    "K": ["turkey",        "ukraine",     "honduras",     "poland"],
-    "L": ["serbia",        "switzerland", "panama",       "iran"],
+    "A": ["mexico",          "south_africa",       "south_korea",    "czech_republic"],
+    "B": ["canada",          "bosnia_herzegovina", "qatar",          "switzerland"],
+    "C": ["brazil",          "morocco",            "haiti",          "scotland"],
+    "D": ["united_states",   "paraguay",           "australia",      "turkey"],
+    "E": ["germany",         "curacao",            "cote_divoire",   "ecuador"],
+    "F": ["netherlands",     "japan",              "sweden",         "tunisia"],
+    "G": ["belgium",         "egypt",              "iran",           "new_zealand"],
+    "H": ["spain",           "cape_verde",         "saudi_arabia",   "uruguay"],
+    "I": ["france",          "senegal",            "iraq",           "norway"],
+    "J": ["argentina",       "algeria",            "austria",        "jordan"],
+    "K": ["portugal",        "dr_congo",           "uzbekistan",     "colombia"],
+    "L": ["england",         "croatia",            "ghana",          "panama"],
 }
 
 # Structural constants
@@ -66,13 +60,12 @@ assert len(set(_all_teams)) == N_TEAMS, "Duplicate team in hardcoded group draw!
 
 # Metadata returned when falling back to hardcoded groups
 _HARDCODED_META: dict = {
-    "source":           "placeholder_wc2026_groups_v1",
-    "is_official":      False,
-    "is_placeholder":   True,
+    "source":           "official_fifa_2026_hardcoded",
+    "is_official":      True,
+    "is_placeholder":   False,
     "description":      (
-        "Hardcoded placeholder from oracle/sim/groups.py — "
-        "NOT the official WC 2026 draw. "
-        "Seed file not found or group-stage fixture set is incomplete."
+        "Official FIFA 2026 World Cup draw (Dec 5 2025) hardcoded in "
+        "oracle/sim/groups.py — seed file not found or fixture set incomplete."
     ),
     "n_fixtures_loaded": 0,
 }

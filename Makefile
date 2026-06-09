@@ -1,4 +1,4 @@
-.PHONY: install test lint clean ingest-results ingest-fixtures holdout backtest simulate ingest-odds market-baseline blend capture-odds export-web dev-frontend build-frontend test-frontend
+.PHONY: install test lint clean ingest-results ingest-fixtures holdout backtest simulate ingest-odds market-baseline blend capture-odds export-web dev-frontend build-frontend test-frontend ingest-results-2026 tournament-state
 
 install:
 	pip install -e ".[dev]"
@@ -15,10 +15,10 @@ ingest-results:
 
 # Load fixture seed file into DuckDB.
 # Source: data/seed/wc2026_fixtures.json
-#   - 72 placeholder group-stage fixtures (is_placeholder=true until official data added)
+#   - 72 official group-stage fixtures (is_official=true, is_placeholder=false)
+#   - Official FIFA 2026 draw (Dec 5 2025): real kickoff times, venues, cities
 #   - Validates team IDs, required fields, group counts, no duplicate match_id
 #   - Drops and recreates the fixtures table to handle schema migrations
-# To switch to official data: update data/seed/wc2026_fixtures.json, then re-run.
 ingest-fixtures:
 	python -m oracle.ingest.fixtures
 
@@ -113,7 +113,7 @@ backtest:
 
 # Run Monte Carlo tournament simulation (Week 5):
 #   10,000 simulations using the locked Elo-full model.
-#   Placeholder group draw — NOT the official WC 2026 draw.
+#   Official group draw (Dec 5 2025) loaded from data/seed/wc2026_fixtures.json.
 #   Positional bracket — NOT the official FIFA R16 pairings.
 #
 # Artifacts written:
@@ -123,6 +123,29 @@ backtest:
 # Run `make ingest-results` first if data/raw/results/results.csv is missing.
 simulate:
 	python3 -m oracle.pipeline.simulate
+
+# Validate and ingest WC 2026 match results from data/seed/wc2026_results.json.
+# Writes match_results.parquet and match_results_summary.json to data/artifacts/.
+# Edit data/seed/wc2026_results.json to add finished match scores, then re-run.
+ingest-results-2026:
+	python -m oracle.ingest.results_2026
+
+# Run the live tournament state pipeline (Week 13).
+# Ingests 2026 results, computes group standings, and runs 10k result-aware
+# Monte Carlo simulations.
+#
+# Artifacts written:
+#   data/artifacts/match_results.parquet          ingested 2026 results
+#   data/artifacts/match_results_summary.json     result counts by group
+#   data/artifacts/group_standings.parquet        live standings all groups
+#   data/artifacts/group_standings.json           same as JSON
+#   data/artifacts/qualification_probs.parquet    per-team stage probabilities
+#   data/artifacts/qualification_probs.json       same as JSON
+#   data/artifacts/tournament_state_summary.json  snapshot metadata
+#
+# Run 'make ingest-results' first if data/raw/results/results.csv is missing.
+tournament-state:
+	python3 -m oracle.pipeline.state
 
 clean:
 	find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true

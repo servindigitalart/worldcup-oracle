@@ -1,0 +1,9 @@
+{
+  "metadata": {
+    "source": "manual",
+    "description": "WC 2026 group-stage match results. Populate as matches finish. status in {scheduled, live, finished, postponed, cancelled}.",
+    "generated": "2026-06-09T00:00:00Z",
+    "how_to_update": "Add a result object per finished match. Run 'make ingest-results-2026' then 'make tournament-state' to regenerate standings and probabilities."
+  },
+  "results": []
+}

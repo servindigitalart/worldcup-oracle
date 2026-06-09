@@ -4,8 +4,8 @@ import ProbBar from '../components/ProbBar.astro';
 import Disclaimer from '../components/Disclaimer.astro';
 import EmptyState from '../components/EmptyState.astro';
 import { loadJson } from '../utils/load';
-import { formatTeamName } from '../utils/format';
-import type { BlendedPrediction } from '../types';
+import { formatTeamName, formatKickoff } from '../utils/format';
+import type { BlendedPrediction, FixtureScheduleEntry } from '../types';
 
 interface FixtureSource {
   source: string | null;
@@ -16,8 +16,8 @@ interface FixtureSource {
   total_groups: number;
 }
 
-const predictions  = loadJson<BlendedPrediction[]>('blended_predictions.json', []);
-const fixtureSource = loadJson<FixtureSource>('fixture_source.json', {
+const predictions    = loadJson<BlendedPrediction[]>('blended_predictions.json', []);
+const fixtureSource  = loadJson<FixtureSource>('fixture_source.json', {
   source: null,
   is_official: false,
   is_placeholder: true,
@@ -25,6 +25,7 @@ const fixtureSource = loadJson<FixtureSource>('fixture_source.json', {
   total_fixtures: 0,
   total_groups: 0,
 });
+const schedule = loadJson<Record<string, FixtureScheduleEntry>>('fixture_schedule.json', {});
 
 // Group matches by group letter
 const byGroup: Record<string, BlendedPrediction[]> = {};
@@ -36,6 +37,10 @@ const groups = Object.keys(byGroup).sort();
 
 const isPlaceholder = fixtureSource.is_placeholder !== false;
 const sourceLabel   = fixtureSource.source ?? 'unknown';
+
+function getSchedule(home: string, away: string): FixtureScheduleEntry | null {
+  return schedule[`${home}_vs_${away}`] ?? schedule[`${away}_vs_${home}`] ?? null;
+}
 ---
 <Layout title="Matches" description="Group-stage match probabilities">
   <div class="space-y-8">
@@ -61,9 +66,9 @@ const sourceLabel   = fixtureSource.source ?? 'unknown';
       </div>
     ) : (
       <div class="rounded-xl border border-emerald-800/50 bg-emerald-950/40 px-4 py-3 text-sm">
-        <p class="font-semibold text-emerald-400">Official fixture data</p>
+        <p class="font-semibold text-emerald-400">Official FIFA 2026 fixture data</p>
         <p class="mt-1 text-emerald-300/80">
-          Groups reflect the official FIFA 2026 schedule.
+          Groups and kickoff times reflect the official FIFA 2026 World Cup schedule.
           Source: <code class="text-emerald-200">{sourceLabel}</code>.
           {fixtureSource.total_fixtures > 0 && (
             <> {fixtureSource.total_fixtures} group-stage fixtures across {fixtureSource.total_groups} groups.</>
@@ -107,24 +112,37 @@ const sourceLabel   = fixtureSource.source ?? 'unknown';
               )}
             </h2>
             <div class="space-y-3">
-              {byGroup[g].map((m) => (
-                <div class="bg-slate-900 border border-slate-800 rounded-xl px-4 py-3">
-                  <ProbBar
-                    home={m.blend_home}
-                    draw={m.blend_draw}
-                    away={m.blend_away}
-                    homeLabel={formatTeamName(m.home_team)}
-                    awayLabel={formatTeamName(m.away_team)}
-                  />
-                  <div class="flex justify-between mt-1.5 text-xs text-slate-600">
-                    <span>{(m.blend_home * 100).toFixed(1)}%</span>
-                    <span class="text-slate-500">
-                      {m.has_market_data ? 'blend' : 'model only'}
-                    </span>
-                    <span>{(m.blend_away * 100).toFixed(1)}%</span>
+              {byGroup[g].map((m) => {
+                const fix = getSchedule(m.home_team, m.away_team);
+                return (
+                  <div class="bg-slate-900 border border-slate-800 rounded-xl px-4 py-3">
+                    <ProbBar
+                      home={m.blend_home}
+                      draw={m.blend_draw}
+                      away={m.blend_away}
+                      homeLabel={formatTeamName(m.home_team)}
+                      awayLabel={formatTeamName(m.away_team)}
+                    />
+                    <div class="flex justify-between mt-1.5 text-xs text-slate-600">
+                      <span>{(m.blend_home * 100).toFixed(1)}%</span>
+                      <span class="text-slate-500">
+                        {m.has_market_data ? 'blend' : 'model only'}
+                      </span>
+                      <span>{(m.blend_away * 100).toFixed(1)}%</span>
+                    </div>
+                    {fix && (fix.kickoff_at || fix.venue) && (
+                      <div class="mt-2 text-xs text-slate-600 flex flex-wrap gap-x-3">
+                        {fix.kickoff_at && (
+                          <span>{formatKickoff(fix.kickoff_at)}</span>
+                        )}
+                        {fix.venue && fix.city && (
+                          <span class="text-slate-700">{fix.venue}, {fix.city}</span>
+                        )}
+                      </div>
+                    )}
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </section>
         ))}

@@ -51,17 +51,21 @@ def run_tournament(
     *,
     dc_grids: dict | None = None,
     groups: dict[str, list[str]] | None = None,
+    known_results: dict[tuple[str, str], tuple[int, int]] | None = None,
 ) -> dict[str, Any]:
     """Run one complete tournament simulation.
 
     Args:
-        elo:       Fitted EloRatings (used for knockout + surrogate-goal fallback).
-        rng:       Seeded random.Random.
-        dc_grids:  Pre-normalised DC flat arrays from precompute_group_grids().
-                   When provided, group-stage scorelines are sampled from the DC
-                   joint distribution instead of surrogate goals.
-        groups:    Group assignments {letter: [team_id, ...]}.
-                   Defaults to WC2026_GROUPS if not provided.
+        elo:           Fitted EloRatings (used for knockout + surrogate-goal fallback).
+        rng:           Seeded random.Random.
+        dc_grids:      Pre-normalised DC flat arrays from precompute_group_grids().
+                       When provided, group-stage scorelines are sampled from the DC
+                       joint distribution instead of surrogate goals.
+        groups:        Group assignments {letter: [team_id, ...]}.
+                       Defaults to WC2026_GROUPS if not provided.
+        known_results: Already-finished match results keyed by
+                       (home_team, away_team) → (home_goals, away_goals).
+                       These bypass sampling and are applied directly.
 
     Returns:
         dict with keys:
@@ -76,7 +80,11 @@ def run_tournament(
     third_place_rows: list[dict] = []
 
     for letter, teams in active_groups.items():
-        standings = simulate_group(teams, elo, rng, dc_grids=dc_grids)
+        standings = simulate_group(
+            teams, elo, rng,
+            dc_grids=dc_grids,
+            known_results=known_results,
+        )
         group_standings[letter] = standings
         third = standings[2]  # 3rd-place finisher (0-indexed)
         third_place_rows.append({**third, "group": letter})
@@ -120,22 +128,21 @@ def monte_carlo(
     *,
     dc: Any = None,
     groups: dict[str, list[str]] | None = None,
+    known_results: dict[tuple[str, str], tuple[int, int]] | None = None,
 ) -> dict[str, Any]:
     """Run n_sims independent tournament simulations and aggregate probabilities.
 
     Args:
-        elo:     Fitted EloRatings instance.
-        n_sims:  Number of Monte Carlo iterations.  Default: 10,000.
-        seed:    Master RNG seed for full reproducibility.
-        dc:      Optional fitted DixonColesRatings.  When provided, DC score
-                 grids are precomputed once for all 72 group-stage matchups
-                 before the simulation loop begins, then reused every run.
-                 This replaces surrogate goals (1-0 / 1-1 / 0-1) with realistic
-                 sampled scorelines, giving meaningful GD/GF for tiebreaks.
-        groups:  Group assignments {letter: [team_id, ...]}.
-                 Defaults to WC2026_GROUPS if not provided.
-                 Pass the result of oracle.sim.groups.load_groups()[0] to use
-                 fixture-derived groups when available.
+        elo:           Fitted EloRatings instance.
+        n_sims:        Number of Monte Carlo iterations.  Default: 10,000.
+        seed:          Master RNG seed for full reproducibility.
+        dc:            Optional fitted DixonColesRatings.  When provided, DC score
+                       grids are precomputed once for all 72 group-stage matchups
+                       before the simulation loop begins, then reused every run.
+        groups:        Group assignments {letter: [team_id, ...]}.
+                       Defaults to WC2026_GROUPS if not provided.
+        known_results: Already-finished match results to apply deterministically.
+                       Keyed by (home_team, away_team) → (home_goals, away_goals).
 
     Returns:
         dict with:
@@ -143,7 +150,8 @@ def monte_carlo(
           seed:               int
           locked_model:       LOCKED_MODEL_VERSION
           goals_model:        "dc" if DC grids active, "surrogate" otherwise
-          team_probs:         {team: {qualify, r16, qf, sf, final, champion}}
+          team_probs:         {team: {qualify, qualify_top2, qualify_third, r16,
+                                     qf, sf, final, champion}}
           champion_counts:    {team: int}  raw champion counts
     """
     active_groups = groups if groups is not None else WC2026_GROUPS
@@ -156,9 +164,11 @@ def monte_carlo(
 
     master_rng = random.Random(seed)
 
-    qualify_counts:  dict[str, int] = defaultdict(int)
-    champion_counts: dict[str, int] = defaultdict(int)
-    finalist_counts: dict[str, int] = defaultdict(int)
+    qualify_counts:       dict[str, int] = defaultdict(int)
+    qualify_top2_counts:  dict[str, int] = defaultdict(int)
+    qualify_third_counts: dict[str, int] = defaultdict(int)
+    champion_counts:      dict[str, int] = defaultdict(int)
+    finalist_counts:      dict[str, int] = defaultdict(int)
     round_wins: dict[str, dict[str, int]] = {
         "R32": defaultdict(int),
         "R16": defaultdict(int),
@@ -168,10 +178,19 @@ def monte_carlo(
 
     for _ in range(n_sims):
         sim_rng = random.Random(master_rng.random())
-        result = run_tournament(elo, sim_rng, dc_grids=dc_grids, groups=active_groups)
+        result = run_tournament(
+            elo, sim_rng,
+            dc_grids=dc_grids,
+            groups=active_groups,
+            known_results=known_results,
+        )
 
-        for team in result["qualified"]:
+        for team, finish in result["qualified"].items():
             qualify_counts[team] += 1
+            if finish in ("1st", "2nd"):
+                qualify_top2_counts[team] += 1
+            elif finish == "3rd_best":
+                qualify_third_counts[team] += 1
 
         champion_counts[result["champion"]] += 1
         finalist_counts[result["finalist"]] += 1
@@ -187,12 +206,14 @@ def monte_carlo(
     team_probs: dict[str, dict[str, float]] = {}
     for team in all_teams:
         team_probs[team] = {
-            "qualify":  qualify_counts[team]    / n_sims,
-            "r16":      round_wins["R32"][team] / n_sims,
-            "qf":       round_wins["R16"][team] / n_sims,
-            "sf":       round_wins["QF"][team]  / n_sims,
-            "final":    finalist_counts[team]   / n_sims,
-            "champion": champion_counts[team]   / n_sims,
+            "qualify":        qualify_counts[team]       / n_sims,
+            "qualify_top2":   qualify_top2_counts[team]  / n_sims,
+            "qualify_third":  qualify_third_counts[team] / n_sims,
+            "r16":            round_wins["R32"][team]    / n_sims,
+            "qf":             round_wins["R16"][team]    / n_sims,
+            "sf":             round_wins["QF"][team]     / n_sims,
+            "final":          finalist_counts[team]      / n_sims,
+            "champion":       champion_counts[team]      / n_sims,
         }
 
     return {

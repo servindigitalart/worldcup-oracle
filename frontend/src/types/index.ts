@@ -114,6 +114,71 @@ export interface MarketBlend {
   disclaimers: Record<string, string>;
 }
 
+export interface FixtureScheduleEntry {
+  kickoff_at: string | null;
+  venue: string | null;
+  city: string | null;
+  host_country: string | null;
+  group: string;
+}
+
+export interface GroupStanding {
+  group: string;
+  team: string;
+  played: number;
+  won: number;
+  drawn: number;
+  lost: number;
+  gf: number;
+  ga: number;
+  gd: number;
+  points: number;
+  rank: number;
+  status_label: 'qualified_top2' | 'eliminated' | 'alive' | 'unknown';
+}
+
+export interface QualificationProb {
+  team: string;
+  qualify: number;
+  qualify_top2: number;
+  qualify_third: number;
+  r16: number;
+  qf: number;
+  sf: number;
+  final: number;
+  champion: number;
+}
+
+export interface TournamentStateSummary {
+  generated_at: string;
+  generated_date: string;
+  n_sims: number;
+  seed: number;
+  locked_model: string;
+  goals_model: string;
+  goals_model_version: string;
+  n_known_results: number;
+  n_finished: number;
+  fixture_source: {
+    source: string | null;
+    is_official: boolean;
+    is_placeholder: boolean;
+    n_fixtures: number;
+  };
+  disclaimers: Record<string, string>;
+  top_champion_probs: Array<{ team: string; champion: number }>;
+}
+
+export interface MatchResult {
+  match_id: string;
+  home_team: string;
+  away_team: string;
+  group: string;
+  home_goals: number | null;
+  away_goals: number | null;
+  status: string;
+}
+
 export interface CaptureStatus {
   generated_at: string;
   has_real_api_key: boolean;

@@ -14,8 +14,9 @@ from oracle.teams import (
 
 
 class TestCanonicalTable:
-    def test_exactly_48_teams(self) -> None:
-        assert len(CANONICAL_TEAMS) == 48
+    def test_exactly_62_teams(self) -> None:
+        # 48 official WC2026 qualifiers + 14 historical-only teams kept for result resolution
+        assert len(CANONICAL_TEAMS) == 62
 
     def test_all_ids_unique(self) -> None:
         ids = list(CANONICAL_TEAMS.keys())
@@ -23,24 +24,21 @@ class TestCanonicalTable:
 
     def test_all_confederations_present(self) -> None:
         confederations = {v[1] for v in CANONICAL_TEAMS.values()}
-        # PLAYOFF = 2 TBD inter-confederation playoff slots
-        assert confederations == {"UEFA", "CONMEBOL", "AFC", "CAF", "CONCACAF", "OFC", "PLAYOFF"}
+        assert confederations == {"UEFA", "CONMEBOL", "AFC", "CAF", "CONCACAF", "OFC"}
 
     def test_confederation_counts(self) -> None:
         from collections import Counter
         counts = Counter(v[1] for v in CANONICAL_TEAMS.values())
-        # Confirmed quota slots
-        assert counts["UEFA"] == 16
-        assert counts["CONMEBOL"] == 6
-        assert counts["AFC"] == 8
-        assert counts["CAF"] == 9
-        assert counts["CONCACAF"] == 6
+        # Official WC2026 qualifiers + historical-only teams per confederation
+        assert counts["UEFA"] == 22      # 16 qualifiers + 6 historical (denmark/italy/poland/romania/serbia/ukraine)
+        assert counts["CONMEBOL"] == 8   # 6 qualifiers + 2 historical (venezuela/chile)
+        assert counts["AFC"] == 9        # 9 qualifiers (qatar added)
+        assert counts["CAF"] == 14       # 10 qualifiers + 4 historical (cameroon/mali/nigeria/tanzania)
+        assert counts["CONCACAF"] == 8   # 6 qualifiers + 2 historical (costa_rica/honduras)
         assert counts["OFC"] == 1
-        # 2 TBD inter-confederation playoff slots
-        assert counts["PLAYOFF"] == 2
 
     def test_get_all_canonical_ids_length(self) -> None:
-        assert len(get_all_canonical_ids()) == 48
+        assert len(get_all_canonical_ids()) == 62
 
 
 class TestAliasResolver:
@@ -101,9 +99,9 @@ class TestAliasResolver:
 
 
 class TestTeamsDataframe:
-    def test_returns_48_rows(self) -> None:
+    def test_returns_62_rows(self) -> None:
         df = teams_dataframe()
-        assert len(df) == 48
+        assert len(df) == 62
 
     def test_columns_present(self) -> None:
         df = teams_dataframe()

@@ -2,6 +2,8 @@
 
 **The most honest public World Cup 2026 forecaster on the internet.**
 
+> **Status: Week 13 — Live Tournament State Engine. Match results ingestion, group standings, result-aware Monte Carlo simulation, qualification probabilities, Standings and Probabilities frontend pages. Run `make tournament-state && make export-web` after adding results. Python tests passing, 35/35 frontend tests passing.**
+> **Status: Week 12 — Official fixture data. `data/seed/wc2026_fixtures.json` replaced with all 72 official FIFA 2026 group-stage fixtures (`is_official: true`, `is_placeholder: false`). Official draw (Dec 5 2025) wired into groups, kickoff times (UTC), venues, and cities. `fixture_schedule.json` exported for frontend; matches page shows kickoff + venue. 537/537 Python tests, 35/35 frontend tests passing.**
 > **Status: Week 11 — Canonical fixture seed file. `data/seed/wc2026_fixtures.json` formalises 72 group-stage fixtures (placeholder, `is_placeholder: true`). Pipeline now derives groups from seed file; fixtures flow through simulator, blend, capture, and frontend. `fixture_source` propagated into all artifacts. 535/535 Python tests, 35/35 frontend tests passing.**
 > **Status: Week 10 — Frontend skeleton live. Static Astro site (5 pages) consuming pipeline artifacts. Runs `make build-frontend` after `make export-web` (exports Parquet → JSON for Astro to read at build time).**
 > **Status: Week 9 — Scheduled odds capture and closing-line workflow. GitHub Actions cron captures market snapshots hourly; artifacts committed when changed. Closing-line candidate status tracking (no_market_data → opening_only → latest_available → closing_candidate → closing_locked). True CLV computable only when `closing_locked`. Local dry-run via `make capture-odds`.**
@@ -26,6 +28,102 @@ A rigorously calibrated, self-grading tournament forecaster built on three hones
 3. **Publish a live CLV/calibration scoreboard** — grade the model against the market in the open, win or lose.
 
 Read the full design rationale in [docs/FINAL_BLUEPRINT.md](docs/FINAL_BLUEPRINT.md).
+
+---
+
+## Week 13 status
+
+Live Tournament State Engine.
+
+**What was added:**
+
+- `data/seed/wc2026_results.json` — canonical results seed (empty initially). Add finished match scores here, then run `make ingest-results-2026` and `make tournament-state`.
+- `oracle/ingest/results_2026.py` — `ResultValidationError`, `load_results_2026()`, `ingest_results_2026()`. Validates match_id against fixture seed, teams, non-negative goals, status in `{scheduled, live, finished, postponed, cancelled}`. Writes `match_results.parquet` + `match_results_summary.json`.
+- `oracle/state/__init__.py` — new module.
+- `oracle/state/standings.py` — `compute_standings(groups, finished_results)` → Polars DataFrame. Deterministic sort: points → GD → GF → canonical team ID. Status labels: `qualified_top2` / `eliminated` / `alive` / `unknown`.
+- `oracle/sim/group.py` — added `known_results` param to `simulate_group()` and `_get_known_result()` helper with bidirectional lookup (goal-flip for reversed ordering).
+- `oracle/sim/tournament.py` — `known_results` param threaded through `run_tournament()` and `monte_carlo()`. Added `qualify_top2` and `qualify_third` to `team_probs` dict.
+- `oracle/pipeline/state.py` — full state pipeline: ingest 2026 results → compute standings → train Elo+DC → result-aware MC (10k sims). Writes 7 artifacts.
+- `scripts/export_artifacts.py` — 4 new exports: `match_results.json`, `group_standings.json`, `qualification_probs.json`, `tournament_state_summary.json`.
+- `frontend/src/types/index.ts` — added `GroupStanding`, `QualificationProb`, `TournamentStateSummary`, `MatchResult` interfaces.
+- `frontend/src/components/NavBar.astro` — added Standings and Probabilities links.
+- `frontend/src/pages/standings.astro` — group tables A–L with W/D/L/GD/Pts, status badges, empty-state note.
+- `frontend/src/pages/probabilities.astro` — per-team probability table (qualify/top2/third/r16/qf/sf/final/win), sorted by group→rank.
+- `Makefile` — added `make ingest-results-2026` and `make tournament-state`.
+- `tests/test_results_2026.py` — 20 tests covering load/validate/ingest.
+- `tests/test_standings.py` — 20 tests covering schema, empty, single result, status labels, sort.
+- `tests/test_sim.py` — `TestKnownResultsGroup` (4 tests) + `TestKnownResultsTournament` (6 tests).
+
+**Workflow to update standings after a match:**
+
+```bash
+# 1. Add the result to data/seed/wc2026_results.json
+# 2. Rebuild state artifacts
+make tournament-state
+# 3. Export to frontend JSON
+make export-web
+# 4. Build / deploy frontend
+make build-frontend
+```
+
+**Architecture:**
+
+```
+data/seed/wc2026_results.json
+        ↓ oracle.ingest.results_2026
+data/artifacts/match_results.parquet
+        ↓ oracle.state.standings
+data/artifacts/group_standings.{parquet,json}
+        ↓ oracle.pipeline.state (+ Elo + DC + MC)
+data/artifacts/qualification_probs.{parquet,json}
+data/artifacts/tournament_state_summary.json
+        ↓ scripts/export_artifacts.py
+frontend/src/data/*.json
+        ↓ Astro build
+/standings, /probabilities pages
+```
+
+---
+
+## Week 12 status
+
+Official FIFA 2026 World Cup fixture data.
+
+**Fixture data status:** Official (`is_official: true`, `is_placeholder: false`). Groups and kickoff times reflect the official FIFA 2026 draw (December 5, 2025, Kennedy Center, Washington D.C.).
+
+**What was added:**
+
+- `data/seed/wc2026_fixtures.json` — rewritten with all 72 official group-stage fixtures: real UTC kickoff times, venues, cities, host countries (`is_placeholder: false`, `is_official: true`). Source: `official_fifa_2026`.
+- `oracle/teams.py` — 14 new official WC2026 teams added: `czech_republic`, `bosnia_herzegovina`, `qatar`, `haiti`, `scotland`, `curacao`, `sweden`, `tunisia`, `cape_verde`, `norway`, `algeria`, `dr_congo`, `ghana`, `paraguay`. Turkey updated from PLAYOFF → UEFA. 14 historical placeholder teams retained for result-data resolution. Total: 62 canonical teams.
+- `oracle/sim/groups.py` — `WC2026_GROUPS` updated to official draw (12 groups A–L, official assignment). `_HARDCODED_META` updated to `is_official: true`. Docstring updated.
+- `scripts/export_artifacts.py` — added `_build_fixture_schedule()` and `fixture_schedule.json` export: dict keyed by `home_vs_away` AND `away_vs_home` → `{kickoff_at, venue, city, host_country, group}` for O(1) frontend lookup.
+- `frontend/src/types/index.ts` — added `FixtureScheduleEntry` type.
+- `frontend/src/utils/format.ts` — added `formatKickoff()` (date+time in UTC); added display name overrides for `czech_republic`, `bosnia_herzegovina`, `cape_verde`, `dr_congo`, `curacao`.
+- `frontend/src/pages/matches.astro` — loads `fixture_schedule.json`; shows kickoff date/time (UTC) and venue/city below each match card; banner updated to emerald for official data.
+- `tests/test_fixtures.py` — 2 tests updated for official data (`test_official_flag_is_set`, `test_load_kickoff_times_returns_all_kickoffs`), 2 new tests added (`test_all_kickoff_times_non_null`, `test_export_produces_fixture_schedule`). 28 total.
+- Ripple: `test_teams.py`, `test_elo.py`, `test_dc.py`, `test_artifacts.py`, `test_forecast.py` — team-count assertions updated from 48 → 62 to reflect expanded CANONICAL_TEAMS.
+
+**Official groups (FIFA draw, December 5 2025):**
+
+| Group | Teams |
+|-------|-------|
+| A | Mexico · South Africa · South Korea · Czech Republic |
+| B | Canada · Bosnia & Herzegovina · Qatar · Switzerland |
+| C | Brazil · Morocco · Haiti · Scotland |
+| D | United States · Paraguay · Australia · Turkey |
+| E | Germany · Curaçao · Côte d'Ivoire · Ecuador |
+| F | Netherlands · Japan · Sweden · Tunisia |
+| G | Belgium · Egypt · Iran · New Zealand |
+| H | Spain · Cape Verde · Saudi Arabia · Uruguay |
+| I | France · Senegal · Iraq · Norway |
+| J | Argentina · Algeria · Austria · Jordan |
+| K | Portugal · DR Congo · Uzbekistan · Colombia |
+| L | England · Croatia · Ghana · Panama |
+
+**Test results:**
+- Python: 537/537 passed (2 new fixture tests, 2 updated, 9 count assertions updated)
+- Frontend: 35/35 passed
+- Artifacts regenerated: all
 
 ---
 

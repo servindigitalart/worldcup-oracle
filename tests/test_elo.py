@@ -158,11 +158,11 @@ class TestEloPredict:
 
 
 class TestRatingsDataframe:
-    def test_returns_48_rows(self) -> None:
+    def test_returns_62_rows(self) -> None:
         elo = EloRatings()
         elo.fit(SMALL_HISTORY)
         df = elo.ratings_dataframe()
-        assert len(df) == 48
+        assert len(df) == 62
 
     def test_columns_present(self) -> None:
         elo = EloRatings()

@@ -48,12 +48,12 @@ class TestDuckDBInit:
 
 
 class TestTeamsTable:
-    def test_load_48_teams(self, tmp_db: str) -> None:
+    def test_load_62_teams(self, tmp_db: str) -> None:
         df = teams_dataframe()
         with get_conn(tmp_db) as conn:
             conn.execute("INSERT INTO teams SELECT * FROM df")
             count = conn.execute("SELECT COUNT(*) FROM teams").fetchone()[0]
-        assert count == 48
+        assert count == 62
 
     def test_team_ids_are_unique_in_db(self, tmp_db: str) -> None:
         df = teams_dataframe()

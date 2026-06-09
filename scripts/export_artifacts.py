@@ -52,6 +52,34 @@ def _write(filename: str, data: object) -> None:
     print(f"  {path.relative_to(REPO_ROOT)}  ({label})")
 
 
+def _build_fixture_schedule() -> dict:
+    """Build per-matchup schedule dict keyed by home_vs_away AND away_vs_home."""
+    seed_path = SEED / "wc2026_fixtures.json"
+    try:
+        data = json.loads(seed_path.read_text())
+        schedule: dict = {}
+        for f in data.get("fixtures", []):
+            if f.get("stage") != "group":
+                continue
+            entry = {
+                "kickoff_at":   f.get("kickoff_at"),
+                "venue":        f.get("venue"),
+                "city":         f.get("city"),
+                "host_country": f.get("host_country"),
+                "group":        f.get("group"),
+            }
+            home = f["home_team"]
+            away = f["away_team"]
+            schedule[f"{home}_vs_{away}"] = entry
+            schedule[f"{away}_vs_{home}"] = entry
+        return schedule
+    except FileNotFoundError:
+        return {}
+    except Exception as exc:
+        print(f"  [warn] fixture_schedule: {exc}", file=sys.stderr)
+        return {}
+
+
 def _build_fixture_source() -> dict:
     """Read data/seed/wc2026_fixtures.json and return a fixture-source summary."""
     seed_path = SEED / "wc2026_fixtures.json"
@@ -101,6 +129,12 @@ def export() -> None:
     _write("holdout_summary.json",      _read_json(ARTIFACTS / "holdout_summary.json"))
     _write("model_comparison.json",     _read_json(ARTIFACTS / "model_comparison_worldcups.json"))
     _write("fixture_source.json",       _build_fixture_source())
+    _write("fixture_schedule.json",     _build_fixture_schedule())
+    # Week 13: live tournament state
+    _write("match_results.json",           _read_parquet(ARTIFACTS / "match_results.parquet"))
+    _write("group_standings.json",         _read_json(ARTIFACTS / "group_standings.json"))
+    _write("qualification_probs.json",     _read_json(ARTIFACTS / "qualification_probs.json"))
+    _write("tournament_state_summary.json", _read_json(ARTIFACTS / "tournament_state_summary.json"))
 
 
 if __name__ == "__main__":

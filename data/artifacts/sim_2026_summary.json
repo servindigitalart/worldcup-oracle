@@ -7,13 +7,13 @@
   "goals_model_version": "dixon-coles-v0.3",
   "goals_model_notes": "Group-stage scorelines sampled from Dixon-Coles joint probability grid (10\u00d710, max_goals=10, xi=0.0018, neutral venue). Grids precomputed once; reused across all simulations. Knockout matches use Elo win probabilities (no scoreline needed).",
   "fixture_source": {
-    "source": "placeholder_wc2026_groups_v1",
-    "is_official": false,
-    "is_placeholder": true,
+    "source": "official_fifa_2026",
+    "is_official": true,
+    "is_placeholder": false,
     "n_fixtures": 72
   },
   "disclaimers": {
-    "group_draw": "Placeholder \u2014 NOT the official WC 2026 draw. Update data/seed/wc2026_fixtures.json once announced.",
+    "group_draw": "Groups loaded from official FIFA 2026 schedule.",
     "bracket": "Positional (seed 1 vs 32, \u2026) \u2014 NOT the official FIFA R16 pairings.",
     "third_place": "No official third-place bracket slot assignment implemented yet.",
     "host_advantage": "USA / Mexico / Canada host advantage not modelled (neutral=True for all matches).",
@@ -22,83 +22,83 @@
   "top_champion_probs": [
     {
       "team": "spain",
-      "champion": 0.1535
+      "champion": 0.1624
     },
     {
       "team": "argentina",
-      "champion": 0.138
+      "champion": 0.129
     },
     {
       "team": "france",
-      "champion": 0.0927
+      "champion": 0.0906
     },
     {
       "team": "brazil",
-      "champion": 0.057
+      "champion": 0.0754
     },
     {
       "team": "england",
-      "champion": 0.0549
+      "champion": 0.0513
     },
     {
       "team": "portugal",
-      "champion": 0.0465
-    },
-    {
-      "team": "croatia",
-      "champion": 0.0438
+      "champion": 0.0429
     },
     {
       "team": "germany",
-      "champion": 0.0357
-    },
-    {
-      "team": "netherlands",
-      "champion": 0.0327
-    },
-    {
-      "team": "colombia",
-      "champion": 0.0325
+      "champion": 0.0427
     },
     {
       "team": "japan",
-      "champion": 0.0305
+      "champion": 0.038
+    },
+    {
+      "team": "netherlands",
+      "champion": 0.0354
     },
     {
       "team": "morocco",
-      "champion": 0.0282
-    },
-    {
-      "team": "switzerland",
-      "champion": 0.0244
+      "champion": 0.0318
     },
     {
       "team": "ecuador",
-      "champion": 0.0241
-    },
-    {
-      "team": "iran",
-      "champion": 0.0237
-    },
-    {
-      "team": "belgium",
-      "champion": 0.0226
-    },
-    {
-      "team": "turkey",
-      "champion": 0.0199
-    },
-    {
-      "team": "uruguay",
-      "champion": 0.0192
-    },
-    {
-      "team": "italy",
-      "champion": 0.0186
+      "champion": 0.0303
     },
     {
       "team": "mexico",
-      "champion": 0.0161
+      "champion": 0.028
+    },
+    {
+      "team": "uruguay",
+      "champion": 0.0277
+    },
+    {
+      "team": "belgium",
+      "champion": 0.0261
+    },
+    {
+      "team": "colombia",
+      "champion": 0.024
+    },
+    {
+      "team": "switzerland",
+      "champion": 0.0199
+    },
+    {
+      "team": "croatia",
+      "champion": 0.019
+    },
+    {
+      "team": "iran",
+      "champion": 0.0182
+    },
+    {
+      "team": "turkey",
+      "champion": 0.0138
+    },
+    {
+      "team": "australia",
+      "champion": 0.0131
     }
   ]
 }

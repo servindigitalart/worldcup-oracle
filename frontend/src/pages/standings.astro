@@ -1,0 +1,134 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { loadJson } from '../utils/load';
+import { formatTeamName } from '../utils/format';
+import type { GroupStanding } from '../types';
+
+const standings = loadJson<GroupStanding[]>('group_standings.json', []);
+
+// Group by letter
+const byGroup: Record<string, GroupStanding[]> = {};
+for (const row of standings) {
+  if (!byGroup[row.group]) byGroup[row.group] = [];
+  byGroup[row.group].push(row);
+}
+const groupLetters = Object.keys(byGroup).sort();
+
+const hasAnyResults = standings.some((r) => r.played > 0);
+
+function statusClass(label: string): string {
+  switch (label) {
+    case 'qualified_top2': return 'bg-emerald-900/50 text-emerald-300 border-emerald-700/50';
+    case 'eliminated':     return 'bg-red-900/40 text-red-300 border-red-700/50';
+    case 'alive':          return 'bg-blue-900/40 text-blue-300 border-blue-700/50';
+    default:               return 'bg-slate-800 text-slate-400 border-slate-700';
+  }
+}
+
+function statusLabel(label: string): string {
+  switch (label) {
+    case 'qualified_top2': return 'Qualified';
+    case 'eliminated':     return 'Eliminated';
+    case 'alive':          return 'In contention';
+    default:               return '—';
+  }
+}
+---
+<Layout title="Standings" description="Live WC 2026 group standings">
+  <div class="space-y-8">
+
+    <div>
+      <h1 class="text-3xl font-bold text-slate-100">Group Standings</h1>
+      <p class="mt-2 text-slate-400">
+        Updated from official match results. Sorted by points → goal difference → goals for → team name.
+      </p>
+    </div>
+
+    {!hasAnyResults && (
+      <div class="rounded-xl border border-slate-700 bg-slate-800/40 px-5 py-6 text-center">
+        <p class="text-lg font-semibold text-slate-300">No results yet</p>
+        <p class="mt-1 text-sm text-slate-500">
+          Standings will appear here once matches have been played.
+          Add results to <code class="text-slate-400">data/seed/wc2026_results.json</code>
+          and run <code class="text-slate-400">make tournament-state</code>.
+        </p>
+      </div>
+    )}
+
+    {groupLetters.length === 0 && hasAnyResults && (
+      <div class="rounded-xl border border-amber-800/50 bg-amber-950/40 px-4 py-3 text-sm">
+        <p class="text-amber-400">
+          No standings data found. Run <code>make tournament-state &amp;&amp; make export-web</code>.
+        </p>
+      </div>
+    )}
+
+    <div class="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+      {groupLetters.map((letter) => {
+        const rows = byGroup[letter];
+        return (
+          <div class="rounded-xl border border-slate-700 bg-slate-800/30 overflow-hidden">
+            <div class="bg-slate-800/60 px-4 py-2.5 border-b border-slate-700">
+              <h2 class="text-sm font-semibold text-slate-200 tracking-wide">GROUP {letter}</h2>
+            </div>
+            <table class="w-full text-xs">
+              <thead>
+                <tr class="text-slate-500 border-b border-slate-700/60">
+                  <th class="px-3 py-2 text-left font-medium w-6">#</th>
+                  <th class="px-3 py-2 text-left font-medium">Team</th>
+                  <th class="px-2 py-2 text-center font-medium">P</th>
+                  <th class="px-2 py-2 text-center font-medium">W</th>
+                  <th class="px-2 py-2 text-center font-medium">D</th>
+                  <th class="px-2 py-2 text-center font-medium">L</th>
+                  <th class="px-2 py-2 text-center font-medium">GD</th>
+                  <th class="px-2 py-2 text-center font-medium">Pts</th>
+                </tr>
+              </thead>
+              <tbody>
+                {rows.map((row) => (
+                  <tr class:list={[
+                    'border-b border-slate-700/30 last:border-0',
+                    row.status_label === 'qualified_top2' ? 'bg-emerald-950/20' : '',
+                    row.status_label === 'eliminated' ? 'bg-red-950/10' : '',
+                  ]}>
+                    <td class="px-3 py-2 text-slate-500 font-mono">{row.rank}</td>
+                    <td class="px-3 py-2">
+                      <div class="flex items-center gap-2">
+                        <span class="text-slate-200 font-medium">{formatTeamName(row.team)}</span>
+                        {row.status_label !== 'unknown' && (
+                          <span class:list={[
+                            'hidden sm:inline-block px-1.5 py-0.5 rounded text-[10px] border',
+                            statusClass(row.status_label),
+                          ]}>
+                            {statusLabel(row.status_label)}
+                          </span>
+                        )}
+                      </div>
+                    </td>
+                    <td class="px-2 py-2 text-center text-slate-400">{row.played}</td>
+                    <td class="px-2 py-2 text-center text-slate-400">{row.won}</td>
+                    <td class="px-2 py-2 text-center text-slate-400">{row.drawn}</td>
+                    <td class="px-2 py-2 text-center text-slate-400">{row.lost}</td>
+                    <td class:list={[
+                      'px-2 py-2 text-center font-mono',
+                      row.gd > 0 ? 'text-emerald-400' : row.gd < 0 ? 'text-red-400' : 'text-slate-400',
+                    ]}>
+                      {row.gd > 0 ? `+${row.gd}` : row.gd}
+                    </td>
+                    <td class="px-2 py-2 text-center font-semibold text-slate-200">{row.points}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        );
+      })}
+    </div>
+
+    <div class="text-xs text-slate-600">
+      <p>P = Played · W = Won · D = Drawn · L = Lost · GD = Goal Difference · Pts = Points</p>
+      <p class="mt-1">Tiebreaker order: Points → Goal Difference → Goals For → Team Name (alphabetical)</p>
+    </div>
+
+  </div>
+</Layout>

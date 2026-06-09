@@ -1,5 +1,5 @@
 """
-Tests for Week 11 fixture seed infrastructure.
+Tests for Week 11–12 fixture seed infrastructure.
 
 Covers:
   - fixture schema validation (all required fields present)
@@ -9,13 +9,13 @@ Covers:
   - 72 group-stage fixtures
   - no duplicate match_id values
   - all teams resolve to canonical IDs
-  - placeholder/official flag present and correct
+  - official flag present and correct (Week 12: is_official=True, is_placeholder=False)
+  - all 72 kickoff_at values are non-null (official data)
   - derive_groups_from_fixtures reconstructs correct group membership
   - load_groups() uses seed file when available; falls back to hardcoded
-  - closing-line kickoff wiring: load_kickoff_times() returns empty dict
-    when all kickoff_at are null, and returns populated dict when not
+  - closing-line kickoff wiring: load_kickoff_times() returns 72 kickoffs
   - simulator accepts a groups= parameter without error
-  - frontend export script produces fixture_source.json with expected keys
+  - frontend export script produces fixture_source.json and fixture_schedule.json
 """
 from __future__ import annotations
 
@@ -143,16 +143,26 @@ def test_all_teams_are_canonical():
     assert not unresolved, f"Unresolved teams: {unresolved}"
 
 
-# ── 8. Placeholder flag is set correctly ──────────────────────────────────────
+# ── 8. Official flag is set correctly (Week 12: real data) ────────────────────
 
-def test_placeholder_flag_is_set():
+def test_official_flag_is_set():
     data = _load_seed()
     meta = data.get("metadata", {})
-    assert meta.get("is_official") is False
+    assert meta.get("is_official") is True, "metadata.is_official should be True"
+    assert meta.get("is_placeholder") is False, "metadata.is_placeholder should be False"
     for fix in data["fixtures"]:
-        assert fix["is_placeholder"] is True, (
-            f"match_id={fix['match_id']!r}: expected is_placeholder=true"
+        assert fix["is_placeholder"] is False, (
+            f"match_id={fix['match_id']!r}: expected is_placeholder=false"
         )
+
+
+def test_all_kickoff_times_non_null():
+    data = _load_seed()
+    gs = _group_stage(data)
+    null_kickoffs = [f["match_id"] for f in gs if f.get("kickoff_at") is None]
+    assert not null_kickoffs, (
+        f"Official fixtures must have kickoff_at set; missing: {null_kickoffs}"
+    )
 
 
 def test_source_field_is_consistent():
@@ -193,8 +203,8 @@ def test_load_groups_uses_seed_file():
     for g, teams in groups.items():
         assert len(teams) == 4
         assert set(teams) == set(WC2026_GROUPS[g])
-    assert meta.get("is_official") is False
-    assert meta.get("is_placeholder") is True
+    assert meta.get("is_official") is True
+    assert meta.get("is_placeholder") is False
     assert meta.get("n_fixtures_loaded") == 72
 
 
@@ -204,20 +214,22 @@ def test_load_groups_falls_back_to_hardcoded(tmp_path):
     missing = tmp_path / "nonexistent.json"
     groups, meta = load_groups(seed_path=missing)
     assert groups is WC2026_GROUPS
-    assert meta.get("is_placeholder") is True
-    assert meta.get("source") == "placeholder_wc2026_groups_v1"
+    assert meta.get("is_placeholder") is False
+    assert meta.get("source") == "official_fifa_2026_hardcoded"
 
 
 # ── 10. Closing-line kickoff wiring ───────────────────────────────────────────
 
-def test_load_kickoff_times_returns_empty_for_all_null():
+def test_load_kickoff_times_returns_all_kickoffs():
     from oracle.ingest.fixtures import load_kickoff_times
 
     kickoffs = load_kickoff_times(SEED_PATH)
-    assert kickoffs == {}, (
-        "All kickoff_at values in placeholder seed are null — "
-        "expected empty dict"
+    assert len(kickoffs) == 72, (
+        f"Official seed has 72 fixtures with non-null kickoffs — "
+        f"expected 72 entries, got {len(kickoffs)}"
     )
+    for pair, dt in kickoffs.items():
+        assert dt.tzinfo is not None, f"kickoff for {pair} must be timezone-aware"
 
 
 def test_load_kickoff_times_returns_populated_dict(tmp_path):
@@ -378,7 +390,8 @@ def test_load_fixtures_from_real_seed():
     assert "kickoff_at" in df.columns
     assert "is_placeholder" in df.columns
     assert "source" in df.columns
-    assert df["is_placeholder"].to_list().count(True) == 72
+    assert df["is_placeholder"].to_list().count(True) == 0
+    assert df["is_placeholder"].to_list().count(False) == 72
 
 
 # ── 13. Placeholder flag propagates into blend artifact ───────────────────────
@@ -422,5 +435,23 @@ def test_export_produces_fixture_source(tmp_path):
     assert "source" in result
     assert "groups" in result
     assert len(result["groups"]) == 12
-    assert result["is_official"] is False
-    assert result["is_placeholder"] is True
+    assert result["is_official"] is True
+    assert result["is_placeholder"] is False
+
+
+def test_export_produces_fixture_schedule():
+    """export_artifacts.py _build_fixture_schedule() returns 144 entries (72 × bidirectional)."""
+    import sys
+    sys.path.insert(0, str(Path(__file__).parent.parent / "scripts"))
+    from export_artifacts import _build_fixture_schedule  # type: ignore
+
+    result = _build_fixture_schedule()
+    assert len(result) == 144, f"Expected 144 bidirectional keys, got {len(result)}"
+    first = next(iter(result.values()))
+    assert "kickoff_at" in first
+    assert "venue" in first
+    assert "city" in first
+    assert "host_country" in first
+    # All kickoffs should be non-null in official data
+    null_ko = [k for k, v in result.items() if v.get("kickoff_at") is None]
+    assert not null_ko, f"Official schedule should have no null kickoffs: {null_ko[:3]}"

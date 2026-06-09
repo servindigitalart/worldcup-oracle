@@ -1,16 +1,16 @@
 {
   "generated_date": "2026-06-08",
   "fixture_source": {
-    "source": "placeholder_wc2026_groups_v1",
-    "is_official": false,
-    "is_placeholder": true,
+    "source": "official_fifa_2026",
+    "is_official": true,
+    "is_placeholder": false,
     "n_fixtures": 72
   },
   "market_weight": 0.8,
   "model_weight": 0.2,
   "n_matchups_total": 72,
-  "n_with_market": 2,
-  "n_model_only": 70,
+  "n_with_market": 0,
+  "n_model_only": 72,
   "backtest": {
     "blend_mean_rps": null,
     "model_mean_rps": null,
@@ -26,6 +26,6 @@
     "purpose": "Blended probabilities are for calibration benchmarking only. This is not financial or betting advice.",
     "weights_not_tuned": "Default weights (market 80% / model 20%) reflect a prior on market information content and have not been calibrated to any specific objective.",
     "no_historical_market_data": "No historical market odds available for 2014/2018/2022 WC. Backtesting the blend requires real pre-match market odds. Will be revisited once WC 2026 match data accumulates.",
-    "group_draw": "Predictions use the placeholder group draw \u2014 NOT the official WC 2026 draw."
+    "group_draw": "Predictions use the official WC 2026 group draw."
   }
 }

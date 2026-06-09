@@ -161,11 +161,11 @@ class TestDixonColesPredict:
 
 
 class TestDixonColesRatingsDataframe:
-    def test_returns_48_rows(self) -> None:
+    def test_returns_62_rows(self) -> None:
         dc = DixonColesRatings()
         dc.fit(SYNTH)
         df = dc.ratings_dataframe()
-        assert len(df) == 48
+        assert len(df) == 62
 
     def test_columns_present(self) -> None:
         dc = DixonColesRatings()

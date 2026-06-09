@@ -159,11 +159,11 @@ class TestHoldoutPipeline:
         assert (artifact_dir / "holdout_2022_wc.parquet").exists()
         assert (artifact_dir / "holdout_summary.json").exists()
 
-    def test_ratings_parquet_has_48_rows(self, tmp_path: Path) -> None:
+    def test_ratings_parquet_has_62_rows(self, tmp_path: Path) -> None:
         artifact_dir = tmp_path / "artifacts"
         run_holdout(results_df=_make_synthetic_results(), artifacts_dir=artifact_dir)
         df = pl.read_parquet(artifact_dir / "ratings_elo.parquet")
-        assert len(df) == 48
+        assert len(df) == 62
 
     def test_holdout_parquet_has_scored_columns(self, tmp_path: Path) -> None:
         artifact_dir = tmp_path / "artifacts"

@@ -1,0 +1,111 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { loadJson } from '../utils/load';
+import { formatTeamName, formatPct } from '../utils/format';
+import type { QualificationProb, GroupStanding, TournamentStateSummary } from '../types';
+
+const probs    = loadJson<QualificationProb[]>('qualification_probs.json', []);
+const standings = loadJson<GroupStanding[]>('group_standings.json', []);
+const summary  = loadJson<TournamentStateSummary>('tournament_state_summary.json', {} as TournamentStateSummary);
+
+// Build group lookup from standings
+const teamGroup: Record<string, string> = {};
+const groupRank: Record<string, number> = {};
+for (const row of standings) {
+  teamGroup[row.team] = row.group;
+  groupRank[row.team] = row.rank;
+}
+
+// Sort probs by group letter → rank within group → champion prob desc
+const sorted = [...probs].sort((a, b) => {
+  const gA = teamGroup[a.team] ?? 'Z';
+  const gB = teamGroup[b.team] ?? 'Z';
+  if (gA !== gB) return gA.localeCompare(gB);
+  const rA = groupRank[a.team] ?? 99;
+  const rB = groupRank[b.team] ?? 99;
+  if (rA !== rB) return rA - rB;
+  return b.champion - a.champion;
+});
+
+const hasData = probs.length > 0;
+const nKnown  = summary?.n_known_results ?? 0;
+const nSims   = summary?.n_sims ?? 0;
+---
+<Layout title="Probabilities" description="Result-conditioned WC 2026 qualification and stage probabilities">
+  <div class="space-y-8">
+
+    <div>
+      <h1 class="text-3xl font-bold text-slate-100">Qualification Probabilities</h1>
+      <p class="mt-2 text-slate-400">
+        Result-conditioned Monte Carlo ({nSims.toLocaleString()} simulations).
+        {nKnown > 0
+          ? `${nKnown} finished match${nKnown === 1 ? '' : 'es'} locked in; remaining matches simulated.`
+          : 'No results yet — showing pre-tournament probabilities.'}
+      </p>
+    </div>
+
+    {!hasData && (
+      <div class="rounded-xl border border-slate-700 bg-slate-800/40 px-5 py-6 text-center">
+        <p class="text-lg font-semibold text-slate-300">No probability data found</p>
+        <p class="mt-1 text-sm text-slate-500">
+          Run <code class="text-slate-400">make tournament-state &amp;&amp; make export-web</code> to generate.
+        </p>
+      </div>
+    )}
+
+    {hasData && (
+      <div class="overflow-x-auto rounded-xl border border-slate-700">
+        <table class="w-full text-xs min-w-[700px]">
+          <thead>
+            <tr class="bg-slate-800/70 text-slate-400 border-b border-slate-700">
+              <th class="px-3 py-2.5 text-left font-medium w-8">Grp</th>
+              <th class="px-3 py-2.5 text-left font-medium">Team</th>
+              <th class="px-3 py-2.5 text-right font-medium">Qualify</th>
+              <th class="px-3 py-2.5 text-right font-medium">Top 2</th>
+              <th class="px-3 py-2.5 text-right font-medium">3rd</th>
+              <th class="px-3 py-2.5 text-right font-medium">R16</th>
+              <th class="px-3 py-2.5 text-right font-medium">QF</th>
+              <th class="px-3 py-2.5 text-right font-medium">SF</th>
+              <th class="px-3 py-2.5 text-right font-medium">Final</th>
+              <th class="px-3 py-2.5 text-right font-medium">Win</th>
+            </tr>
+          </thead>
+          <tbody>
+            {sorted.map((row) => {
+              const grp = teamGroup[row.team] ?? '?';
+              return (
+                <tr class="border-b border-slate-700/40 last:border-0 hover:bg-slate-800/30 transition-colors">
+                  <td class="px-3 py-2 text-slate-500 font-mono text-center">{grp}</td>
+                  <td class="px-3 py-2 text-slate-200 font-medium">{formatTeamName(row.team)}</td>
+                  <td class="px-3 py-2 text-right text-slate-300">{formatPct(row.qualify)}</td>
+                  <td class="px-3 py-2 text-right text-slate-400">{formatPct(row.qualify_top2)}</td>
+                  <td class="px-3 py-2 text-right text-slate-400">{formatPct(row.qualify_third)}</td>
+                  <td class="px-3 py-2 text-right text-slate-300">{formatPct(row.r16)}</td>
+                  <td class="px-3 py-2 text-right text-slate-300">{formatPct(row.qf)}</td>
+                  <td class="px-3 py-2 text-right text-slate-300">{formatPct(row.sf)}</td>
+                  <td class="px-3 py-2 text-right text-slate-300">{formatPct(row.final)}</td>
+                  <td class:list={[
+                    'px-3 py-2 text-right font-semibold',
+                    row.champion >= 0.1 ? 'text-emerald-400' :
+                    row.champion >= 0.03 ? 'text-slate-200' : 'text-slate-500',
+                  ]}>
+                    {formatPct(row.champion)}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    )}
+
+    <div class="text-xs text-slate-600 space-y-1">
+      <p>Qualify = reach R32 (top 2 per group + best 8 third-place teams) · Top 2 = finish 1st or 2nd in group</p>
+      <p>3rd = qualify as one of the 8 best third-place teams · Win = win the tournament</p>
+      {summary?.disclaimers?.bracket && (
+        <p class="text-slate-700">{summary.disclaimers.bracket}</p>
+      )}
+    </div>
+
+  </div>
+</Layout>

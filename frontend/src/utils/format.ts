@@ -1,11 +1,16 @@
 const TEAM_NAMES: Record<string, string> = {
-  united_states: 'United States',
-  cote_divoire: "Côte d'Ivoire",
-  south_korea: 'South Korea',
-  saudi_arabia: 'Saudi Arabia',
-  new_zealand: 'New Zealand',
-  costa_rica: 'Costa Rica',
-  south_africa: 'South Africa',
+  united_states:     'United States',
+  cote_divoire:      "Côte d'Ivoire",
+  south_korea:       'South Korea',
+  saudi_arabia:      'Saudi Arabia',
+  new_zealand:       'New Zealand',
+  costa_rica:        'Costa Rica',
+  south_africa:      'South Africa',
+  czech_republic:    'Czech Republic',
+  bosnia_herzegovina:'Bosnia & Herzegovina',
+  cape_verde:        'Cape Verde',
+  dr_congo:          'DR Congo',
+  curacao:           'Curaçao',
 };
 
 export function formatTeamName(slug: string): string {
@@ -34,6 +39,21 @@ export function formatDate(iso: string | null | undefined): string {
     const d = new Date(iso);
     if (isNaN(d.getTime())) return iso;
     return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+  } catch {
+    return iso;
+  }
+}
+
+export function formatKickoff(iso: string | null | undefined): string {
+  if (!iso) return '—';
+  try {
+    const d = new Date(iso);
+    if (isNaN(d.getTime())) return iso;
+    return d.toLocaleString('en-GB', {
+      day: 'numeric', month: 'short', year: 'numeric',
+      hour: '2-digit', minute: '2-digit',
+      timeZone: 'UTC', timeZoneName: 'short',
+    });
   } catch {
     return iso;
   }
