@@ -1,0 +1,554 @@
+# World Cup Oracle
+
+**The most honest public World Cup 2026 forecaster on the internet.**
+
+> **Status: Week 10 — Frontend skeleton live. Static Astro site (5 pages) consuming pipeline artifacts. Runs `make build-frontend` after `make export-web` (exports Parquet → JSON for Astro to read at build time).**
+> **Status: Week 9 — Scheduled odds capture and closing-line workflow. GitHub Actions cron captures market snapshots hourly; artifacts committed when changed. Closing-line candidate status tracking (no_market_data → opening_only → latest_available → closing_candidate → closing_locked). True CLV computable only when `closing_locked`. Local dry-run via `make capture-odds`.**
+> See the [12-week roadmap](docs/FINAL_BLUEPRINT.md#12-week-roadmap) for the full plan.
+
+---
+
+## Disclaimer
+
+This is an educational project about probabilistic modeling and football analytics.
+It is not gambling advice and does not guarantee profit.
+Every number ships with explicit uncertainty and a public calibration history.
+
+---
+
+## What this actually is
+
+A rigorously calibrated, self-grading tournament forecaster built on three honest pillars:
+
+1. **Be as calibrated as the closing line on individual matches** — and say so publicly.
+2. **Be the best open-source 2026 tournament simulator** — correct 48-team format, uncertainty propagation, exact tiebreak cascade.
+3. **Publish a live CLV/calibration scoreboard** — grade the model against the market in the open, win or lose.
+
+Read the full design rationale in [docs/FINAL_BLUEPRINT.md](docs/FINAL_BLUEPRINT.md).
+
+---
+
+## Week 10 status
+
+Static frontend skeleton.
+
+**Stack:** Astro 4 · TypeScript · TailwindCSS · Vitest
+
+**What was added:**
+- `frontend/` — Astro project with 5 static routes:
+  - `/` — Overview: simulator stats, top 12 champion picks, pipeline status, known limitations
+  - `/matches` — Group-stage fixtures with probability bars (home/draw/away), grouped A–L
+  - `/tournament` — All 48 teams sorted by champion probability; stage probability table; horizontal bars
+  - `/model` — Multi-year backtest RPS table (3 models × 3 years), 2022 holdout summary, RPS explainer
+  - `/market` — Blend config, snapshot capture status, closing-line candidate table, model-market gap table
+- `scripts/export_artifacts.py` — converts Parquet artifacts → JSON under `frontend/src/data/`; JSON artifacts copied directly. Handles missing files gracefully.
+- `frontend/src/components/` — `Layout`, `NavBar`, `Disclaimer`, `StatCard`, `ProbBar`, `EmptyState`
+- `frontend/src/utils/format.ts` — `formatTeamName` (with overrides for Côte d'Ivoire, United States, etc.), `formatPct`, `formatRps`, `formatOdds`, `formatDate`, `formatModelName`, `statusBadgeClass`
+- `frontend/src/utils/load.ts` — `loadJson` reads from `src/data/` at build time, returns fallback on missing file
+- `frontend/src/__tests__/format.test.ts` — 35 Vitest unit tests, all passing
+- 5 static HTML pages, 152KB total output
+
+**Design:** Dark theme (slate-950 background), probability bars with colored sections (blue/slate/rose), responsive grid layout.
+
+**Commands:**
+```bash
+# First time setup
+cd frontend && npm install
+
+# Export artifacts and build the static site
+make build-frontend
+# → frontend/dist/ — deployable static files
+
+# Development server with live reload
+make dev-frontend
+# → http://localhost:4321
+
+# Frontend unit tests only
+make test-frontend
+
+# Just export artifacts (if running astro dev separately)
+make export-web
+```
+
+**Architecture:**
+- `scripts/export_artifacts.py` reads `data/artifacts/*.parquet` and `data/artifacts/*.json`
+- Writes all data to `frontend/src/data/*.json`
+- Astro reads these files at build time via `loadJson()` (Node fs, not fetch)
+- Output is fully static HTML — no runtime JS required for data display
+- `frontend/src/data/` is gitignored; run `make export-web` before building
+
+**Empty-state handling:** Every page checks if data is present and shows an actionable `EmptyState` component with the relevant `make` command if data is missing.
+
+---
+
+## Week 9 status
+
+Scheduled market capture and closing-line candidate workflow.
+
+**What was added:**
+- `.github/workflows/capture-odds.yml` — GitHub Actions cron job that runs `oracle.pipeline.capture` hourly, commits updated snapshot artifacts if changed (`[skip ci]` in commit message prevents loops). Graceful: if `ODDS_API_KEY` secret is absent, the workflow runs with `DummyOddsProvider` and does not fail.
+- `oracle/market/closing.py` — Five-state closing-line classification per match:
+  - `no_market_data` — no snapshots for this match
+  - `opening_only` — exactly one distinct capture timestamp
+  - `latest_available` — multiple timestamps; kickoff unknown or >2 h away
+  - `closing_candidate` — latest snapshot within `closing_window_hours` (default 2 h) of kickoff
+  - `closing_locked` — kickoff has passed; latest snapshot is the closing line
+- `oracle/pipeline/capture.py` — capture pipeline entry point. Ingests odds, computes closing-line status, writes `market_capture_status.json` and `closing_line_candidates.parquet`.
+- 46 new tests in `tests/test_capture.py` — all offline (injectable `now` parameter, no network calls).
+
+**Setting up `ODDS_API_KEY`:**
+```bash
+# Local development
+export ODDS_API_KEY=your_key_here
+make capture-odds   # real data
+
+# Without a key — dry-run using DummyOddsProvider (always works)
+make capture-odds
+```
+
+For GitHub Actions, add the key as a repository secret:
+`Settings → Secrets and variables → Actions → New repository secret → ODDS_API_KEY`
+
+**How scheduled capture works:**
+
+The workflow runs every hour. On each run:
+1. `oracle.pipeline.capture` fetches latest odds (real or dummy provider).
+2. New rows are appended to `data/curated/market_snapshots.parquet` (append-only, deduplicated by `snapshot_id`).
+3. Per-match closing-line status is written to `data/artifacts/market_capture_status.json` and `data/artifacts/closing_line_candidates.parquet`.
+4. The commit step fires only if any of these files changed.
+
+**Closing-line candidate vs true CLV:**
+
+| Status | Meaning | CLV computable? |
+|---|---|---|
+| `no_market_data` | No odds captured for this match | No |
+| `opening_only` | Single capture; no movement yet | No |
+| `latest_available` | Multiple captures; kickoff not close | No |
+| `closing_candidate` | Latest capture within 2 h of kickoff | No — still pre-kickoff |
+| `closing_locked` | Kickoff has passed | **Yes** — use `closing_line_clv_record()` |
+
+True CLV (`model_prob − market_close_prob_devigged`) is only meaningful when `closing_locked == True`. For all other statuses `market_close_prob` is `None` and `aggregate_clv()` skips the record automatically.
+
+```python
+from oracle.market.closing import (
+    closing_line_summary,
+    closing_line_clv_record,
+    match_snapshot_status,
+)
+from oracle.harness.clv import aggregate_clv
+
+# Per-match status
+rows = closing_line_summary(snapshots, kickoff_times={"wc2026_B_01": kickoff_dt})
+
+# CLV-ready record — market_close_prob set only when closing_locked
+from oracle.market.movement import opening_snapshot, latest_snapshot
+rec = closing_line_clv_record(
+    match_id="wc2026_B_01",
+    selection="home",
+    model_prob=0.52,
+    open_snap=opening_snapshot(snapshots, "wc2026_B_01", "bwin", "1x2", "home"),
+    latest_snap=latest_snapshot(snapshots, "wc2026_B_01", "bwin", "1x2", "home"),
+    closing_status="closing_locked",   # only set this when status is confirmed
+)
+result = aggregate_clv([rec])  # n_records == 1; meaningful only for closing_locked
+```
+
+**Local dry-run:**
+```bash
+make capture-odds
+# → Ingests with DummyOddsProvider (no key required)
+# → Writes data/artifacts/market_capture_status.json
+# → Writes data/artifacts/closing_line_candidates.parquet
+```
+
+**Responsible terminology:**
+
+| Use | Avoid |
+|---|---|
+| `closing_locked` | "CLV" before kickoff |
+| `closing_candidate` | "closing line candidate at kickoff" |
+| `snapshot_movement` | "CLV drift" |
+| `market_baseline` | "edge" |
+| `model_market_gap` | "profit" |
+
+---
+
+## Week 8 status
+
+Market baseline and model-vs-market blend evaluation.
+
+**What was added:**
+- `oracle/market/baseline.py` — `validate_market_probs()`, `market_probs_for_match()`, `all_market_probs()`. Converts `OddsSnapshot` rows into `{"home": float, "draw": float, "away": float}` prediction dicts, averaging over bookmakers and selecting the latest snapshot per (bookmaker × selection).
+- `oracle/market/gap.py` — `model_market_gap()` computes absolute and directional gap between model and market for one match. `batch_model_market_gaps()` covers all matchups; matches without market data get a `missing_market_row()`. Label is always `"model_market_gap"` — not "edge".
+- `oracle/market/blend.py` — `blend_probabilities()` (weighted average, renormalised to sum exactly to 1.0), `blend_model_only()` (pass-through when no market data), `batch_blend()`, and `backtest_blend()` (requires real historical odds; currently illustrative only). Default: 80% market / 20% model.
+- `oracle/pipeline/blend.py` — generates three artifacts by joining Elo predictions with curated market snapshots on canonical team-pair keys.
+- 84 new tests in `tests/test_blend.py` — including explicit terminology checks that "edge", "profit", "guaranteed", "sure bet", and "beat the market" do not appear anywhere in output dicts.
+
+**Blend API:**
+```python
+from oracle.market.blend import blend_probabilities, batch_blend, DEFAULT_MARKET_WEIGHT
+
+# Single match
+result = blend_probabilities(
+    model_probs={"home": 0.45, "draw": 0.28, "away": 0.27},
+    market_probs={"home": 0.42, "draw": 0.30, "away": 0.28},
+    market_weight=0.80,  # default
+    model_weight=0.20,   # default
+)
+# result = {"home": ..., "draw": ..., "away": ...,
+#           "market_weight": 0.8, "model_weight": 0.2, "label": "blend", "note": ...}
+
+# Batch (full group stage)
+from oracle.market.blend import batch_blend
+blended = batch_blend(model_probs_by_match, market_probs_by_match)
+```
+
+**Model-market gap:**
+```python
+from oracle.market.gap import model_market_gap
+
+gap = model_market_gap(model_probs, market_probs, match_id="m1")
+# gap["label"] == "model_market_gap"   (NOT "edge")
+# gap["max_gap_selection"]             which selection diverges most
+# gap["max_gap_value"]                 magnitude of that divergence
+```
+
+**Language rules enforced:**
+
+| Use | Avoid |
+|---|---|
+| `model_market_gap` | "edge" |
+| `market_baseline` | "profit" |
+| `blend` | "guaranteed" |
+| `benchmark` | "sure bet" |
+| `calibration` | "beat the market" |
+
+**Default blend weights:** 80% market / 20% model. Rationale: the market typically has more information than a simple Elo model. These weights are NOT tuned for any financial objective and will be revised once WC 2026 calibration data accumulates.
+
+**Why no historical backtest yet:** No historical market odds are available for 2014/2018/2022 WC matches. The `backtest_blend()` function exists and is tested with synthetic data; `has_real_data` is always `False` until real odds are captured. This is reported explicitly in `market_blend_summary.json`.
+
+```bash
+# Generate blend artifacts (works without ODDS_API_KEY — uses dummy data)
+make ingest-odds   # or set ODDS_API_KEY for real data
+make blend
+# → data/artifacts/model_market_comparison.parquet
+# → data/artifacts/blended_predictions.parquet
+# → data/artifacts/market_blend_summary.json
+```
+
+---
+
+## Week 7 status
+
+Market odds ingestion and CLV-ready pipeline foundation.
+
+**What was added:**
+- `oracle/market/` — new package with four modules:
+  - `schema.py` — `OddsSnapshot` dataclass (snapshot_id, bookmaker, market, match_id, home_team, away_team, selection, decimal_odds, implied_probability_raw, implied_probability_devigged, devig_method, captured_at, source, source_event_id). `build_1x2_snapshots()` de-vigs all three 1X2 outcomes together using Shin (default) or power method.
+  - `provider.py` — abstract `OddsProvider` interface, `DummyOddsProvider` (no network), `TheOddsAPIProvider` (reads `ODDS_API_KEY` env var, gracefully raises `OddsAPIKeyMissing` if absent). Provider accepts injectable `_http_get` callable so tests never touch the network.
+  - `snapshot.py` — append-only Parquet persistence. `save_snapshots()` reads existing rows, deduplicates by `snapshot_id`, appends only new rows. `load_snapshots()` returns `[]` when the file doesn't exist yet.
+  - `movement.py` — `opening_snapshot()` / `latest_snapshot()` selection, `snapshot_movement()` (labeled `"snapshot_movement"` — **NOT CLV**), `clv_ready_record()` returning a `CLVRecord` ready for `aggregate_clv()` once kickoff captures exist.
+- `oracle/ingest/odds.py` — rewritten. Tries `TheOddsAPIProvider`; falls back to `DummyOddsProvider` if `ODDS_API_KEY` is missing. Writes append-only to `data/curated/market_snapshots.parquet`.
+- `oracle/pipeline/market.py` — generates market baseline artifacts. Uses dummy data if no real snapshots are ingested, with explicit `"using_dummy_data": true` flag.
+- 57 new tests — all passing, zero network calls.
+
+**Market terminology (strict):**
+
+| Term | Meaning |
+|---|---|
+| `snapshot_movement` / `latest-vs-open` | Odds drift between opening and latest snapshot. NOT CLV. |
+| `market_baseline` | De-vigged market probabilities from snapshots. For benchmarking only. |
+| `CLV-ready` | All fields to compute CLV are present. Actual CLV only computable when `latest_snap` is a true closing line (captured at kickoff). |
+| CLV | **Only** called CLV when the closing line is captured at kickoff. Not yet implemented — Week 8+. |
+
+**Disclaimer:** Market data is used as a calibration benchmark only. This is not a betting product. No profitability claims.
+
+**How to configure:**
+```bash
+# Without API key — uses dummy odds (always works, CI-safe)
+make ingest-odds
+make market-baseline
+
+# With real market data (The Odds API free tier)
+export ODDS_API_KEY=your_key_here
+make ingest-odds        # appends real snapshots to data/curated/market_snapshots.parquet
+make market-baseline    # writes data/artifacts/market_{snapshots,baseline_summary}
+```
+
+---
+
+## Week 6 status
+
+Dixon-Coles scoreline sampling replaces surrogate goals in the group stage.
+All 72 group-stage matchup grids are precomputed once per pipeline run, then
+reused across all 10,000 simulations.  Knockout matches still use Elo win
+probabilities (no goals needed there).
+
+**Why surrogate goals were replaced:**
+The Week 5 audit found that mapping win/draw/loss to fixed 1-0 / 1-1 / 0-1
+scorelines made GD and GF fully determined by a team's W-D-L record. Two teams
+sharing the same points total always had identical GD, so tiebreaks degraded to
+random coin flips. Dixon-Coles scoreline sampling breaks this: a 2-0 win and a
+1-0 win are now distinct outcomes with different GD contributions, making
+third-place selection and within-group tiebreaks meaningfully informative.
+
+**Remaining limitations (intentionally deferred):**
+
+| Limitation | Status |
+|---|---|
+| Placeholder group draw | Awaiting official FIFA announcement |
+| Placeholder R32 bracket (positional seed 1 vs 32) | Awaiting official FIFA R16 table |
+| No official third-place bracket slot assignment | TODO once table is published |
+| No host advantage (USA / Mexico / Canada) | Intentionally deferred |
+| No Elo rating uncertainty propagation | Intentionally deferred |
+
+| Component | Status |
+|---|---|
+| Repo structure + Python tooling | Done |
+| DuckDB schema + Parquet data folders | Done |
+| 48-team canonical ID + alias resolver | Done |
+| martj42 results ingestion (SSL + NA fix) | Done |
+| Shin + power de-vig (penaltyblog) | Done |
+| Elo ratings module (`oracle/ratings/elo.py`) | Done |
+| Time-decay weight utility (`oracle/scoring/decay.py`) | Done |
+| Dixon-Coles wrapper + `predict_grid()` | Done |
+| Calibration diagnostics (`oracle/scoring/calibration.py`) | Done |
+| Multi-year backtest pipeline (`oracle/pipeline/multi_holdout.py`) | Done |
+| Group-stage simulator with DC scorelines (`oracle/sim/group.py`) | Done |
+| DC grid precompute + sampling (`oracle/sim/dc_goals.py`) | Done |
+| Tiebreak cascade (`oracle/sim/tiebreak.py`) | Done |
+| Knockout bracket (`oracle/sim/bracket.py`) | Done |
+| Monte Carlo runner (`oracle/sim/tournament.py`) | Done |
+| Simulation pipeline with DC (`oracle/pipeline/simulate.py`) | Done |
+| **Tests (313 passing)** | **Done** |
+| Odds provider interface + DummyOddsProvider | Done |
+| The Odds API integration (`ODDS_API_KEY`) | Done |
+| Shin/power de-vig on ingest | Done |
+| Append-only Parquet snapshot store | Done |
+| Snapshot movement / latest-vs-open | Done |
+| CLV-ready record builder | Done |
+| Market baseline artifacts | Done |
+| **Tests (370 passing)** | **Done** |
+| Market baseline conversion (`baseline.py`) | Done |
+| Model-market gap analysis (`gap.py`) | Done |
+| 80/20 blend with configurable weights (`blend.py`) | Done |
+| Blend pipeline + 3 artifacts | Done |
+| **Tests (454 passing)** | **Done** |
+| True closing-line capture (at kickoff) | Week 9 |
+| Historical market backtest (needs real WC odds) | Deferred |
+| Frontend (Astro/Vercel) | Week 9+ |
+
+### Week 6 simulation (placeholder draw, 10,000 sims, Elo-full + DC scorelines)
+
+Run `make simulate` after `make ingest-results` to reproduce. Results are from
+the placeholder draw — these numbers will shift significantly once the official
+WC 2026 draw is announced.
+
+⚠️  These probabilities are structural estimates based on Elo ratings and a
+placeholder group assignment. They are NOT final forecasts.
+
+```
+Team                    Qualify     R16      QF      SF   Final  Champion
+─────────────────────────────────────────────────────────────────────────
+spain                     95.4%   69.7%   49.3%   34.9%   23.3%     15.3%
+argentina                 95.2%   66.8%   46.5%   30.7%   20.8%     13.8%
+france                    87.2%   62.9%   41.7%   24.3%   15.3%      9.3%
+brazil                    89.6%   53.8%   32.2%   19.2%   10.9%      5.7%
+england                   95.1%   63.8%   35.0%   18.0%   10.2%      5.5%
+portugal                  90.0%   51.0%   29.7%   16.3%    9.1%      4.7%
+croatia                   97.3%   57.2%   35.9%   22.0%   10.1%      4.4%
+germany                   85.8%   51.5%   24.3%   12.7%    6.8%      3.6%
+netherlands               93.8%   55.2%   24.5%   13.2%    6.6%      3.3%
+colombia                  93.3%   55.1%   24.6%   13.1%    6.5%      3.2%
+─────────────────────────────────────────────────────────────────────────
+goals_model: dc (dixon-coles-v0.3, xi=0.0018, 10×10 grid, neutral venue)
+locked_model: elo-baseline-v0.2
+```
+
+### Multi-year results (2014 + 2018 + 2022 WC group stages, 144 matches)
+
+```
+Model                     2014     2018     2022   Aggregate  Calibration gap
+──────────────────────────────────────────────────────────────────────────────
+Dixon-Coles (xi=0.0018)  0.1846   0.1913   0.2330   0.2030     0.123  ← best RPS
+Elo full history         0.2195   0.2099   0.2221   0.2171     0.059  ← best calibration
+Elo recent (post-2010)   0.2285   0.2236   0.2242   0.2254     0.091
+Uniform (1/3)            0.2500   0.2500   0.2500   0.2500     —
+──────────────────────────────────────────────────────────────────────────────
+All three models beat the uniform baseline on every year and in aggregate.
+```
+
+**Honest interpretation:**
+- Dixon-Coles wins aggregate RPS (0.203) due to strong 2014/2018 results. Single-year 2022 (0.233) misled Week 3.
+- Elo-full has the best calibration (mean gap 0.059 vs DC's 0.123). The project goal is honest calibration, not raw leaderboard ranking.
+- The DC vs Elo-full gap (0.014 aggregate RPS) is too small for 144 matches to be statistically conclusive.
+- **Current default: Elo-full.** Reason: best calibration + no hyperparameters to tune. Lock this as baseline before adding real odds.
+- All models show Elo-recent consistently underperforms Elo-full. Post-2010 training is insufficient for stable ratings.
+
+---
+
+## Stack
+
+| Layer | Tool | Why |
+|---|---|---|
+| Data | DuckDB + Parquet | Reproducible analytics without a server |
+| Pipeline | Python + GitHub Actions | Nightly cron → static artifacts |
+| Models | penaltyblog (Week 2+) | Don't reimplement Dixon-Coles |
+| Frontend | Astro (Week 7+) | Ships less JS; islands for the sim |
+| Hosting | Vercel (Week 7+) | Free tier; static-first |
+
+No Postgres. No Celery. No Redis. No microservices.
+The data is 48 teams and 104 matches — right-sized tools only.
+
+---
+
+## Getting started
+
+```bash
+# 1. Install
+pip install -e ".[dev]"
+
+# 2. Run tests
+pytest
+
+# 3. Ingest martj42 historical results (downloads ~5 MB CSV)
+make ingest-results
+
+# 4. Run multi-year backtest (Week 4) — PRIMARY evaluation command
+#    Trains locked models for 2014, 2018, 2022 WC group stages independently.
+#    No data leakage between years. Scores all 48 group-stage matches/year (144 total).
+make backtest
+# → data/artifacts/backtest_worldcups.parquet
+# → data/artifacts/backtest_worldcups_summary.json
+# → data/artifacts/model_comparison_worldcups.json
+# → data/artifacts/calibration_worldcups.json
+
+# 5. Run single-year 2022 holdout (Week 3 baseline, still useful for quick checks)
+make holdout
+# → data/artifacts/ratings_elo.parquet  (+ _recent, _dc_params)
+# → data/artifacts/holdout_2022_wc.parquet
+# → data/artifacts/holdout_summary.json
+# → data/artifacts/model_comparison_2022.json
+# → data/artifacts/calibration_2022.json
+
+# 6. Run tournament simulation (Week 5) — 10,000 Monte Carlo sims, Elo-full
+#    ⚠️  Uses placeholder group draw — not the official WC 2026 draw.
+make simulate
+# → data/artifacts/sim_2026_summary.json
+# → data/artifacts/sim_2026_team_probs.parquet
+
+# 7. Ingest dummy fixtures (placeholder data)
+make ingest-fixtures
+
+# 8. Ingest odds snapshots (uses DummyOddsProvider if ODDS_API_KEY not set)
+make ingest-odds
+# → data/curated/market_snapshots.parquet
+
+# 9. Generate market baseline artifacts
+make market-baseline
+# → data/artifacts/market_snapshots.parquet
+# → data/artifacts/market_baseline_summary.json
+
+# 10. Run model-market blend pipeline (Week 8)
+#     Blends Elo-full predictions with de-vigged market odds (80% market / 20% model).
+#     Works without ODDS_API_KEY — uses dummy data for unmatched matchups.
+make blend
+# → data/artifacts/model_market_comparison.parquet
+# → data/artifacts/blended_predictions.parquet
+# → data/artifacts/market_blend_summary.json
+```
+
+Python 3.11+ required.
+
+---
+
+## Project structure
+
+```
+oracle/
+  db.py            DuckDB connection factory + schema
+  teams.py         48-team canonical ID + alias resolver
+  ingest/
+    results.py     martj42 historical results (SSL + NA-safe)
+    fixtures.py    2026 match schedule
+    odds.py        market snapshots (append-only)
+  scoring/
+    metrics.py     RPS, log-loss, Brier
+    devig.py       Shin / power / naive de-vig (penaltyblog)
+    decay.py       Exponential time-decay weights (xi, half-life)
+    calibration.py Reliability binning for 1X2 predictions
+  ratings/
+    elo.py         Elo ratings wrapper (penaltyblog, K-factor + neutral venue)
+    dixon_coles.py Dixon-Coles goal model wrapper (penaltyblog, time-decay)
+  forecast/
+    baseline.py    1X2 Elo-baseline forecaster (MODEL_VERSION = locked model)
+  sim/
+    groups.py      WC 2026 placeholder group draw (48 teams, 12 groups)
+    group.py       Round-robin group simulation → standings (DC or surrogate)
+    dc_goals.py    DC grid precompute + CDF-inversion scoreline sampler
+    tiebreak.py    Standings sort: points → GD → GF → random
+    bracket.py     5-round knockout (R32→R16→QF→SF→Final)
+    tournament.py  run_tournament() + monte_carlo() runner
+  market/
+    schema.py      OddsSnapshot dataclass + build_1x2_snapshots (de-vigs on build)
+    provider.py    OddsProvider ABC + DummyOddsProvider + TheOddsAPIProvider
+    snapshot.py    Append-only Parquet persistence (save/load)
+    movement.py    opening/latest snapshot selection + snapshot_movement + clv_ready_record
+    baseline.py    Probs1x2 type + validate_market_probs + market_probs_for_match
+    gap.py         model_market_gap + batch_model_market_gaps (labeled "model_market_gap")
+    blend.py       blend_probabilities + batch_blend + backtest_blend (80/20 default)
+  pipeline/
+    holdout.py     Single-year multi-model holdout (2022 WC)
+    multi_holdout.py  Multi-year backtest with leakage prevention (2014/2018/2022)
+    simulate.py    Monte Carlo runner → sim_2026_summary.json + parquet
+    market.py      Market baseline artifacts → market_snapshots.parquet + summary
+    blend.py       Blend pipeline → model_market_comparison + blended_predictions + summary
+  harness/
+    clv.py         Closing-Line Value tracking
+    backtest.py    Score predictions vs market benchmark
+data/
+  raw/             Append-only raw downloads
+    results/       martj42 CSV (49,437 rows, 1872–2026)
+    fixtures/      2026 fixture list
+    odds/          Market snapshots (timestamped)
+  curated/         Cleaned Parquet layers
+  artifacts/       Pipeline outputs
+    ratings_elo.parquet                Full-history Elo ratings (48 teams)
+    ratings_elo_recent.parquet         Post-2010 Elo ratings (48 teams)
+    ratings_dc_params.parquet          Dixon-Coles attack/defence (48 teams)
+    holdout_2022_wc.parquet            Per-match RPS, 2022 only, all models
+    holdout_summary.json               2022 aggregate metrics
+    model_comparison_2022.json         2022 single-year comparison
+    calibration_2022.json              2022 calibration bins
+    backtest_worldcups.parquet         Per-match rows, 2014+2018+2022 (144)
+    backtest_worldcups_summary.json    Per-year + aggregate RPS
+    model_comparison_worldcups.json    Ranked multi-year comparison
+    calibration_worldcups.json         10-bin calibration, 144 pooled matches
+    sim_2026_summary.json              Champion probs + metadata (placeholder draw)
+    sim_2026_team_probs.parquet        Per-team stage probs, 48 teams
+    market_snapshots.parquet           Ingested 1X2 snapshot rows (de-vigged)
+    market_baseline_summary.json       Per-match de-vigged baseline + disclaimers
+    model_market_comparison.parquet    Model vs market probs + gap per matchup
+    blended_predictions.parquet        Blended (80% market / 20% model) per matchup
+    market_blend_summary.json          Blend metadata + backtest result + disclaimers
+tests/
+docs/
+  FINAL_BLUEPRINT.md   Full design rationale
+  RED_TEAM_AUDIT.md
+```
+
+---
+
+## Design principles
+
+- **Reproducibility first.** Every run is seeded. One command reproduces.
+- **Calibration over accuracy.** Proper scoring rules, not leaderboard metrics.
+- **Market is the benchmark, not the enemy.** We'll mostly match it; we'll say so.
+- **No overengineering.** If a component doesn't improve a scoring rule, the simulator, or honesty, it dies.
+- **Public self-grading.** The calibration scoreboard is the product.
+
+---
+
+## License
+
+MIT. Data sources retain their own licenses — respect each provider's ToS.

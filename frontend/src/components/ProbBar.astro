@@ -1,0 +1,52 @@
+---
+interface Props {
+  home: number;
+  draw: number;
+  away: number;
+  homeLabel: string;
+  awayLabel: string;
+}
+const { home, draw, away, homeLabel, awayLabel } = Astro.props;
+
+const hp = (home * 100).toFixed(1);
+const dp = (draw * 100).toFixed(1);
+const ap = (away * 100).toFixed(1);
+---
+<div class="flex items-center gap-3 min-w-0">
+  <span
+    class="text-right text-sm text-slate-300 truncate shrink-0"
+    style="width: 7.5rem"
+    title={homeLabel}
+  >
+    {homeLabel}
+  </span>
+
+  <div class="flex flex-1 h-7 rounded-md overflow-hidden text-xs font-semibold">
+    <div
+      class="flex items-center justify-center bg-blue-700 text-blue-100 transition-all"
+      style={`width:${hp}%`}
+    >
+      {home >= 0.15 ? `${Math.round(home * 100)}%` : ''}
+    </div>
+    <div
+      class="flex items-center justify-center bg-slate-600 text-slate-200 transition-all"
+      style={`width:${dp}%`}
+    >
+      {draw >= 0.15 ? `${Math.round(draw * 100)}%` : ''}
+    </div>
+    <div
+      class="flex items-center justify-center bg-rose-800 text-rose-100 transition-all"
+      style={`width:${ap}%`}
+    >
+      {away >= 0.15 ? `${Math.round(away * 100)}%` : ''}
+    </div>
+  </div>
+
+  <span
+    class="text-sm text-slate-300 truncate shrink-0"
+    style="width: 7.5rem"
+    title={awayLabel}
+  >
+    {awayLabel}
+  </span>
+</div>

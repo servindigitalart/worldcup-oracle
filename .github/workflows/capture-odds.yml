@@ -1,0 +1,66 @@
+# Scheduled market-odds capture.
+#
+# Runs hourly.  Adjust the cron schedule and the window based on your
+# Odds API quota — the free tier allows 500 requests/month, so running
+# more frequently than once every 3–4 hours will exhaust it quickly.
+#
+# Required GitHub secret:
+#   ODDS_API_KEY — your key from the-odds-api.com.
+#   If the secret is absent, the pipeline runs with DummyOddsProvider
+#   (dry-run only — no real data is captured and no artifact is committed).
+#
+# Commit safety:
+#   The commit step only fires when there are staged changes (git diff
+#   --cached --quiet exits non-zero).  The "[skip ci]" tag in the commit
+#   message prevents this workflow from triggering itself again.
+
+name: capture-odds
+
+on:
+  schedule:
+    # Every hour.  Change to '*/30 * * * *' during peak match windows.
+    - cron: '0 * * * *'
+  workflow_dispatch:  # allow manual trigger from the Actions UI
+
+permissions:
+  contents: write
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -e ".[dev]"
+
+      - name: Capture odds snapshot
+        env:
+          # Secret is empty string when not configured; ingest() falls back
+          # to DummyOddsProvider gracefully — workflow will NOT fail.
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+        run: python3 -m oracle.pipeline.capture
+
+      - name: Commit updated snapshots (if changed)
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          # Stage snapshot and artifact files; || true so missing files don't abort
+          git add \
+            data/curated/market_snapshots.parquet \
+            data/artifacts/market_capture_status.json \
+            data/artifacts/closing_line_candidates.parquet \
+            "data/raw/odds/" \
+            || true
+          # Only commit when there are staged changes
+          git diff --cached --quiet || \
+            git commit -m "chore: update market snapshots $(date -u +%Y-%m-%dT%H:%M:%SZ) [skip ci]"
+          git push || true

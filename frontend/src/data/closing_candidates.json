@@ -1,0 +1,38 @@
+[
+  {
+    "match_id": "wc2026_B_01",
+    "status": "latest_available",
+    "n_snapshots": 12,
+    "opening_captured_at": "2026-06-11T08:00:00Z",
+    "latest_captured_at": "2026-06-11T15:00:00Z",
+    "hours_of_coverage": 7.0,
+    "has_closing_line": false
+  },
+  {
+    "match_id": "wc2026_C_01",
+    "status": "opening_only",
+    "n_snapshots": 6,
+    "opening_captured_at": "2026-06-12T10:00:00Z",
+    "latest_captured_at": "2026-06-12T10:00:00Z",
+    "hours_of_coverage": 0.0,
+    "has_closing_line": false
+  },
+  {
+    "match_id": "wc2026_m001",
+    "status": "latest_available",
+    "n_snapshots": 6,
+    "opening_captured_at": "2026-06-11T08:00:00Z",
+    "latest_captured_at": "2026-06-11T15:00:00Z",
+    "hours_of_coverage": 7.0,
+    "has_closing_line": false
+  },
+  {
+    "match_id": "wc2026_m002",
+    "status": "opening_only",
+    "n_snapshots": 3,
+    "opening_captured_at": "2026-06-12T10:00:00Z",
+    "latest_captured_at": "2026-06-12T10:00:00Z",
+    "hours_of_coverage": 0.0,
+    "has_closing_line": false
+  }
+]

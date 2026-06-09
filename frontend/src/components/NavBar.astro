@@ -1,0 +1,32 @@
+---
+const links = [
+  { href: '/',           label: 'Overview'   },
+  { href: '/matches',    label: 'Matches'    },
+  { href: '/tournament', label: 'Tournament' },
+  { href: '/model',      label: 'Model'      },
+  { href: '/market',     label: 'Market'     },
+];
+const { pathname } = Astro.url;
+---
+<nav class="sticky top-0 z-10 bg-slate-900/95 backdrop-blur border-b border-slate-800">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 flex items-center h-13 gap-6">
+    <a href="/" class="font-semibold text-white text-sm tracking-tight shrink-0">
+      WC 2026 Oracle
+    </a>
+    <div class="flex gap-0.5 overflow-x-auto">
+      {links.map(({ href, label }) => (
+        <a
+          href={href}
+          class:list={[
+            'px-3 py-1.5 rounded text-sm whitespace-nowrap transition-colors',
+            pathname === href
+              ? 'bg-slate-700 text-white font-medium'
+              : 'text-slate-400 hover:text-white hover:bg-slate-800',
+          ]}
+        >
+          {label}
+        </a>
+      ))}
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,253 @@
+{
+  "generated_at": "2026-06-08T14:29:23.534190+00:00",
+  "years": [
+    2014,
+    2018,
+    2022
+  ],
+  "total_matches": 144,
+  "n_bins": 10,
+  "note": "Calibration pooled across all three WC group stages. ~14 matches per bin.",
+  "models": {
+    "elo-baseline-v0.2": {
+      "outcome_label": "home_win",
+      "n_matches": 144,
+      "n_bins": 10,
+      "mean_abs_calibration_gap": 0.0586,
+      "uniform_baseline_prob": 0.3333,
+      "small_sample_warning": false,
+      "bins": [
+        {
+          "bin_index": 0,
+          "n_matches": 14,
+          "mean_predicted": 0.2078,
+          "observed_rate": 0.2143,
+          "calibration_gap": -0.0065
+        },
+        {
+          "bin_index": 1,
+          "n_matches": 14,
+          "mean_predicted": 0.2708,
+          "observed_rate": 0.0714,
+          "calibration_gap": 0.1993
+        },
+        {
+          "bin_index": 2,
+          "n_matches": 14,
+          "mean_predicted": 0.3085,
+          "observed_rate": 0.2143,
+          "calibration_gap": 0.0942
+        },
+        {
+          "bin_index": 3,
+          "n_matches": 14,
+          "mean_predicted": 0.3424,
+          "observed_rate": 0.2857,
+          "calibration_gap": 0.0567
+        },
+        {
+          "bin_index": 4,
+          "n_matches": 14,
+          "mean_predicted": 0.3797,
+          "observed_rate": 0.3571,
+          "calibration_gap": 0.0225
+        },
+        {
+          "bin_index": 5,
+          "n_matches": 14,
+          "mean_predicted": 0.4129,
+          "observed_rate": 0.3571,
+          "calibration_gap": 0.0558
+        },
+        {
+          "bin_index": 6,
+          "n_matches": 14,
+          "mean_predicted": 0.4507,
+          "observed_rate": 0.4286,
+          "calibration_gap": 0.0222
+        },
+        {
+          "bin_index": 7,
+          "n_matches": 14,
+          "mean_predicted": 0.4968,
+          "observed_rate": 0.5,
+          "calibration_gap": -0.0032
+        },
+        {
+          "bin_index": 8,
+          "n_matches": 14,
+          "mean_predicted": 0.5541,
+          "observed_rate": 0.6429,
+          "calibration_gap": -0.0888
+        },
+        {
+          "bin_index": 9,
+          "n_matches": 18,
+          "mean_predicted": 0.6479,
+          "observed_rate": 0.6111,
+          "calibration_gap": 0.0367
+        }
+      ]
+    },
+    "elo-baseline-v0.2-recent": {
+      "outcome_label": "home_win",
+      "n_matches": 144,
+      "n_bins": 10,
+      "mean_abs_calibration_gap": 0.0906,
+      "uniform_baseline_prob": 0.3333,
+      "small_sample_warning": false,
+      "bins": [
+        {
+          "bin_index": 0,
+          "n_matches": 14,
+          "mean_predicted": 0.2544,
+          "observed_rate": 0.2143,
+          "calibration_gap": 0.0402
+        },
+        {
+          "bin_index": 1,
+          "n_matches": 14,
+          "mean_predicted": 0.3118,
+          "observed_rate": 0.1429,
+          "calibration_gap": 0.1689
+        },
+        {
+          "bin_index": 2,
+          "n_matches": 14,
+          "mean_predicted": 0.3358,
+          "observed_rate": 0.3571,
+          "calibration_gap": -0.0214
+        },
+        {
+          "bin_index": 3,
+          "n_matches": 14,
+          "mean_predicted": 0.3526,
+          "observed_rate": 0.2143,
+          "calibration_gap": 0.1383
+        },
+        {
+          "bin_index": 4,
+          "n_matches": 14,
+          "mean_predicted": 0.3762,
+          "observed_rate": 0.2857,
+          "calibration_gap": 0.0905
+        },
+        {
+          "bin_index": 5,
+          "n_matches": 14,
+          "mean_predicted": 0.3991,
+          "observed_rate": 0.5,
+          "calibration_gap": -0.1009
+        },
+        {
+          "bin_index": 6,
+          "n_matches": 14,
+          "mean_predicted": 0.4242,
+          "observed_rate": 0.2857,
+          "calibration_gap": 0.1385
+        },
+        {
+          "bin_index": 7,
+          "n_matches": 14,
+          "mean_predicted": 0.4491,
+          "observed_rate": 0.6429,
+          "calibration_gap": -0.1938
+        },
+        {
+          "bin_index": 8,
+          "n_matches": 14,
+          "mean_predicted": 0.4871,
+          "observed_rate": 0.5,
+          "calibration_gap": -0.0129
+        },
+        {
+          "bin_index": 9,
+          "n_matches": 18,
+          "mean_predicted": 0.5545,
+          "observed_rate": 0.5556,
+          "calibration_gap": -0.0011
+        }
+      ]
+    },
+    "dixon-coles-v0.3": {
+      "outcome_label": "home_win",
+      "n_matches": 144,
+      "n_bins": 10,
+      "mean_abs_calibration_gap": 0.1228,
+      "uniform_baseline_prob": 0.3333,
+      "small_sample_warning": false,
+      "bins": [
+        {
+          "bin_index": 0,
+          "n_matches": 14,
+          "mean_predicted": 0.0906,
+          "observed_rate": 0.2143,
+          "calibration_gap": -0.1237
+        },
+        {
+          "bin_index": 1,
+          "n_matches": 14,
+          "mean_predicted": 0.1541,
+          "observed_rate": 0.1429,
+          "calibration_gap": 0.0112
+        },
+        {
+          "bin_index": 2,
+          "n_matches": 14,
+          "mean_predicted": 0.1996,
+          "observed_rate": 0.0714,
+          "calibration_gap": 0.1282
+        },
+        {
+          "bin_index": 3,
+          "n_matches": 14,
+          "mean_predicted": 0.2473,
+          "observed_rate": 0.1429,
+          "calibration_gap": 0.1044
+        },
+        {
+          "bin_index": 4,
+          "n_matches": 14,
+          "mean_predicted": 0.3142,
+          "observed_rate": 0.3571,
+          "calibration_gap": -0.043
+        },
+        {
+          "bin_index": 5,
+          "n_matches": 14,
+          "mean_predicted": 0.3742,
+          "observed_rate": 0.5,
+          "calibration_gap": -0.1258
+        },
+        {
+          "bin_index": 6,
+          "n_matches": 14,
+          "mean_predicted": 0.4547,
+          "observed_rate": 0.6429,
+          "calibration_gap": -0.1881
+        },
+        {
+          "bin_index": 7,
+          "n_matches": 14,
+          "mean_predicted": 0.512,
+          "observed_rate": 0.2143,
+          "calibration_gap": 0.2977
+        },
+        {
+          "bin_index": 8,
+          "n_matches": 14,
+          "mean_predicted": 0.5827,
+          "observed_rate": 0.5,
+          "calibration_gap": 0.0827
+        },
+        {
+          "bin_index": 9,
+          "n_matches": 18,
+          "mean_predicted": 0.7105,
+          "observed_rate": 0.8333,
+          "calibration_gap": -0.1229
+        }
+      ]
+    }
+  }
+}

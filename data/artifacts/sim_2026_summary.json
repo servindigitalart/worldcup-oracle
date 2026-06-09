@@ -1,0 +1,98 @@
+{
+  "generated_date": "2026-06-08",
+  "n_sims": 10000,
+  "seed": 42,
+  "locked_model": "elo-baseline-v0.2",
+  "goals_model": "dc",
+  "goals_model_version": "dixon-coles-v0.3",
+  "goals_model_notes": "Group-stage scorelines sampled from Dixon-Coles joint probability grid (10\u00d710, max_goals=10, xi=0.0018, neutral venue). Grids precomputed once; reused across all simulations. Knockout matches use Elo win probabilities (no scoreline needed).",
+  "disclaimers": {
+    "group_draw": "Placeholder \u2014 NOT the official WC 2026 draw. Replace WC2026_GROUPS once announced.",
+    "bracket": "Positional (seed 1 vs 32, \u2026) \u2014 NOT the official FIFA R16 pairings.",
+    "third_place": "No official third-place bracket slot assignment implemented yet.",
+    "host_advantage": "USA / Mexico / Canada host advantage not modelled (neutral=True for all matches).",
+    "rating_uncertainty": "Elo ratings treated as point estimates; no uncertainty propagation."
+  },
+  "top_champion_probs": [
+    {
+      "team": "spain",
+      "champion": 0.1535
+    },
+    {
+      "team": "argentina",
+      "champion": 0.138
+    },
+    {
+      "team": "france",
+      "champion": 0.0927
+    },
+    {
+      "team": "brazil",
+      "champion": 0.057
+    },
+    {
+      "team": "england",
+      "champion": 0.0549
+    },
+    {
+      "team": "portugal",
+      "champion": 0.0465
+    },
+    {
+      "team": "croatia",
+      "champion": 0.0438
+    },
+    {
+      "team": "germany",
+      "champion": 0.0357
+    },
+    {
+      "team": "netherlands",
+      "champion": 0.0327
+    },
+    {
+      "team": "colombia",
+      "champion": 0.0325
+    },
+    {
+      "team": "japan",
+      "champion": 0.0305
+    },
+    {
+      "team": "morocco",
+      "champion": 0.0282
+    },
+    {
+      "team": "switzerland",
+      "champion": 0.0244
+    },
+    {
+      "team": "ecuador",
+      "champion": 0.0241
+    },
+    {
+      "team": "iran",
+      "champion": 0.0237
+    },
+    {
+      "team": "belgium",
+      "champion": 0.0226
+    },
+    {
+      "team": "turkey",
+      "champion": 0.0199
+    },
+    {
+      "team": "uruguay",
+      "champion": 0.0192
+    },
+    {
+      "team": "italy",
+      "champion": 0.0186
+    },
+    {
+      "team": "mexico",
+      "champion": 0.0161
+    }
+  ]
+}

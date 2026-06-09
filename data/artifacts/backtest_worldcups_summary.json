@@ -1,0 +1,73 @@
+{
+  "generated_at": "2026-06-08T14:29:23.534190+00:00",
+  "tournament": "FIFA World Cup",
+  "stage": "group stage",
+  "years": [
+    2014,
+    2018,
+    2022
+  ],
+  "total_matches": 144,
+  "uniform_rps": 0.25,
+  "small_sample_note": "144 matches across 3 tournaments. Treat aggregate RPS differences < 0.01 as directional, not conclusive.",
+  "per_year": {
+    "2014": {
+      "n_matches": 48,
+      "train_cutoff": "2014-06-11",
+      "n_train": 37861,
+      "rps": {
+        "elo-baseline-v0.2": 0.2195,
+        "elo-baseline-v0.2-recent": 0.2285,
+        "dixon-coles-v0.3": 0.1846
+      },
+      "beats_uniform": {
+        "elo-baseline-v0.2": true,
+        "elo-baseline-v0.2-recent": true,
+        "dixon-coles-v0.3": true
+      }
+    },
+    "2018": {
+      "n_matches": 48,
+      "train_cutoff": "2018-06-13",
+      "n_train": 41639,
+      "rps": {
+        "elo-baseline-v0.2": 0.2099,
+        "elo-baseline-v0.2-recent": 0.2236,
+        "dixon-coles-v0.3": 0.1913
+      },
+      "beats_uniform": {
+        "elo-baseline-v0.2": true,
+        "elo-baseline-v0.2-recent": true,
+        "dixon-coles-v0.3": true
+      }
+    },
+    "2022": {
+      "n_matches": 48,
+      "train_cutoff": "2022-11-19",
+      "n_train": 45699,
+      "rps": {
+        "elo-baseline-v0.2": 0.2221,
+        "elo-baseline-v0.2-recent": 0.2242,
+        "dixon-coles-v0.3": 0.233
+      },
+      "beats_uniform": {
+        "elo-baseline-v0.2": true,
+        "elo-baseline-v0.2-recent": true,
+        "dixon-coles-v0.3": true
+      }
+    }
+  },
+  "aggregate": {
+    "n_matches": 144,
+    "rps": {
+      "elo-baseline-v0.2": 0.2171,
+      "elo-baseline-v0.2-recent": 0.2254,
+      "dixon-coles-v0.3": 0.203
+    },
+    "beats_uniform": {
+      "elo-baseline-v0.2": true,
+      "elo-baseline-v0.2-recent": true,
+      "dixon-coles-v0.3": true
+    }
+  }
+}

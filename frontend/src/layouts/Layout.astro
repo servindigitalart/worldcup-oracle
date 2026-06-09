@@ -1,0 +1,28 @@
+---
+import NavBar from '../components/NavBar.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = 'WC 2026 probabilistic forecaster.' } = Astro.props;
+---
+<!doctype html>
+<html lang="en" class="bg-slate-950 text-slate-100">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <title>{title} — WC Oracle</title>
+  </head>
+  <body class="min-h-screen bg-slate-950 antialiased">
+    <NavBar />
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 py-8">
+      <slot />
+    </main>
+    <footer class="border-t border-slate-800 mt-16 py-6 text-center text-xs text-slate-600">
+      Educational calibration project. Not financial or betting advice. Probabilities from statistical models only.
+    </footer>
+  </body>
+</html>

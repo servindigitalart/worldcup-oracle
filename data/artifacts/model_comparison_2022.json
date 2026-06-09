@@ -1,0 +1,37 @@
+{
+  "holdout_name": "FIFA World Cup group stage 2022",
+  "n_holdout_scored": 36,
+  "uniform_rps": 0.25,
+  "small_sample_note": "Only 36 scored matches \u2014 treat calibration/RPS differences as directional, not statistically conclusive.",
+  "models": [
+    {
+      "model": "elo-baseline-v0.2-recent",
+      "description": "Elo trained on post-2010 data only",
+      "n_train": 24222,
+      "mean_rps": 0.22698393621558877,
+      "beats_uniform": true
+    },
+    {
+      "model": "elo-baseline-v0.2",
+      "description": "Elo trained on full history (1872\u2013cutoff)",
+      "n_train": 45699,
+      "mean_rps": 0.22795085694490608,
+      "beats_uniform": true
+    },
+    {
+      "model": "dixon-coles-v0.3",
+      "description": "Dixon-Coles with time-decay weights (xi=0.0018)",
+      "n_train": 45699,
+      "mean_rps": 0.24544649861765735,
+      "beats_uniform": true
+    },
+    {
+      "model": "uniform",
+      "description": "Uniform 1/3-1/3-1/3 baseline",
+      "n_train": null,
+      "mean_rps": 0.25,
+      "beats_uniform": false
+    }
+  ],
+  "generated_at": "2026-06-08T14:06:55.714747+00:00"
+}

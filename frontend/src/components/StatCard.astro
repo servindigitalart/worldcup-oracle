@@ -1,0 +1,19 @@
+---
+interface Props {
+  label: string;
+  value: string | number;
+  sub?: string;
+  accent?: boolean;
+}
+const { label, value, sub, accent = false } = Astro.props;
+---
+<div class="bg-slate-900 border border-slate-800 rounded-xl p-5">
+  <div class="text-slate-400 text-xs font-medium uppercase tracking-wider">{label}</div>
+  <div class:list={[
+    'text-2xl font-bold mt-1.5',
+    accent ? 'text-blue-400' : 'text-slate-100',
+  ]}>
+    {value}
+  </div>
+  {sub && <div class="text-xs text-slate-500 mt-1">{sub}</div>}
+</div>

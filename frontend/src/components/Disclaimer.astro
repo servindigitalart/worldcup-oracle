@@ -1,0 +1,16 @@
+---
+interface Props {
+  compact?: boolean;
+}
+const { compact = false } = Astro.props;
+---
+<div class:list={[
+  'border border-amber-800/40 rounded-lg bg-amber-950/20 text-amber-200/70',
+  compact ? 'px-4 py-2.5 text-xs' : 'px-5 py-4 text-sm',
+]}>
+  <span class="font-semibold text-amber-300/90">Disclaimer — </span>
+  Educational calibration project. Probabilities are outputs of statistical models,
+  not betting advice, financial guidance, or performance guarantees.
+  Not affiliated with FIFA. Uses a placeholder WC 2026 group draw — not the official
+  draw. No profitability claims. Market data is for benchmarking only.
+</div>

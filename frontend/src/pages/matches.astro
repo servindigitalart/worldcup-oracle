@@ -1,0 +1,85 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ProbBar from '../components/ProbBar.astro';
+import Disclaimer from '../components/Disclaimer.astro';
+import EmptyState from '../components/EmptyState.astro';
+import { loadJson } from '../utils/load';
+import { formatTeamName } from '../utils/format';
+import type { BlendedPrediction } from '../types';
+
+const predictions = loadJson<BlendedPrediction[]>('blended_predictions.json', []);
+
+// Group matches by group letter
+const byGroup: Record<string, BlendedPrediction[]> = {};
+for (const m of predictions) {
+  if (!byGroup[m.group]) byGroup[m.group] = [];
+  byGroup[m.group].push(m);
+}
+const groups = Object.keys(byGroup).sort();
+---
+<Layout title="Matches" description="Group-stage match probabilities">
+  <div class="space-y-8">
+
+    <div>
+      <h1 class="text-3xl font-bold text-slate-100">Group Stage Matches</h1>
+      <p class="mt-2 text-slate-400">
+        Blended probabilities (80% market / 20% model by default).
+        Matches without market data use model-only predictions.
+      </p>
+    </div>
+
+    <Disclaimer compact />
+
+    <!-- Legend -->
+    <div class="flex flex-wrap gap-4 text-xs text-slate-500">
+      <span class="flex items-center gap-1.5">
+        <span class="w-3 h-3 rounded-sm bg-blue-700 inline-block"></span> Home win
+      </span>
+      <span class="flex items-center gap-1.5">
+        <span class="w-3 h-3 rounded-sm bg-slate-600 inline-block"></span> Draw
+      </span>
+      <span class="flex items-center gap-1.5">
+        <span class="w-3 h-3 rounded-sm bg-rose-800 inline-block"></span> Away win
+      </span>
+      <span class="text-slate-600">· Probabilities are neutral-venue estimates.</span>
+    </div>
+
+    {predictions.length === 0 ? (
+      <EmptyState
+        title="No predictions available"
+        message="Run the blend pipeline to generate match probabilities."
+        command="make blend"
+      />
+    ) : (
+      <div class="space-y-10">
+        {groups.map((g) => (
+          <section>
+            <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4">
+              Group {g}
+            </h2>
+            <div class="space-y-3">
+              {byGroup[g].map((m) => (
+                <div class="bg-slate-900 border border-slate-800 rounded-xl px-4 py-3">
+                  <ProbBar
+                    home={m.blend_home}
+                    draw={m.blend_draw}
+                    away={m.blend_away}
+                    homeLabel={formatTeamName(m.home_team)}
+                    awayLabel={formatTeamName(m.away_team)}
+                  />
+                  <div class="flex justify-between mt-1.5 text-xs text-slate-600">
+                    <span>{(m.blend_home * 100).toFixed(1)}%</span>
+                    <span class="text-slate-500">
+                      {m.has_market_data ? 'blend' : 'model only'}
+                    </span>
+                    <span>{(m.blend_away * 100).toFixed(1)}%</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        ))}
+      </div>
+    )}
+  </div>
+</Layout>

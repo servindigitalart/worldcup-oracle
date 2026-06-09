@@ -1,0 +1,120 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Disclaimer from '../components/Disclaimer.astro';
+import StatCard from '../components/StatCard.astro';
+import EmptyState from '../components/EmptyState.astro';
+import { loadJson } from '../utils/load';
+import { formatTeamName, formatPct, formatDate } from '../utils/format';
+import type { SimSummary, MarketBlend, CaptureStatus } from '../types';
+
+const sim     = loadJson<SimSummary | null>('sim_summary.json', null);
+const blend   = loadJson<MarketBlend | null>('market_blend.json', null);
+const capture = loadJson<CaptureStatus | null>('capture_status.json', null);
+---
+<Layout title="Overview">
+  <div class="space-y-8">
+
+    <!-- Header -->
+    <div>
+      <h1 class="text-3xl font-bold text-slate-100">World Cup 2026 Oracle</h1>
+      <p class="mt-2 text-slate-400 max-w-2xl">
+        Probabilistic tournament forecaster. Elo + Dixon-Coles models blended with
+        market odds (80/20 default). Calibrated against 2014–2022 WC group stages.
+      </p>
+    </div>
+
+    <Disclaimer />
+
+    {sim ? (
+      <>
+        <!-- Quick stats -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <StatCard label="Simulations" value={sim.n_sims.toLocaleString()} />
+          <StatCard label="Teams" value="48" sub="12 groups, 4 teams each" />
+          <StatCard label="Match model" value={sim.locked_model.split('-')[0].toUpperCase()} sub={sim.locked_model} />
+          <StatCard label="Generated" value={formatDate(sim.generated_date)} />
+        </div>
+
+        <!-- Top champion picks -->
+        <section>
+          <h2 class="text-lg font-semibold text-slate-200 mb-4">
+            Top Champion Probabilities
+            <span class="text-sm font-normal text-slate-500 ml-2">({sim.n_sims.toLocaleString()} simulations)</span>
+          </h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {sim.top_champion_probs.slice(0, 12).map((row, i) => (
+              <div class="bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 flex items-center gap-3">
+                <span class="text-slate-600 text-sm font-mono w-5 text-right shrink-0">{i + 1}</span>
+                <div class="flex-1 min-w-0">
+                  <div class="text-slate-200 font-medium text-sm truncate">
+                    {formatTeamName(row.team)}
+                  </div>
+                </div>
+                <div class="text-blue-400 font-semibold text-sm shrink-0">
+                  {formatPct(row.champion)}
+                </div>
+              </div>
+            ))}
+          </div>
+          <p class="text-xs text-slate-500 mt-3">
+            Placeholder group draw — not the official WC 2026 draw.
+          </p>
+        </section>
+
+        <!-- Pipeline status -->
+        <section>
+          <h2 class="text-lg font-semibold text-slate-200 mb-4">Pipeline Status</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
+              <div class="text-xs text-slate-500 uppercase tracking-wider mb-1">Goals model</div>
+              <div class="text-sm text-slate-200 font-medium">{sim.goals_model_version}</div>
+              <div class="text-xs text-slate-500 mt-1">Group-stage scorelines</div>
+            </div>
+            {blend && (
+              <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
+                <div class="text-xs text-slate-500 uppercase tracking-wider mb-1">Blend weights</div>
+                <div class="text-sm text-slate-200 font-medium">
+                  {(blend.market_weight * 100).toFixed(0)}% market /
+                  {(blend.model_weight * 100).toFixed(0)}% model
+                </div>
+                <div class="text-xs text-slate-500 mt-1">
+                  {blend.n_with_market} of {blend.n_matchups_total} with market data
+                </div>
+              </div>
+            )}
+            {capture && (
+              <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
+                <div class="text-xs text-slate-500 uppercase tracking-wider mb-1">Capture status</div>
+                <div class="text-sm text-slate-200 font-medium">
+                  {capture.n_total_snapshots} snapshots
+                </div>
+                <div class="text-xs text-slate-500 mt-1">
+                  {capture.has_real_api_key ? 'Live market data' : 'Dummy provider'}
+                </div>
+              </div>
+            )}
+          </div>
+        </section>
+
+        <!-- Disclaimers -->
+        <section>
+          <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-3">Known Limitations</h2>
+          <ul class="space-y-1.5">
+            {Object.entries(sim.disclaimers).map(([k, v]) => (
+              <li class="text-xs text-slate-500 flex gap-2">
+                <span class="text-slate-600 shrink-0">·</span>
+                <span><span class="text-slate-400">{k.replace(/_/g, ' ')}:</span> {v}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </>
+    ) : (
+      <EmptyState
+        title="No simulation data"
+        message="Run the simulation pipeline to generate tournament probabilities."
+        command="make simulate"
+      />
+    )}
+  </div>
+</Layout>

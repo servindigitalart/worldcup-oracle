@@ -1,0 +1,124 @@
+.PHONY: install test lint clean ingest-results holdout backtest simulate ingest-odds market-baseline blend capture-odds export-web dev-frontend build-frontend test-frontend
+
+install:
+	pip install -e ".[dev]"
+
+test:
+	pytest
+
+test-cov:
+	pytest --cov=oracle --cov-report=term-missing
+
+# Ingest martj42 historical results CSV (~5 MB download)
+ingest-results:
+	python -m oracle.ingest.results
+
+ingest-fixtures:
+	python -m oracle.ingest.fixtures
+
+ingest-odds:
+	python3 -m oracle.ingest.odds
+
+# Generate market baseline artifacts from ingested odds snapshots.
+# If no real snapshots exist, writes placeholder artifacts using DummyOddsProvider.
+# Set ODDS_API_KEY and run 'make ingest-odds' first to use real market data.
+#
+# Artifacts written:
+#   data/artifacts/market_snapshots.parquet       all ingested 1X2 snapshot rows
+#   data/artifacts/market_baseline_summary.json   per-match de-vigged baseline
+market-baseline:
+	python3 -m oracle.pipeline.market
+
+# Generate model-market comparison and blended prediction artifacts.
+# Blends Elo-full model predictions with market odds (default: 80% market / 20% model).
+# Falls back to model-only predictions for matchups without market data.
+#
+# Run 'make ingest-odds' first to ensure market_snapshots.parquet is populated.
+#
+# Artifacts written:
+#   data/artifacts/model_market_comparison.parquet  model vs market probs + gap
+#   data/artifacts/blended_predictions.parquet      per-matchup blended probs
+#   data/artifacts/market_blend_summary.json        blend metadata + disclaimers
+blend:
+	python3 -m oracle.pipeline.blend
+
+# Dry-run scheduled market capture locally.
+# Uses DummyOddsProvider if ODDS_API_KEY is not set — safe to run without a key.
+# Set ODDS_API_KEY in your environment to capture real market data.
+#
+# Artifacts written:
+#   data/artifacts/market_capture_status.json   per-match closing-line status
+#   data/artifacts/closing_line_candidates.parquet  one row per tracked match
+capture-odds:
+	python3 -m oracle.pipeline.capture
+
+# Export pipeline artifacts to JSON for the Astro frontend.
+# Run this before building or developing the frontend.
+# Writes JSON files to frontend/src/data/ from data/artifacts/ Parquet + JSON.
+export-web:
+	python3 scripts/export_artifacts.py
+
+# Start the Astro dev server (live reload on file changes).
+# Runs export-web first to ensure data is up to date.
+dev-frontend: export-web
+	cd frontend && npm run dev
+
+# Build the static frontend to frontend/dist/.
+# Runs export-web first to ensure the latest artifacts are included.
+build-frontend: export-web
+	cd frontend && npm run build
+
+# Run frontend unit tests (Vitest).
+test-frontend:
+	cd frontend && npm test
+
+# Run multi-model holdout (Week 3):
+#   Trains Elo-full, Elo-recent, Dixon-Coles on pre-2022 history.
+#   Scores each on the 2022 WC group stage and writes artifacts to data/artifacts/.
+#
+# Artifacts written:
+#   ratings_elo.parquet          — full-history Elo ratings (48 teams)
+#   ratings_elo_recent.parquet   — post-2010 Elo ratings (48 teams)
+#   ratings_dc_params.parquet    — Dixon-Coles attack/defence params (48 teams)
+#   holdout_2022_wc.parquet      — per-match RPS for all three models
+#   holdout_summary.json         — aggregate metrics
+#   model_comparison_2022.json   — ranked model comparison table
+#   calibration_2022.json        — calibration bins per model
+#
+# Run `make ingest-results` first if data/raw/results/results.csv is missing.
+holdout:
+	python -m oracle.pipeline.holdout
+
+# Run multi-year backtest (Week 4):
+#   Trains locked models (Elo-full, Elo-recent, Dixon-Coles) independently
+#   for 2014, 2018, and 2022 WC group stages (no data leakage between years).
+#   Scores all 48 group-stage matches per year (144 total) using raw-name
+#   fallback for historical participants not in the WC 2026 team list.
+#
+# Artifacts written:
+#   backtest_worldcups.parquet         per-match rows, all years × all models
+#   backtest_worldcups_summary.json    per-year + aggregate RPS
+#   model_comparison_worldcups.json    ranked model table
+#   calibration_worldcups.json         10-bin calibration, 144 pooled matches
+#
+# Run `make ingest-results` first if data/raw/results/results.csv is missing.
+backtest:
+	python -m oracle.pipeline.multi_holdout
+
+# Run Monte Carlo tournament simulation (Week 5):
+#   10,000 simulations using the locked Elo-full model.
+#   Placeholder group draw — NOT the official WC 2026 draw.
+#   Positional bracket — NOT the official FIFA R16 pairings.
+#
+# Artifacts written:
+#   sim_2026_summary.json          top champion probabilities + metadata
+#   sim_2026_team_probs.parquet    per-team stage probabilities (48 teams)
+#
+# Run `make ingest-results` first if data/raw/results/results.csv is missing.
+simulate:
+	python3 -m oracle.pipeline.simulate
+
+clean:
+	find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
+	find . -type f -name "*.pyc" -delete
+	rm -rf .pytest_cache .coverage htmlcov

@@ -1,0 +1,254 @@
+---
+import Layout from '../layouts/Layout.astro';
+import StatCard from '../components/StatCard.astro';
+import Disclaimer from '../components/Disclaimer.astro';
+import EmptyState from '../components/EmptyState.astro';
+import { loadJson } from '../utils/load';
+import { formatTeamName, formatPct, formatDate, statusBadgeClass } from '../utils/format';
+import type { MarketBlend, CaptureStatus, MarketComparison, ClosingCandidate } from '../types';
+
+const blend      = loadJson<MarketBlend | null>('market_blend.json', null);
+const capture    = loadJson<CaptureStatus | null>('capture_status.json', null);
+const comparison = loadJson<MarketComparison[]>('market_comparison.json', []);
+const candidates = loadJson<ClosingCandidate[]>('closing_candidates.json', []);
+
+const withMarket = comparison.filter(m => m.has_market_data);
+const withoutMarket = comparison.length - withMarket.length;
+
+// Sort by abs(max_gap_value) descending for matches with market data
+const gapRows = withMarket
+  .filter(m => m.max_gap_value != null)
+  .sort((a, b) => Math.abs(b.max_gap_value!) - Math.abs(a.max_gap_value!));
+
+const STATUS_ORDER = ['closing_locked', 'closing_candidate', 'latest_available', 'opening_only', 'no_market_data'];
+---
+<Layout title="Market" description="Market odds benchmarking and blend summary">
+  <div class="space-y-10">
+
+    <div>
+      <h1 class="text-3xl font-bold text-slate-100">Market Benchmarking</h1>
+      <p class="mt-2 text-slate-400">
+        De-vigged market probabilities used as a calibration benchmark.
+        Not a betting product. Model-market gaps are informational only.
+      </p>
+    </div>
+
+    <Disclaimer compact />
+
+    {!blend && !capture ? (
+      <EmptyState
+        title="No market data"
+        message="Run the odds ingestion and blend pipelines."
+        command="make ingest-odds && make blend"
+      />
+    ) : (
+      <>
+        <!-- Blend configuration -->
+        {blend && (
+          <section>
+            <h2 class="text-lg font-semibold text-slate-200 mb-4">Blend Configuration</h2>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              <StatCard
+                label="Market weight"
+                value={`${(blend.market_weight * 100).toFixed(0)}%`}
+                sub="default prior on market information"
+              />
+              <StatCard
+                label="Model weight"
+                value={`${(blend.model_weight * 100).toFixed(0)}%`}
+                sub="Elo-full model contribution"
+              />
+              <StatCard
+                label="With market data"
+                value={blend.n_with_market}
+                sub={`of ${blend.n_matchups_total} matchups`}
+                accent
+              />
+              <StatCard
+                label="Model only"
+                value={blend.n_model_only}
+                sub="no market odds available"
+              />
+            </div>
+            <p class="text-xs text-slate-500 mt-3">
+              {blend.disclaimers?.weights_not_tuned ?? ''}
+            </p>
+          </section>
+        )}
+
+        <!-- Capture status -->
+        {capture && (
+          <section>
+            <h2 class="text-lg font-semibold text-slate-200 mb-4">Snapshot Capture Status</h2>
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-4">
+              <StatCard label="Total snapshots" value={capture.n_total_snapshots} />
+              <StatCard label="Matches tracked" value={capture.n_matches} />
+              <StatCard
+                label="Closing locked"
+                value={capture.n_closing_locked}
+                sub="true closing line available"
+                accent={capture.n_closing_locked > 0}
+              />
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
+              <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">
+                By Status
+              </div>
+              <div class="space-y-2">
+                {STATUS_ORDER.map(status => {
+                  const count = capture.by_status[status as keyof typeof capture.by_status] ?? 0;
+                  return (
+                    <div class="flex items-center gap-3">
+                      <span class:list={[
+                        'px-2 py-0.5 rounded border text-xs font-medium w-36 text-center shrink-0',
+                        statusBadgeClass(status),
+                      ]}>
+                        {status.replace(/_/g, ' ')}
+                      </span>
+                      <span class="text-slate-300 text-sm tabular-nums">{count}</span>
+                    </div>
+                  );
+                })}
+              </div>
+              <p class="text-xs text-slate-600 mt-4 leading-relaxed">{capture.note}</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+              <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 text-xs text-slate-500 space-y-1">
+                <div class="font-semibold text-slate-400 mb-1">Data source</div>
+                <div>{capture.has_real_api_key ? 'The Odds API (live)' : 'Dummy provider (no key set)'}</div>
+                <div>Last captured: {formatDate(capture.generated_at)}</div>
+                <div>{capture.n_new_rows} new rows in last run</div>
+              </div>
+              <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 text-xs space-y-2">
+                <div class="font-semibold text-slate-400">Closing-line status guide</div>
+                {[
+                  ['closing_locked', 'Kickoff passed — true closing line available'],
+                  ['closing_candidate', 'Latest snapshot within 2h of kickoff'],
+                  ['latest_available', 'Multiple snapshots, kickoff not imminent'],
+                  ['opening_only', 'Single capture — no movement yet'],
+                  ['no_market_data', 'No odds captured for this match'],
+                ].map(([s, d]) => (
+                  <div class="flex gap-2">
+                    <span class:list={['px-1.5 py-0.5 rounded border text-xs shrink-0', statusBadgeClass(s)]}>
+                      {s.replace(/_/g, ' ')}
+                    </span>
+                    <span class="text-slate-500">{d}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
+        <!-- Closing-line candidates table -->
+        {candidates.length > 0 && (
+          <section>
+            <h2 class="text-lg font-semibold text-slate-200 mb-4">Tracked Matches</h2>
+            <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="border-b border-slate-800 text-xs text-slate-500 uppercase tracking-wider">
+                    <th class="text-left px-4 py-3">Match ID</th>
+                    <th class="text-left px-4 py-3">Status</th>
+                    <th class="text-right px-4 py-3">Snapshots</th>
+                    <th class="text-right px-4 py-3">Coverage (h)</th>
+                    <th class="text-right px-4 py-3">Latest capture</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {candidates.map(c => (
+                    <tr class="border-b border-slate-800/60 last:border-0 hover:bg-slate-800/30">
+                      <td class="px-4 py-3 font-mono text-xs text-slate-400">{c.match_id}</td>
+                      <td class="px-4 py-3">
+                        <span class:list={[
+                          'px-2 py-0.5 rounded border text-xs font-medium',
+                          statusBadgeClass(c.status),
+                        ]}>
+                          {c.status.replace(/_/g, ' ')}
+                        </span>
+                      </td>
+                      <td class="px-4 py-3 text-right text-slate-400 tabular-nums">{c.n_snapshots}</td>
+                      <td class="px-4 py-3 text-right text-slate-400 tabular-nums">
+                        {c.hours_of_coverage.toFixed(1)}
+                      </td>
+                      <td class="px-4 py-3 text-right text-slate-500 text-xs tabular-nums">
+                        {c.latest_captured_at
+                          ? new Date(c.latest_captured_at).toLocaleString('en-GB', { timeStyle: 'short', dateStyle: 'short' })
+                          : '—'}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        )}
+
+        <!-- Model-market gaps -->
+        {gapRows.length > 0 ? (
+          <section>
+            <h2 class="text-lg font-semibold text-slate-200 mb-1">Model-Market Gaps</h2>
+            <p class="text-xs text-slate-500 mb-4">
+              Matches where the model diverges most from de-vigged market probabilities.
+              Labeled "model_market_gap" — not "edge". Informational only.
+            </p>
+            <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="border-b border-slate-800 text-xs text-slate-500 uppercase tracking-wider">
+                    <th class="text-left px-4 py-3">Match</th>
+                    <th class="text-left px-4 py-3">Selection</th>
+                    <th class="text-right px-4 py-3">Model</th>
+                    <th class="text-right px-4 py-3">Market</th>
+                    <th class="text-right px-4 py-3">Gap</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {gapRows.map(m => {
+                    const sel = m.max_gap_selection ?? '';
+                    const modelProb = sel === 'home' ? m.model_home : sel === 'draw' ? m.model_draw : m.model_away;
+                    const mktProb   = sel === 'home' ? m.market_home : sel === 'draw' ? m.market_draw : m.market_away;
+                    const gap       = m.max_gap_value;
+                    return (
+                      <tr class="border-b border-slate-800/60 last:border-0 hover:bg-slate-800/30">
+                        <td class="px-4 py-3 text-slate-300">
+                          {formatTeamName(m.home_team)} vs {formatTeamName(m.away_team)}
+                        </td>
+                        <td class="px-4 py-3 text-slate-500 capitalize">{sel}</td>
+                        <td class="px-4 py-3 text-right tabular-nums text-slate-400">
+                          {formatPct(modelProb)}
+                        </td>
+                        <td class="px-4 py-3 text-right tabular-nums text-slate-400">
+                          {formatPct(mktProb)}
+                        </td>
+                        <td class:list={[
+                          'px-4 py-3 text-right tabular-nums font-semibold',
+                          gap != null && gap > 0 ? 'text-blue-400' : 'text-rose-400',
+                        ]}>
+                          {gap != null ? (gap > 0 ? '+' : '') + (gap * 100).toFixed(1) + 'pp' : '—'}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        ) : (
+          comparison.length > 0 && (
+            <section class="bg-slate-900 border border-slate-800 rounded-xl p-6 text-center">
+              <div class="text-slate-500 text-sm">
+                {withoutMarket} of {comparison.length} matchups have no market data yet.
+              </div>
+              <div class="text-xs text-slate-600 mt-1">
+                Set ODDS_API_KEY and run <code class="text-blue-400">make capture-odds</code> to ingest real odds.
+              </div>
+            </section>
+          )
+        )}
+      </>
+    )}
+  </div>
+</Layout>

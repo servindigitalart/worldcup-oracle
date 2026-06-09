@@ -1,0 +1,13 @@
+{
+  "holdout_name": "FIFA World Cup group stage 2022",
+  "train_cutoff": "2022-11-19",
+  "n_train_matches": 45699,
+  "n_holdout_total": 48,
+  "n_holdout_scored": 36,
+  "uniform_rps": 0.25,
+  "small_sample_note": "Only 36 scored matches \u2014 treat calibration/RPS differences as directional, not statistically conclusive.",
+  "model_version": "elo-baseline-v0.2",
+  "mean_rps": 0.22795085694490608,
+  "beats_uniform": true,
+  "generated_at": "2026-06-08T14:06:55.714747+00:00"
+}
