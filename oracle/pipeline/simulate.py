@@ -35,6 +35,7 @@ from oracle.ingest.results import load_results
 from oracle.ratings.dixon_coles import DixonColesRatings
 from oracle.ratings.dixon_coles import MODEL_VERSION as DC_MODEL_VERSION
 from oracle.ratings.elo import EloRatings
+from oracle.sim.groups import load_groups
 from oracle.sim.tournament import N_SIMS, monte_carlo
 
 _ARTIFACTS = Path("data/artifacts")
@@ -60,11 +61,21 @@ def run(n_sims: int = N_SIMS, seed: int = 42) -> None:
     dc.fit(df)
     _LOG.info(f"Dixon-Coles trained ({DC_MODEL_VERSION}).")
 
+    # ── Group assignments (seed file → fallback to hardcoded placeholder) ────
+    groups, fixture_meta = load_groups()
+    _LOG.info(
+        "Fixture source: %s  (is_official=%s, is_placeholder=%s, n_fixtures=%d)",
+        fixture_meta.get("source"),
+        fixture_meta.get("is_official"),
+        fixture_meta.get("is_placeholder"),
+        fixture_meta.get("n_fixtures_loaded", 0),
+    )
+
     # ── Monte Carlo ───────────────────────────────────────────────────────────
     _LOG.info(f"Running {n_sims:,} Monte Carlo simulations (seed={seed}) …")
     _LOG.info("  Group-stage scores: DC joint probability grid (precomputed, neutral venue)")
     _LOG.info("  Knockout outcomes:  Elo win probability (no goals needed)")
-    mc = monte_carlo(elo, n_sims=n_sims, seed=seed, dc=dc)
+    mc = monte_carlo(elo, n_sims=n_sims, seed=seed, dc=dc, groups=groups)
     t_sim = time.perf_counter() - t_start
     _LOG.info(f"Done in {t_sim:.1f}s.")
 
@@ -85,8 +96,18 @@ def run(n_sims: int = N_SIMS, seed: int = 42) -> None:
             "Grids precomputed once; reused across all simulations. "
             "Knockout matches use Elo win probabilities (no scoreline needed)."
         ),
+        "fixture_source": {
+            "source":         fixture_meta.get("source"),
+            "is_official":    fixture_meta.get("is_official", False),
+            "is_placeholder": fixture_meta.get("is_placeholder", True),
+            "n_fixtures":     fixture_meta.get("n_fixtures_loaded", 0),
+        },
         "disclaimers": {
-            "group_draw":      "Placeholder — NOT the official WC 2026 draw. Replace WC2026_GROUPS once announced.",
+            "group_draw": (
+                "Groups loaded from official FIFA 2026 schedule."
+                if fixture_meta.get("is_official")
+                else "Placeholder — NOT the official WC 2026 draw. Update data/seed/wc2026_fixtures.json once announced."
+            ),
             "bracket":         "Positional (seed 1 vs 32, …) — NOT the official FIFA R16 pairings.",
             "third_place":     "No official third-place bracket slot assignment implemented yet.",
             "host_advantage":  "USA / Mexico / Canada host advantage not modelled (neutral=True for all matches).",

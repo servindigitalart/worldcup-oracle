@@ -28,17 +28,19 @@ CREATE TABLE IF NOT EXISTS results (
     away_team_id  TEXT
 );
 
--- 2026 fixture list
+-- 2026 fixture list (Week 11 canonical schema)
 CREATE TABLE IF NOT EXISTS fixtures (
-    fixture_id    TEXT PRIMARY KEY,
-    match_date    TIMESTAMP,
-    stage         TEXT,           -- 'group', 'r32', 'r16', 'qf', 'sf', 'final', 'third_place'
-    group_name    TEXT,           -- null for knockouts
-    home_team_id  TEXT,
-    away_team_id  TEXT,
-    venue         TEXT,
-    city          TEXT,
-    host_country  TEXT            -- 'USA' | 'Canada' | 'Mexico'
+    match_id        TEXT PRIMARY KEY,
+    stage           TEXT,           -- 'group', 'r32', 'r16', 'qf', 'sf', 'final', 'third_place'
+    group_name      TEXT,           -- null for knockouts
+    home_team       TEXT,
+    away_team       TEXT,
+    kickoff_at      TIMESTAMP,      -- null until official schedule available
+    venue           TEXT,
+    city            TEXT,
+    host_country    TEXT,           -- 'USA' | 'Canada' | 'Mexico'
+    source          TEXT,           -- e.g. 'placeholder_wc2026_groups_v1' | 'official_fifa_2026'
+    is_placeholder  BOOLEAN         -- true until official data replaces the row
 );
 
 -- market odds snapshots (append-only; each row is one snapshot)

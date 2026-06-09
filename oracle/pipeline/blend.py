@@ -49,7 +49,7 @@ from oracle.market.blend import (
 from oracle.market.gap import batch_model_market_gaps
 from oracle.market.snapshot import CURATED_PATH, load_snapshots
 from oracle.ratings.elo import EloRatings
-from oracle.sim.groups import WC2026_GROUPS
+from oracle.sim.groups import load_groups
 from oracle.teams import try_resolve_team
 
 log = logging.getLogger(__name__)
@@ -70,17 +70,26 @@ def run(
     elo.fit(df)
     log.info("  %d matches loaded. Elo trained.", len(df))
 
-    # ── 2. Model predictions for all 72 group-stage matchups ──────────────────
+    # ── 2. Load groups (seed file when available, hardcoded placeholder fallback)
+    groups, fixture_meta = load_groups()
+    log.info(
+        "  Fixture source: %s  (is_official=%s, is_placeholder=%s)",
+        fixture_meta.get("source"),
+        fixture_meta.get("is_official"),
+        fixture_meta.get("is_placeholder"),
+    )
+
+    # ── 3. Model predictions for all group-stage matchups ─────────────────────
     model_probs: dict[str, Probs1x2] = {}
     match_meta: dict[str, dict] = {}
-    for group, teams in WC2026_GROUPS.items():
+    for group, teams in groups.items():
         for home, away in combinations(teams, 2):
             key = f"{home}_vs_{away}"
             model_probs[key] = elo.predict(home, away, neutral=True)
             match_meta[key] = {"home_team": home, "away_team": away, "group": group}
     log.info("  %d group-stage matchups predicted.", len(model_probs))
 
-    # ── 3. Load market snapshots and build pair-keyed market probs ────────────
+    # ── 4. Load market snapshots and build pair-keyed market probs ───────────
     snapshots = load_snapshots(CURATED_PATH)
     log.info("  %d market snapshot rows loaded.", len(snapshots))
 
@@ -102,13 +111,13 @@ def run(
         n_matched, len(model_probs),
     )
 
-    # ── 4. Model-market gaps ──────────────────────────────────────────────────
+    # ── 5. Model-market gaps ──────────────────────────────────────────────────
     gap_rows = batch_model_market_gaps(model_probs, market_by_pair, match_meta)
 
-    # ── 5. Blended predictions ────────────────────────────────────────────────
+    # ── 6. Blended predictions ────────────────────────────────────────────────
     blended = batch_blend(model_probs, market_by_pair, market_weight, model_weight)
 
-    # ── 6. Backtest (no real historical data available) ───────────────────────
+    # ── 7. Backtest (no real historical data available) ───────────────────────
     bt = backtest_blend([], market_weight, model_weight)
 
     # ── Artifact 1: model_market_comparison.parquet ───────────────────────────
@@ -160,8 +169,21 @@ def run(
     log.info("Wrote %s  (%d rows)", blend_path, len(blend_rows))
 
     # ── Artifact 3: market_blend_summary.json ─────────────────────────────────
+    is_official   = fixture_meta.get("is_official", False)
+    is_placeholder = fixture_meta.get("is_placeholder", True)
+    draw_disclaimer = (
+        "Predictions use the official WC 2026 group draw."
+        if is_official else
+        "Predictions use the placeholder group draw — NOT the official WC 2026 draw."
+    )
     summary = {
         "generated_date":   str(date.today()),
+        "fixture_source": {
+            "source":         fixture_meta.get("source"),
+            "is_official":    is_official,
+            "is_placeholder": is_placeholder,
+            "n_fixtures":     fixture_meta.get("n_fixtures_loaded", 0),
+        },
         "market_weight":    market_weight,
         "model_weight":     model_weight,
         "n_matchups_total": len(model_probs),
@@ -184,10 +206,7 @@ def run(
                 "Backtesting the blend requires real pre-match market odds. "
                 "Will be revisited once WC 2026 match data accumulates."
             ),
-            "placeholder_draw": (
-                "Predictions use the placeholder group draw — NOT the "
-                "official WC 2026 draw."
-            ),
+            "group_draw": draw_disclaimer,
         },
     }
     summary_path = _ARTIFACTS / "market_blend_summary.json"

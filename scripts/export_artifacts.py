@@ -2,6 +2,7 @@
 Export pipeline artifacts to JSON for the Astro frontend.
 
 Reads JSON artifacts directly and converts Parquet files to JSON arrays.
+Also reads data/seed/wc2026_fixtures.json to export fixture_source.json.
 Writes all output to frontend/src/data/.
 
 Usage:
@@ -16,6 +17,7 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 ARTIFACTS = REPO_ROOT / "data" / "artifacts"
+SEED      = REPO_ROOT / "data" / "seed"
 OUT       = REPO_ROOT / "frontend" / "src" / "data"
 
 
@@ -50,6 +52,41 @@ def _write(filename: str, data: object) -> None:
     print(f"  {path.relative_to(REPO_ROOT)}  ({label})")
 
 
+def _build_fixture_source() -> dict:
+    """Read data/seed/wc2026_fixtures.json and return a fixture-source summary."""
+    seed_path = SEED / "wc2026_fixtures.json"
+    try:
+        data = json.loads(seed_path.read_text())
+        meta = data.get("metadata", {})
+        fixtures = data.get("fixtures", [])
+        group_stage = [f for f in fixtures if f.get("stage") == "group"]
+        groups: dict[str, set] = {}
+        for f in group_stage:
+            g = f.get("group", "")
+            groups.setdefault(g, set()).update([f["home_team"], f["away_team"]])
+        return {
+            "source":           meta.get("source"),
+            "is_official":      meta.get("is_official", False),
+            "is_placeholder":   meta.get("is_placeholder", True) if "is_placeholder" in meta else not meta.get("is_official", False),
+            "description":      meta.get("description", ""),
+            "generated":        meta.get("generated"),
+            "total_fixtures":   len(group_stage),
+            "total_groups":     len(groups),
+            "teams_per_group":  meta.get("teams_per_group", 4),
+            "how_to_update":    meta.get("how_to_update", ""),
+            "groups": {
+                g: sorted(teams)
+                for g, teams in sorted(groups.items())
+            },
+        }
+    except FileNotFoundError:
+        print(f"  [skip] wc2026_fixtures.json — not found at {seed_path}", file=sys.stderr)
+        return {"source": None, "is_official": False, "is_placeholder": True}
+    except Exception as exc:
+        print(f"  [warn] wc2026_fixtures.json: {exc}", file=sys.stderr)
+        return {"source": None, "is_official": False, "is_placeholder": True}
+
+
 def export() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
 
@@ -63,6 +100,7 @@ def export() -> None:
     _write("backtest_summary.json",     _read_json(ARTIFACTS / "backtest_worldcups_summary.json"))
     _write("holdout_summary.json",      _read_json(ARTIFACTS / "holdout_summary.json"))
     _write("model_comparison.json",     _read_json(ARTIFACTS / "model_comparison_worldcups.json"))
+    _write("fixture_source.json",       _build_fixture_source())
 
 
 if __name__ == "__main__":

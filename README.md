@@ -2,6 +2,7 @@
 
 **The most honest public World Cup 2026 forecaster on the internet.**
 
+> **Status: Week 11 — Canonical fixture seed file. `data/seed/wc2026_fixtures.json` formalises 72 group-stage fixtures (placeholder, `is_placeholder: true`). Pipeline now derives groups from seed file; fixtures flow through simulator, blend, capture, and frontend. `fixture_source` propagated into all artifacts. 535/535 Python tests, 35/35 frontend tests passing.**
 > **Status: Week 10 — Frontend skeleton live. Static Astro site (5 pages) consuming pipeline artifacts. Runs `make build-frontend` after `make export-web` (exports Parquet → JSON for Astro to read at build time).**
 > **Status: Week 9 — Scheduled odds capture and closing-line workflow. GitHub Actions cron captures market snapshots hourly; artifacts committed when changed. Closing-line candidate status tracking (no_market_data → opening_only → latest_available → closing_candidate → closing_locked). True CLV computable only when `closing_locked`. Local dry-run via `make capture-odds`.**
 > See the [12-week roadmap](docs/FINAL_BLUEPRINT.md#12-week-roadmap) for the full plan.
@@ -25,6 +26,67 @@ A rigorously calibrated, self-grading tournament forecaster built on three hones
 3. **Publish a live CLV/calibration scoreboard** — grade the model against the market in the open, win or lose.
 
 Read the full design rationale in [docs/FINAL_BLUEPRINT.md](docs/FINAL_BLUEPRINT.md).
+
+---
+
+## Week 11 status
+
+Canonical fixture seed file and fixture-derived pipeline.
+
+**Fixture data status:** Placeholder (`is_placeholder: true`). Groups and matchups are NOT from the official FIFA 2026 schedule. The seed file satisfies all structural rules (12 groups, 4 teams, 72 fixtures, 48 unique canonical teams) and is ready to accept official data.
+
+**What was added:**
+
+- `data/seed/wc2026_fixtures.json` — canonical fixture seed file. Schema: `match_id, stage, group, home_team, away_team, kickoff_at, venue, city, host_country, source, is_placeholder`. Currently 72 placeholder group-stage fixtures (`is_placeholder: true`, all `kickoff_at: null`).
+- `oracle/ingest/fixtures.py` (rewritten) — loads from seed file; validates required fields, team resolution, group/team counts, no duplicate `match_id`; raises `FixtureValidationError` on structural problems.
+- `oracle/ingest/fixtures.load_kickoff_times()` — returns `{(home, away): datetime}` for fixtures with non-null `kickoff_at`. Returns empty dict during placeholder phase.
+- `oracle/sim/groups.load_groups()` — preferred API for obtaining group assignments. Reads seed file when available; falls back to hardcoded `WC2026_GROUPS`. Returns `(groups_dict, fixture_meta)` so callers can propagate `is_official` / `is_placeholder` into artifacts.
+- `oracle/sim/groups.derive_groups_from_fixtures()` — reconstructs `{group: [team, ...]}` from a list of fixture dicts, preserving team order.
+- `oracle/sim/tournament.monte_carlo()` and `run_tournament()` — accept `groups=` parameter. Callers pass `load_groups()[0]` to use fixture-derived groups.
+- `oracle/sim/dc_goals.precompute_group_grids()` — accepts `groups=` parameter.
+- `oracle/pipeline/blend.py` — calls `load_groups()`; adds `fixture_source` block to `market_blend_summary.json`.
+- `oracle/pipeline/simulate.py` — calls `load_groups()`; passes groups to `monte_carlo()`; adds `fixture_source` block to `sim_2026_summary.json`.
+- `oracle/pipeline/capture.py` — calls `load_kickoff_times()`, matches snapshots by canonical team pair, passes `kickoff_times` to `closing_line_summary()`. Infrastructure is ready; all kickoffs are null in placeholder phase so status remains `opening_only` / `latest_available`.
+- `scripts/export_artifacts.py` — exports `fixture_source.json` to `frontend/src/data/` with group membership and data-status metadata.
+- `frontend/src/pages/matches.astro` — amber banner when `is_placeholder: true`; emerald banner when `is_official: true`.
+- `oracle/db.py` — updated fixtures table schema: `match_id, kickoff_at, is_placeholder, source` (replaces legacy `fixture_id, match_date, home_team_id, away_team_id`).
+- `tests/test_fixtures.py` — 26 new tests covering all required fixture validation, team resolution, group derivation, `load_groups()` fallback, kickoff wiring, simulator integration, and artifact propagation.
+
+**How fixture data flows through the pipeline:**
+```
+data/seed/wc2026_fixtures.json
+    ├─→ oracle.ingest.fixtures.load_groups()     → groups dict fed to simulate + blend
+    ├─→ oracle.ingest.fixtures.load_kickoff_times() → kickoff_at fed to capture pipeline
+    ├─→ oracle.sim.groups.load_groups()          → groups dict (72 matchups)
+    └─→ scripts/export_artifacts.py              → frontend/src/data/fixture_source.json
+```
+
+**How to update to official data:**
+```bash
+# 1. Edit data/seed/wc2026_fixtures.json:
+#    - set kickoff_at (ISO-8601 UTC), venue, city, host_country for each fixture
+#    - set is_placeholder: false on updated rows
+#    - set source: "official_fifa_2026"
+#    - set metadata.is_official: true
+
+# 2. Reload and regenerate
+make ingest-fixtures          # validate + load into DuckDB
+make simulate                 # re-run 10k MC sims with official groups
+make blend                    # re-run model-market blend
+make capture-odds             # re-classify closing-line status with real kickoffs
+make export-web               # export all artifacts to frontend/src/data/
+make build-frontend           # rebuild static site
+```
+
+**Test results:**
+- Python: 535/535 passed (26 new fixture tests)
+- Frontend: 35/35 passed
+- Artifacts regenerated: `sim_2026_summary.json`, `sim_2026_team_probs.parquet`, `blended_predictions.parquet`, `model_market_comparison.parquet`, `market_blend_summary.json`, `market_capture_status.json`, `closing_line_candidates.parquet`, `fixture_source.json` (new)
+
+**Placeholder limitations:**
+- Groups are NOT the official FIFA 2026 draw (knowledge cutoff Aug 2025, draw announced after)
+- All `kickoff_at` are null — closing-line status cannot reach `closing_candidate` or `closing_locked`
+- Venue, city, host_country are all null — host-advantage modelling not yet possible
 
 ---
 

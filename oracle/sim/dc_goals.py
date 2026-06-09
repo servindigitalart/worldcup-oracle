@@ -53,8 +53,11 @@ _MAX_GOALS = 10
 _GRID_CELLS = _MAX_GOALS * _MAX_GOALS  # 100
 
 
-def precompute_group_grids(dc) -> dict[tuple[str, str], np.ndarray]:
-    """Return pre-normalized flat CDF arrays for all 72 group-stage matchups.
+def precompute_group_grids(
+    dc,
+    groups: dict[str, list[str]] | None = None,
+) -> dict[tuple[str, str], np.ndarray]:
+    """Return pre-normalized flat CDF arrays for all group-stage matchups.
 
     Keys are (home_team_id, away_team_id) following the iteration order of
     itertools.combinations over each group's team list — the same order used
@@ -63,13 +66,19 @@ def precompute_group_grids(dc) -> dict[tuple[str, str], np.ndarray]:
     Values are float64 numpy arrays of length MAX_GOALS² (100), non-negative,
     summing to 1.0, ready for use with sample_scoreline().
 
+    Args:
+        dc:     Fitted DixonColesRatings instance.
+        groups: Group assignments {letter: [team_id, ...]}.
+                Defaults to WC2026_GROUPS if not provided.
+
     Matchups where dc.predict_grid() raises are silently omitted; those
     matches fall back to Elo-based surrogate goals.
     """
+    active_groups = groups if groups is not None else WC2026_GROUPS
     grids: dict[tuple[str, str], np.ndarray] = {}
     n_ok = n_fail = 0
 
-    for teams in WC2026_GROUPS.values():
+    for teams in active_groups.values():
         for home, away in combinations(teams, 2):
             try:
                 grid_obj = dc.predict_grid(home, away, neutral=True)

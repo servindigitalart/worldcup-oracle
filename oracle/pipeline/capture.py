@@ -25,13 +25,14 @@ import os
 from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Optional
 
 import polars as pl
 
+from oracle.ingest.fixtures import load_kickoff_times
 from oracle.ingest.odds import ingest
 from oracle.market.closing import closing_line_summary
 from oracle.market.snapshot import CURATED_PATH, RAW_DIR, load_snapshots
+from oracle.teams import try_resolve_team
 
 log = logging.getLogger(__name__)
 _DEFAULT_ARTIFACTS = Path("data/artifacts")
@@ -74,7 +75,30 @@ def run(
     log.info("%d total snapshot rows.", len(snapshots))
 
     # ── 3. Closing-line status for each match ─────────────────────────────────
-    summary_rows = closing_line_summary(snapshots)
+    # Build kickoff_times dict from fixture seed: {snap.match_id: kickoff_dt}.
+    # Matched by canonical (home_team, away_team) pair.
+    # When all kickoff_at values are null (placeholder phase) this is empty
+    # and every match keeps "opening_only" / "latest_available" status.
+    fixture_kickoffs = load_kickoff_times()
+    kickoff_times: dict[str, datetime] = {}
+    if fixture_kickoffs:
+        for snap in snapshots:
+            home_c = try_resolve_team(snap.home_team) or snap.home_team
+            away_c = try_resolve_team(snap.away_team) or snap.away_team
+            ko = fixture_kickoffs.get((home_c, away_c))
+            if ko is not None:
+                kickoff_times[snap.match_id] = ko
+        log.info(
+            "Kickoff times wired: %d / %d snapshots matched a fixture kickoff.",
+            len(kickoff_times), len(snapshots),
+        )
+    else:
+        log.info(
+            "No fixture kickoff times available (all null in seed). "
+            "Closing-line status will remain opening_only / latest_available."
+        )
+
+    summary_rows = closing_line_summary(snapshots, kickoff_times=kickoff_times or None)
 
     # ── 4. Write closing_line_candidates.parquet ──────────────────────────────
     cand_path = output_dir / "closing_line_candidates.parquet"

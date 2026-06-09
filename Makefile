@@ -1,4 +1,4 @@
-.PHONY: install test lint clean ingest-results holdout backtest simulate ingest-odds market-baseline blend capture-odds export-web dev-frontend build-frontend test-frontend
+.PHONY: install test lint clean ingest-results ingest-fixtures holdout backtest simulate ingest-odds market-baseline blend capture-odds export-web dev-frontend build-frontend test-frontend
 
 install:
 	pip install -e ".[dev]"
@@ -13,6 +13,12 @@ test-cov:
 ingest-results:
 	python -m oracle.ingest.results
 
+# Load fixture seed file into DuckDB.
+# Source: data/seed/wc2026_fixtures.json
+#   - 72 placeholder group-stage fixtures (is_placeholder=true until official data added)
+#   - Validates team IDs, required fields, group counts, no duplicate match_id
+#   - Drops and recreates the fixtures table to handle schema migrations
+# To switch to official data: update data/seed/wc2026_fixtures.json, then re-run.
 ingest-fixtures:
 	python -m oracle.ingest.fixtures
 

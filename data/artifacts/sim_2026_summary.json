@@ -6,8 +6,14 @@
   "goals_model": "dc",
   "goals_model_version": "dixon-coles-v0.3",
   "goals_model_notes": "Group-stage scorelines sampled from Dixon-Coles joint probability grid (10\u00d710, max_goals=10, xi=0.0018, neutral venue). Grids precomputed once; reused across all simulations. Knockout matches use Elo win probabilities (no scoreline needed).",
+  "fixture_source": {
+    "source": "placeholder_wc2026_groups_v1",
+    "is_official": false,
+    "is_placeholder": true,
+    "n_fixtures": 72
+  },
   "disclaimers": {
-    "group_draw": "Placeholder \u2014 NOT the official WC 2026 draw. Replace WC2026_GROUPS once announced.",
+    "group_draw": "Placeholder \u2014 NOT the official WC 2026 draw. Update data/seed/wc2026_fixtures.json once announced.",
     "bracket": "Positional (seed 1 vs 32, \u2026) \u2014 NOT the official FIFA R16 pairings.",
     "third_place": "No official third-place bracket slot assignment implemented yet.",
     "host_advantage": "USA / Mexico / Canada host advantage not modelled (neutral=True for all matches).",

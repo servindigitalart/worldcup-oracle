@@ -24,6 +24,11 @@ Scoreline model (Week 6+):
   and reused across all simulations.  This gives realistic GD/GF distributions
   so that tiebreaks carry meaningful signal rather than always resolving randomly.
   Knockout matches continue to use Elo win probabilities (no goals needed).
+
+Groups (Week 11+):
+  Pass groups=... to override the default WC2026_GROUPS.  Callers should obtain
+  this via oracle.sim.groups.load_groups() so that official fixture data is used
+  when available.  Omitting groups falls back to the hardcoded placeholder.
 """
 from __future__ import annotations
 
@@ -45,6 +50,7 @@ def run_tournament(
     rng: random.Random,
     *,
     dc_grids: dict | None = None,
+    groups: dict[str, list[str]] | None = None,
 ) -> dict[str, Any]:
     """Run one complete tournament simulation.
 
@@ -54,6 +60,8 @@ def run_tournament(
         dc_grids:  Pre-normalised DC flat arrays from precompute_group_grids().
                    When provided, group-stage scorelines are sampled from the DC
                    joint distribution instead of surrogate goals.
+        groups:    Group assignments {letter: [team_id, ...]}.
+                   Defaults to WC2026_GROUPS if not provided.
 
     Returns:
         dict with keys:
@@ -63,10 +71,11 @@ def run_tournament(
           finalist:   team id (runner-up)
           ko_results: list of per-round match result lists
     """
+    active_groups = groups if groups is not None else WC2026_GROUPS
     group_standings: dict[str, list[dict]] = {}
     third_place_rows: list[dict] = []
 
-    for letter, teams in WC2026_GROUPS.items():
+    for letter, teams in active_groups.items():
         standings = simulate_group(teams, elo, rng, dc_grids=dc_grids)
         group_standings[letter] = standings
         third = standings[2]  # 3rd-place finisher (0-indexed)
@@ -85,7 +94,7 @@ def run_tournament(
 
     # Build seeding list: 12 group winners, 12 runners-up, 8 best-third
     # Order within each tier follows group letter order (A→L).
-    group_order = list(WC2026_GROUPS.keys())
+    group_order = list(active_groups.keys())
     seeds: list[str] = (
         [group_standings[g][0]["team"] for g in group_order] +
         [group_standings[g][1]["team"] for g in group_order] +
@@ -96,10 +105,10 @@ def run_tournament(
     ko = simulate_knockout(seeds, elo, rng)
 
     return {
-        "groups": group_standings,
-        "qualified": qualified,
-        "champion": ko["champion"],
-        "finalist": ko["finalist"],
+        "groups":     group_standings,
+        "qualified":  qualified,
+        "champion":   ko["champion"],
+        "finalist":   ko["finalist"],
         "ko_results": ko["results"],
     }
 
@@ -110,6 +119,7 @@ def monte_carlo(
     seed: int = 42,
     *,
     dc: Any = None,
+    groups: dict[str, list[str]] | None = None,
 ) -> dict[str, Any]:
     """Run n_sims independent tournament simulations and aggregate probabilities.
 
@@ -122,6 +132,10 @@ def monte_carlo(
                  before the simulation loop begins, then reused every run.
                  This replaces surrogate goals (1-0 / 1-1 / 0-1) with realistic
                  sampled scorelines, giving meaningful GD/GF for tiebreaks.
+        groups:  Group assignments {letter: [team_id, ...]}.
+                 Defaults to WC2026_GROUPS if not provided.
+                 Pass the result of oracle.sim.groups.load_groups()[0] to use
+                 fixture-derived groups when available.
 
     Returns:
         dict with:
@@ -132,11 +146,13 @@ def monte_carlo(
           team_probs:         {team: {qualify, r16, qf, sf, final, champion}}
           champion_counts:    {team: int}  raw champion counts
     """
+    active_groups = groups if groups is not None else WC2026_GROUPS
+
     # Precompute DC grids once — 72 matchups, done before the sim loop.
     dc_grids: dict | None = None
     if dc is not None:
         from oracle.sim.dc_goals import precompute_group_grids
-        dc_grids = precompute_group_grids(dc)
+        dc_grids = precompute_group_grids(dc, groups=active_groups)
 
     master_rng = random.Random(seed)
 
@@ -152,7 +168,7 @@ def monte_carlo(
 
     for _ in range(n_sims):
         sim_rng = random.Random(master_rng.random())
-        result = run_tournament(elo, sim_rng, dc_grids=dc_grids)
+        result = run_tournament(elo, sim_rng, dc_grids=dc_grids, groups=active_groups)
 
         for team in result["qualified"]:
             qualify_counts[team] += 1
@@ -167,7 +183,7 @@ def monte_carlo(
                 if rnd in round_wins:
                     round_wins[rnd][match["winner"]] += 1
 
-    all_teams = [WC2026_GROUPS[g][i] for g in WC2026_GROUPS for i in range(4)]
+    all_teams = [active_groups[g][i] for g in active_groups for i in range(4)]
     team_probs: dict[str, dict[str, float]] = {}
     for team in all_teams:
         team_probs[team] = {
