@@ -21,15 +21,17 @@ SEED      = REPO_ROOT / "data" / "seed"
 OUT       = REPO_ROOT / "frontend" / "src" / "data"
 
 
-def _read_json(path: Path) -> object:
+def _read_json(path: Path, fallback: object = None) -> object:
+    if fallback is None:
+        fallback = {}
     try:
         return json.loads(path.read_text())
     except FileNotFoundError:
         print(f"  [skip] {path.name} — not found (run the pipeline first)", file=sys.stderr)
-        return {}
+        return fallback
     except Exception as exc:
         print(f"  [warn] {path.name}: {exc}", file=sys.stderr)
-        return {}
+        return fallback
 
 
 def _read_parquet(path: Path) -> list:
@@ -132,9 +134,18 @@ def export() -> None:
     _write("fixture_schedule.json",     _build_fixture_schedule())
     # Week 13: live tournament state
     _write("match_results.json",           _read_parquet(ARTIFACTS / "match_results.parquet"))
-    _write("group_standings.json",         _read_json(ARTIFACTS / "group_standings.json"))
-    _write("qualification_probs.json",     _read_json(ARTIFACTS / "qualification_probs.json"))
+    _write("group_standings.json",         _read_json(ARTIFACTS / "group_standings.json", []))
+    _write("qualification_probs.json",     _read_json(ARTIFACTS / "qualification_probs.json", []))
     _write("tournament_state_summary.json", _read_json(ARTIFACTS / "tournament_state_summary.json"))
+    # Week 14: responsible recommendations
+    _write("recommendations.json",         _read_json(ARTIFACTS / "recommendations.json", []))
+    _write("recommendations_summary.json", _read_json(ARTIFACTS / "recommendations_summary.json"))
+    # Week 15: transparency + auditability
+    _write("methodology.json",         _read_json(ARTIFACTS / "methodology.json"))
+    _write("data_sources.json",        _read_json(ARTIFACTS / "data_sources.json"))
+    _write("calibration_history.json", _read_json(ARTIFACTS / "calibration_history.json"))
+    _write("model_reliability.json",   _read_json(ARTIFACTS / "model_reliability.json"))
+    _write("market_agreement.json",    _read_json(ARTIFACTS / "market_agreement.json"))
 
 
 if __name__ == "__main__":

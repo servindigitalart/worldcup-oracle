@@ -1,4 +1,4 @@
-.PHONY: install test lint clean ingest-results ingest-fixtures holdout backtest simulate ingest-odds market-baseline blend capture-odds export-web dev-frontend build-frontend test-frontend ingest-results-2026 tournament-state
+.PHONY: install test lint clean ingest-results ingest-fixtures holdout backtest simulate ingest-odds market-baseline blend capture-odds export-web dev-frontend build-frontend test-frontend ingest-results-2026 tournament-state recommendations methodology data-sources calibration-history reliability market-agreement transparency
 
 install:
 	pip install -e ".[dev]"
@@ -124,6 +124,19 @@ backtest:
 simulate:
 	python3 -m oracle.pipeline.simulate
 
+# Run the responsible recommendation engine (Week 14).
+# Applies deterministic rules to model-market comparison data.
+# Requires 'make blend' to have been run first.
+# With no real market data all matches will show no_recommendation.
+# Set ODDS_API_KEY and run 'make ingest-odds && make blend' for market data.
+#
+# Artifacts written:
+#   data/artifacts/recommendations.parquet      one row per match
+#   data/artifacts/recommendations.json         same as JSON array
+#   data/artifacts/recommendations_summary.json aggregate counts
+recommendations:
+	python3 -m oracle.pipeline.recommendations
+
 # Validate and ingest WC 2026 match results from data/seed/wc2026_results.json.
 # Writes match_results.parquet and match_results_summary.json to data/artifacts/.
 # Edit data/seed/wc2026_results.json to add finished match scores, then re-run.
@@ -146,6 +159,25 @@ ingest-results-2026:
 # Run 'make ingest-results' first if data/raw/results/results.csv is missing.
 tournament-state:
 	python3 -m oracle.pipeline.state
+
+# Week 15: transparency + auditability
+methodology:
+	python3 -m oracle.pipeline.methodology
+
+data-sources:
+	python3 -m oracle.pipeline.data_sources
+
+calibration-history:
+	python3 -m oracle.pipeline.calibration_history
+
+reliability:
+	python3 -m oracle.pipeline.reliability
+
+market-agreement:
+	python3 -m oracle.pipeline.market_agreement
+
+# Run all Week 15 transparency pipelines in one shot
+transparency: methodology data-sources calibration-history reliability market-agreement
 
 clean:
 	find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true

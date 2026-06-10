@@ -1,0 +1,156 @@
+---
+import Layout from '../layouts/Layout.astro';
+import StatCard from '../components/StatCard.astro';
+import EmptyState from '../components/EmptyState.astro';
+import { loadJson } from '../utils/load';
+import type { DataSources } from '../types';
+
+const ds = loadJson<DataSources | null>('data_sources.json', null);
+---
+<Layout title="Data" description="Where the data comes from — match counts, sources, coverage">
+  <div class="space-y-10">
+
+    <div>
+      <h1 class="text-3xl font-bold text-slate-100">Data Sources</h1>
+      <p class="mt-2 text-slate-400">
+        Exactly where the training and evaluation data comes from.
+      </p>
+    </div>
+
+    {!ds || ds.historical_matches === 0 ? (
+      <EmptyState
+        title="No data source info"
+        message="Run the data-sources pipeline first."
+        command="make data-sources"
+      />
+    ) : (
+      <>
+        <!-- Top-level stat cards -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <StatCard
+            label="Total matches"
+            value={ds.historical_matches.toLocaleString()}
+            accent
+          />
+          <StatCard
+            label="World Cups"
+            value={ds.world_cups}
+            sub={`${ds.world_cup_matches.toLocaleString()} WC matches`}
+          />
+          <StatCard
+            label="Qualifiers"
+            value={ds.qualifier_matches.toLocaleString()}
+            sub={ds.qualifiers ? 'included' : 'not included'}
+          />
+          <StatCard
+            label="Friendlies"
+            value={ds.friendly_matches.toLocaleString()}
+            sub={ds.friendlies ? 'included' : 'not included'}
+          />
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <StatCard
+            label="Continental matches"
+            value={ds.continental_matches.toLocaleString()}
+            sub={ds.continental_tournaments ? 'included' : 'not included'}
+          />
+          <StatCard
+            label="Distinct tournaments"
+            value={ds.n_distinct_tournaments.toLocaleString()}
+          />
+          <StatCard
+            label="Earliest match"
+            value={ds.date_range?.earliest ?? '—'}
+          />
+          <StatCard
+            label="Latest match"
+            value={ds.date_range?.latest ?? '—'}
+          />
+        </div>
+
+        <!-- Source detail -->
+        <section class="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-4">
+          <h2 class="text-lg font-semibold text-slate-200">Primary Dataset</h2>
+          <div class="grid sm:grid-cols-2 gap-6 text-sm text-slate-400">
+            <div class="space-y-3">
+              <div>
+                <div class="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Source</div>
+                <p class="text-slate-200 font-medium">{ds.source}</p>
+              </div>
+              <div>
+                <div class="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">License</div>
+                <p>{ds.license ?? '—'}</p>
+              </div>
+            </div>
+            <div class="space-y-3">
+              <div>
+                <div class="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Coverage</div>
+                <ul class="space-y-1">
+                  <li class="flex items-center gap-2">
+                    <span class={ds.qualifiers ? 'text-green-500' : 'text-slate-600'}>
+                      {ds.qualifiers ? '✓' : '✗'}
+                    </span>
+                    Qualifiers
+                  </li>
+                  <li class="flex items-center gap-2">
+                    <span class={ds.friendlies ? 'text-green-500' : 'text-slate-600'}>
+                      {ds.friendlies ? '✓' : '✗'}
+                    </span>
+                    Friendlies
+                  </li>
+                  <li class="flex items-center gap-2">
+                    <span class={ds.continental_tournaments ? 'text-green-500' : 'text-slate-600'}>
+                      {ds.continental_tournaments ? '✓' : '✗'}
+                    </span>
+                    Continental tournaments
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <p class="text-xs text-slate-500 leading-relaxed">{ds.note}</p>
+        </section>
+
+        <!-- World Cup years -->
+        {ds.world_cup_years && ds.world_cup_years.length > 0 && (
+          <section class="bg-slate-900 border border-slate-800 rounded-xl p-5">
+            <h3 class="text-sm font-semibold text-slate-300 mb-3">World Cup History in Dataset</h3>
+            <div class="flex flex-wrap gap-2">
+              {ds.world_cup_years.map(year => (
+                <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-lg text-sm text-slate-300 font-mono">
+                  {year}
+                </span>
+              ))}
+            </div>
+          </section>
+        )}
+
+        <!-- What is not in the data -->
+        <section class="bg-slate-900 border border-slate-800 rounded-xl p-5">
+          <h3 class="text-sm font-semibold text-slate-300 mb-3">What is NOT in this dataset</h3>
+          <ul class="grid sm:grid-cols-2 gap-2 text-sm text-slate-400">
+            {[
+              'Player-level statistics',
+              'Injury or suspension data',
+              'Expected goals (xG)',
+              'Squad market value',
+              'Weather conditions',
+              'Referee assignments',
+              'Tactical formations',
+              'Social media sentiment',
+            ].map(item => (
+              <li class="flex items-center gap-2">
+                <span class="text-rose-600 text-xs">✗</span>
+                {item}
+              </li>
+            ))}
+          </ul>
+          <p class="text-xs text-slate-600 mt-3">
+            These exclusions are intentional — see the Methodology page for rationale.
+          </p>
+        </section>
+      </>
+    )}
+  </div>
+</Layout>

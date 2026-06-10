@@ -1,0 +1,37 @@
+{
+  "generated_at": "2026-06-10T01:33:18.097738+00:00",
+  "total_matches": 72,
+  "n_no_recommendation": 72,
+  "n_watch": 0,
+  "n_market_aligned": 0,
+  "n_model_gap_detected": 0,
+  "n_avoid": 0,
+  "n_actionable": 0,
+  "n_missing_market": 72,
+  "has_real_market_data": false,
+  "language_policy": {
+    "forbidden_terms": [
+      "bet this now",
+      "can't lose",
+      "free money",
+      "guaranteed",
+      "high certainty",
+      "lock",
+      "must bet",
+      "profit",
+      "sure bet"
+    ],
+    "safe_terms": [
+      "educational only",
+      "probability signal",
+      "model gap detected",
+      "watch",
+      "avoid",
+      "no recommendation",
+      "market-aligned",
+      "low confidence",
+      "data incomplete"
+    ]
+  },
+  "disclaimer": "These are educational probability signals only. Not betting advice. A model-market gap is not evidence of value. Market odds may be more accurate than model probabilities."
+}

@@ -7,7 +7,8 @@ export function loadJson<T>(filename: string, fallback: T): T {
   const path = resolve(DATA_DIR, filename);
   if (!existsSync(path)) return fallback;
   try {
-    return JSON.parse(readFileSync(path, 'utf-8')) as T;
+    const parsed = JSON.parse(readFileSync(path, 'utf-8'));
+    return parsed ?? fallback;
   } catch {
     return fallback;
   }

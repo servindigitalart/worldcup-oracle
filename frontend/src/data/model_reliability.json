@@ -1,0 +1,77 @@
+{
+  "primary_model": "elo-baseline-v0.2",
+  "uniform_rps": 0.25,
+  "models": {
+    "elo-baseline-v0.2": {
+      "model_version": "elo-baseline-v0.2",
+      "source": "backtest_worldcups",
+      "n_matches": 144,
+      "rps": 0.2171,
+      "log_loss": 0.9914,
+      "brier": 0.1969,
+      "ece": 0.058,
+      "sharpness": 0.5066,
+      "calibration_badge": "fair",
+      "uniform_rps": 0.25,
+      "beats_uniform": true,
+      "note": "144 matches across WC 2014, 2018, 2022 group stages. Treat aggregate RPS differences < 0.01 as directional, not conclusive.",
+      "formulas": {
+        "rps": "RPS = (1/(K-1)) * sum_{k=1}^{K-1} (cum_pred_k - cum_actual_k)^2, K=3",
+        "log_loss": "log_loss = -(1/N) * sum_i log(p_i[outcome_i])",
+        "brier": "brier_multi = (1/(N*K)) * sum_i sum_k (p_ik - I_ik)^2, K=3",
+        "ece": "ECE = sum_b (|B_b|/N) * |confidence_b - accuracy_b|",
+        "sharpness": "sharpness = mean(max(p_home, p_draw, p_away))"
+      }
+    },
+    "elo-baseline-v0.2-recent": {
+      "model_version": "elo-baseline-v0.2-recent",
+      "source": "backtest_worldcups",
+      "n_matches": 144,
+      "rps": 0.2254,
+      "log_loss": 1.0125,
+      "brier": 0.2024,
+      "ece": 0.0881,
+      "sharpness": 0.4616,
+      "calibration_badge": "fair",
+      "uniform_rps": 0.25,
+      "beats_uniform": true,
+      "note": "144 matches across WC 2014, 2018, 2022 group stages. Treat aggregate RPS differences < 0.01 as directional, not conclusive.",
+      "formulas": {
+        "rps": "RPS = (1/(K-1)) * sum_{k=1}^{K-1} (cum_pred_k - cum_actual_k)^2, K=3",
+        "log_loss": "log_loss = -(1/N) * sum_i log(p_i[outcome_i])",
+        "brier": "brier_multi = (1/(N*K)) * sum_i sum_k (p_ik - I_ik)^2, K=3",
+        "ece": "ECE = sum_b (|B_b|/N) * |confidence_b - accuracy_b|",
+        "sharpness": "sharpness = mean(max(p_home, p_draw, p_away))"
+      }
+    },
+    "dixon-coles-v0.3": {
+      "model_version": "dixon-coles-v0.3",
+      "source": "backtest_worldcups",
+      "n_matches": 144,
+      "rps": 0.203,
+      "log_loss": 0.972,
+      "brier": 0.1895,
+      "ece": 0.1228,
+      "sharpness": 0.5284,
+      "calibration_badge": "poor",
+      "uniform_rps": 0.25,
+      "beats_uniform": true,
+      "note": "144 matches across WC 2014, 2018, 2022 group stages. Treat aggregate RPS differences < 0.01 as directional, not conclusive.",
+      "formulas": {
+        "rps": "RPS = (1/(K-1)) * sum_{k=1}^{K-1} (cum_pred_k - cum_actual_k)^2, K=3",
+        "log_loss": "log_loss = -(1/N) * sum_i log(p_i[outcome_i])",
+        "brier": "brier_multi = (1/(N*K)) * sum_i sum_k (p_ik - I_ik)^2, K=3",
+        "ece": "ECE = sum_b (|B_b|/N) * |confidence_b - accuracy_b|",
+        "sharpness": "sharpness = mean(max(p_home, p_draw, p_away))"
+      }
+    }
+  },
+  "rps": 0.2171,
+  "log_loss": 0.9914,
+  "brier": 0.1969,
+  "ece": 0.058,
+  "sharpness": 0.5066,
+  "calibration_badge": "fair",
+  "note": "144 matches across WC 2014, 2018, 2022 group stages. Treat aggregate RPS differences < 0.01 as directional, not conclusive.",
+  "generated_at": "2026-06-10T17:19:27.290744+00:00"
+}

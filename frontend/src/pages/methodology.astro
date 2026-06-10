@@ -1,0 +1,175 @@
+---
+import Layout from '../layouts/Layout.astro';
+import StatCard from '../components/StatCard.astro';
+import EmptyState from '../components/EmptyState.astro';
+import { loadJson } from '../utils/load';
+import { formatModelName } from '../utils/format';
+import type { MethodologyInput } from '../types';
+
+const m = loadJson<MethodologyInput | null>('methodology.json', null);
+---
+<Layout title="Methodology" description="How the World Cup Oracle works — models, inputs, limitations">
+  <div class="space-y-10">
+
+    <div>
+      <h1 class="text-3xl font-bold text-slate-100">Methodology</h1>
+      <p class="mt-2 text-slate-400">
+        What data goes in, what stays out, and what the model cannot do.
+      </p>
+    </div>
+
+    {!m ? (
+      <EmptyState
+        title="No methodology data"
+        message="Run the methodology pipeline first."
+        command="make methodology"
+      />
+    ) : (
+      <>
+        <!-- Version cards -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+          <StatCard label="Ratings model" value={formatModelName(m.model_version)} />
+          <StatCard label="Goals model" value={formatModelName(m.goals_model)} />
+          <StatCard label="Blend version" value={m.blend_version} />
+        </div>
+
+        <!-- Elo section -->
+        <section class="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-4">
+          <div>
+            <h2 class="text-lg font-semibold text-slate-100">{m.elo.name}</h2>
+            <span class="text-xs text-slate-500 font-mono">{m.elo.version}</span>
+          </div>
+          <div class="grid sm:grid-cols-2 gap-4 text-sm text-slate-400">
+            <div>
+              <div class="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">What it is</div>
+              <p class="leading-relaxed">{m.elo.what_it_is}</p>
+            </div>
+            <div>
+              <div class="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">What it does</div>
+              <p class="leading-relaxed">{m.elo.what_it_does}</p>
+            </div>
+          </div>
+          <div class="grid sm:grid-cols-2 gap-4 text-sm">
+            <div>
+              <div class="text-xs font-semibold uppercase tracking-wider text-green-600 mb-2">Strengths</div>
+              <ul class="space-y-1 text-slate-400">
+                {m.elo.strengths.map(s => <li class="flex gap-2"><span class="text-green-600 shrink-0">+</span>{s}</li>)}
+              </ul>
+            </div>
+            <div>
+              <div class="text-xs font-semibold uppercase tracking-wider text-rose-600 mb-2">Weaknesses</div>
+              <ul class="space-y-1 text-slate-400">
+                {m.elo.weaknesses.map(w => <li class="flex gap-2"><span class="text-rose-600 shrink-0">−</span>{w}</li>)}
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- Dixon-Coles section -->
+        <section class="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-4">
+          <div>
+            <h2 class="text-lg font-semibold text-slate-100">{m.dixon_coles.name}</h2>
+            <span class="text-xs text-slate-500 font-mono">{m.dixon_coles.version}</span>
+          </div>
+          <div class="grid sm:grid-cols-2 gap-4 text-sm text-slate-400">
+            <div>
+              <div class="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">What it is</div>
+              <p class="leading-relaxed">{m.dixon_coles.what_it_is}</p>
+            </div>
+            <div>
+              <div class="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">What it does</div>
+              <p class="leading-relaxed">{m.dixon_coles.what_it_does}</p>
+            </div>
+          </div>
+          <div class="grid sm:grid-cols-2 gap-4 text-sm">
+            <div>
+              <div class="text-xs font-semibold uppercase tracking-wider text-green-600 mb-2">Strengths</div>
+              <ul class="space-y-1 text-slate-400">
+                {m.dixon_coles.strengths.map(s => <li class="flex gap-2"><span class="text-green-600 shrink-0">+</span>{s}</li>)}
+              </ul>
+            </div>
+            <div>
+              <div class="text-xs font-semibold uppercase tracking-wider text-rose-600 mb-2">Weaknesses</div>
+              <ul class="space-y-1 text-slate-400">
+                {m.dixon_coles.weaknesses.map(w => <li class="flex gap-2"><span class="text-rose-600 shrink-0">−</span>{w}</li>)}
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- Market blend section -->
+        <section class="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-4">
+          <div class="flex items-start justify-between flex-wrap gap-2">
+            <div>
+              <h2 class="text-lg font-semibold text-slate-100">{m.market_blend.name}</h2>
+              <span class="text-xs text-slate-500 font-mono">{m.market_blend.version}</span>
+            </div>
+            <div class="flex gap-3 text-sm">
+              <span class="px-3 py-1 bg-blue-900/40 border border-blue-700/40 rounded-lg text-blue-300">
+                Market {(m.market_blend.market_weight * 100).toFixed(0)}%
+              </span>
+              <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-lg text-slate-300">
+                Model {(m.market_blend.model_weight * 100).toFixed(0)}%
+              </span>
+            </div>
+          </div>
+          <div class="grid sm:grid-cols-3 gap-4 text-sm text-slate-400">
+            <div>
+              <div class="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Why it exists</div>
+              <p class="leading-relaxed">{m.market_blend.why_it_exists}</p>
+            </div>
+            <div>
+              <div class="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Why not follow market blindly</div>
+              <p class="leading-relaxed">{m.market_blend.why_not_follow_market_blindly}</p>
+            </div>
+            <div>
+              <div class="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Why calibration matters</div>
+              <p class="leading-relaxed">{m.market_blend.why_calibration_matters}</p>
+            </div>
+          </div>
+          <p class="text-xs text-amber-500/80 italic">{m.market_blend.caveat}</p>
+        </section>
+
+        <!-- Inputs used / not used -->
+        <div class="grid sm:grid-cols-2 gap-6">
+          <section class="bg-slate-900 border border-slate-800 rounded-xl p-5">
+            <h3 class="text-sm font-semibold text-slate-300 mb-3">Inputs Used</h3>
+            <ul class="space-y-1">
+              {m.inputs_used.map(inp => (
+                <li class="flex items-center gap-2 text-sm text-slate-400">
+                  <span class="text-green-500 text-xs">✓</span>
+                  <span class="font-mono text-xs text-slate-300">{inp}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          <section class="bg-slate-900 border border-slate-800 rounded-xl p-5">
+            <h3 class="text-sm font-semibold text-slate-300 mb-3">Inputs NOT Used</h3>
+            <ul class="space-y-1">
+              {m.inputs_not_used.map(inp => (
+                <li class="flex items-center gap-2 text-sm text-slate-400">
+                  <span class="text-rose-600 text-xs">✗</span>
+                  <span class="font-mono text-xs text-slate-500">{inp}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        </div>
+
+        <!-- Limitations -->
+        <section class="bg-amber-950/30 border border-amber-800/40 rounded-xl p-5">
+          <h3 class="text-sm font-semibold text-amber-400 mb-3">Known Limitations</h3>
+          <ul class="space-y-2">
+            {m.limitations.map(lim => (
+              <li class="flex gap-2 text-sm text-slate-400">
+                <span class="text-amber-500 shrink-0">!</span>
+                {lim}
+              </li>
+            ))}
+          </ul>
+        </section>
+      </>
+    )}
+  </div>
+</Layout>

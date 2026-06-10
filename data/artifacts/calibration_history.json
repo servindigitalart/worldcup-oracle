@@ -1,0 +1,302 @@
+{
+  "source": "calibration_worldcups.json",
+  "years": [
+    2014,
+    2018,
+    2022
+  ],
+  "total_matches": 144,
+  "note": "Calibration pooled across all three WC group stages. ~14 matches per bin.",
+  "primary_model": "elo-baseline-v0.2",
+  "models": {
+    "elo-baseline-v0.2": [
+      {
+        "bucket": "0.20-0.25",
+        "predicted": 0.2078,
+        "actual": 0.2143,
+        "samples": 14,
+        "gap": -0.0065
+      },
+      {
+        "bucket": "0.25-0.30",
+        "predicted": 0.2708,
+        "actual": 0.0714,
+        "samples": 14,
+        "gap": 0.1993
+      },
+      {
+        "bucket": "0.30-0.35",
+        "predicted": 0.3085,
+        "actual": 0.2143,
+        "samples": 14,
+        "gap": 0.0942
+      },
+      {
+        "bucket": "0.30-0.35",
+        "predicted": 0.3424,
+        "actual": 0.2857,
+        "samples": 14,
+        "gap": 0.0567
+      },
+      {
+        "bucket": "0.35-0.40",
+        "predicted": 0.3797,
+        "actual": 0.3571,
+        "samples": 14,
+        "gap": 0.0225
+      },
+      {
+        "bucket": "0.40-0.45",
+        "predicted": 0.4129,
+        "actual": 0.3571,
+        "samples": 14,
+        "gap": 0.0558
+      },
+      {
+        "bucket": "0.45-0.50",
+        "predicted": 0.4507,
+        "actual": 0.4286,
+        "samples": 14,
+        "gap": 0.0222
+      },
+      {
+        "bucket": "0.45-0.50",
+        "predicted": 0.4968,
+        "actual": 0.5,
+        "samples": 14,
+        "gap": -0.0032
+      },
+      {
+        "bucket": "0.55-0.60",
+        "predicted": 0.5541,
+        "actual": 0.6429,
+        "samples": 14,
+        "gap": -0.0888
+      },
+      {
+        "bucket": "0.60-0.65",
+        "predicted": 0.6479,
+        "actual": 0.6111,
+        "samples": 18,
+        "gap": 0.0367
+      }
+    ],
+    "elo-baseline-v0.2-recent": [
+      {
+        "bucket": "0.25-0.30",
+        "predicted": 0.2544,
+        "actual": 0.2143,
+        "samples": 14,
+        "gap": 0.0402
+      },
+      {
+        "bucket": "0.30-0.35",
+        "predicted": 0.3118,
+        "actual": 0.1429,
+        "samples": 14,
+        "gap": 0.1689
+      },
+      {
+        "bucket": "0.30-0.35",
+        "predicted": 0.3358,
+        "actual": 0.3571,
+        "samples": 14,
+        "gap": -0.0214
+      },
+      {
+        "bucket": "0.35-0.40",
+        "predicted": 0.3526,
+        "actual": 0.2143,
+        "samples": 14,
+        "gap": 0.1383
+      },
+      {
+        "bucket": "0.35-0.40",
+        "predicted": 0.3762,
+        "actual": 0.2857,
+        "samples": 14,
+        "gap": 0.0905
+      },
+      {
+        "bucket": "0.35-0.40",
+        "predicted": 0.3991,
+        "actual": 0.5,
+        "samples": 14,
+        "gap": -0.1009
+      },
+      {
+        "bucket": "0.40-0.45",
+        "predicted": 0.4242,
+        "actual": 0.2857,
+        "samples": 14,
+        "gap": 0.1385
+      },
+      {
+        "bucket": "0.40-0.45",
+        "predicted": 0.4491,
+        "actual": 0.6429,
+        "samples": 14,
+        "gap": -0.1938
+      },
+      {
+        "bucket": "0.45-0.50",
+        "predicted": 0.4871,
+        "actual": 0.5,
+        "samples": 14,
+        "gap": -0.0129
+      },
+      {
+        "bucket": "0.55-0.60",
+        "predicted": 0.5545,
+        "actual": 0.5556,
+        "samples": 18,
+        "gap": -0.0011
+      }
+    ],
+    "dixon-coles-v0.3": [
+      {
+        "bucket": "0.05-0.10",
+        "predicted": 0.0906,
+        "actual": 0.2143,
+        "samples": 14,
+        "gap": -0.1237
+      },
+      {
+        "bucket": "0.15-0.20",
+        "predicted": 0.1541,
+        "actual": 0.1429,
+        "samples": 14,
+        "gap": 0.0112
+      },
+      {
+        "bucket": "0.15-0.20",
+        "predicted": 0.1996,
+        "actual": 0.0714,
+        "samples": 14,
+        "gap": 0.1282
+      },
+      {
+        "bucket": "0.20-0.25",
+        "predicted": 0.2473,
+        "actual": 0.1429,
+        "samples": 14,
+        "gap": 0.1044
+      },
+      {
+        "bucket": "0.30-0.35",
+        "predicted": 0.3142,
+        "actual": 0.3571,
+        "samples": 14,
+        "gap": -0.043
+      },
+      {
+        "bucket": "0.35-0.40",
+        "predicted": 0.3742,
+        "actual": 0.5,
+        "samples": 14,
+        "gap": -0.1258
+      },
+      {
+        "bucket": "0.45-0.50",
+        "predicted": 0.4547,
+        "actual": 0.6429,
+        "samples": 14,
+        "gap": -0.1881
+      },
+      {
+        "bucket": "0.50-0.55",
+        "predicted": 0.512,
+        "actual": 0.2143,
+        "samples": 14,
+        "gap": 0.2977
+      },
+      {
+        "bucket": "0.55-0.60",
+        "predicted": 0.5827,
+        "actual": 0.5,
+        "samples": 14,
+        "gap": 0.0827
+      },
+      {
+        "bucket": "0.70-0.75",
+        "predicted": 0.7105,
+        "actual": 0.8333,
+        "samples": 18,
+        "gap": -0.1229
+      }
+    ]
+  },
+  "buckets": [
+    {
+      "bucket": "0.20-0.25",
+      "predicted": 0.2078,
+      "actual": 0.2143,
+      "samples": 14,
+      "gap": -0.0065
+    },
+    {
+      "bucket": "0.25-0.30",
+      "predicted": 0.2708,
+      "actual": 0.0714,
+      "samples": 14,
+      "gap": 0.1993
+    },
+    {
+      "bucket": "0.30-0.35",
+      "predicted": 0.3085,
+      "actual": 0.2143,
+      "samples": 14,
+      "gap": 0.0942
+    },
+    {
+      "bucket": "0.30-0.35",
+      "predicted": 0.3424,
+      "actual": 0.2857,
+      "samples": 14,
+      "gap": 0.0567
+    },
+    {
+      "bucket": "0.35-0.40",
+      "predicted": 0.3797,
+      "actual": 0.3571,
+      "samples": 14,
+      "gap": 0.0225
+    },
+    {
+      "bucket": "0.40-0.45",
+      "predicted": 0.4129,
+      "actual": 0.3571,
+      "samples": 14,
+      "gap": 0.0558
+    },
+    {
+      "bucket": "0.45-0.50",
+      "predicted": 0.4507,
+      "actual": 0.4286,
+      "samples": 14,
+      "gap": 0.0222
+    },
+    {
+      "bucket": "0.45-0.50",
+      "predicted": 0.4968,
+      "actual": 0.5,
+      "samples": 14,
+      "gap": -0.0032
+    },
+    {
+      "bucket": "0.55-0.60",
+      "predicted": 0.5541,
+      "actual": 0.6429,
+      "samples": 14,
+      "gap": -0.0888
+    },
+    {
+      "bucket": "0.60-0.65",
+      "predicted": 0.6479,
+      "actual": 0.6111,
+      "samples": 18,
+      "gap": 0.0367
+    }
+  ],
+  "generated_at": "2026-06-10T17:19:27.086570+00:00"
+}

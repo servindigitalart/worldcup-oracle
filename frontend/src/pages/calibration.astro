@@ -1,0 +1,186 @@
+---
+import Layout from '../layouts/Layout.astro';
+import StatCard from '../components/StatCard.astro';
+import EmptyState from '../components/EmptyState.astro';
+import { loadJson } from '../utils/load';
+import { formatModelName } from '../utils/format';
+import type { CalibrationHistory, ModelReliability } from '../types';
+
+const cal   = loadJson<CalibrationHistory | null>('calibration_history.json', null);
+const rel   = loadJson<ModelReliability | null>('model_reliability.json', null);
+
+const hasData = !!(cal?.buckets?.length || rel?.rps != null);
+
+const badgeClass = (badge: string) => {
+  const map: Record<string, string> = {
+    excellent: 'bg-green-900/50 text-green-300 border-green-700/40',
+    good:      'bg-blue-900/40 text-blue-300 border-blue-700/40',
+    fair:      'bg-amber-900/30 text-amber-300 border-amber-700/40',
+    poor:      'bg-rose-900/30 text-rose-400 border-rose-700/40',
+    unknown:   'bg-slate-800 text-slate-400 border-slate-700',
+  };
+  return map[badge] ?? map['unknown'];
+};
+---
+<Layout title="Calibration" description="Model calibration, reliability metrics, ECE">
+  <div class="space-y-10">
+
+    <div>
+      <h1 class="text-3xl font-bold text-slate-100">Calibration</h1>
+      <p class="mt-2 text-slate-400">
+        How well do stated probabilities match observed outcomes? Lower ECE = better calibration.
+      </p>
+    </div>
+
+    {!hasData ? (
+      <EmptyState
+        title="No calibration data"
+        message="Run the backtest and reliability pipelines first."
+        command="make backtest && make reliability"
+      />
+    ) : (
+      <>
+        <!-- Reliability stat cards -->
+        {rel && (
+          <div class="space-y-4">
+            <div class="flex items-center gap-3">
+              <h2 class="text-lg font-semibold text-slate-200">Reliability Metrics</h2>
+              {rel.calibration_badge && (
+                <span class:list={[
+                  'px-2.5 py-0.5 rounded-full text-xs font-semibold border capitalize',
+                  badgeClass(rel.calibration_badge),
+                ]}>
+                  {rel.calibration_badge}
+                </span>
+              )}
+            </div>
+            <p class="text-xs text-slate-500">{rel.note}</p>
+            <div class="grid grid-cols-2 sm:grid-cols-5 gap-4">
+              <StatCard
+                label="RPS"
+                value={rel.rps?.toFixed(4) ?? '—'}
+                sub={rel.rps != null && rel.rps < (rel.uniform_rps ?? 0.25) ? 'Beats uniform' : 'Below baseline'}
+                accent={rel.rps != null && rel.rps < (rel.uniform_rps ?? 0.25)}
+              />
+              <StatCard label="Log-Loss" value={rel.log_loss?.toFixed(4) ?? '—'} sub="lower is better" />
+              <StatCard label="Brier" value={rel.brier?.toFixed(4) ?? '—'} sub="lower is better" />
+              <StatCard label="ECE" value={rel.ece?.toFixed(4) ?? '—'} sub="lower is better" accent />
+              <StatCard label="Sharpness" value={rel.sharpness?.toFixed(4) ?? '—'} sub="higher is more decisive" />
+            </div>
+
+            <!-- Per-model table -->
+            {rel.models && Object.keys(rel.models).length > 1 && (
+              <section>
+                <h3 class="text-sm font-semibold text-slate-300 mb-3">Per-Model Metrics</h3>
+                <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-x-auto">
+                  <table class="w-full text-sm">
+                    <thead>
+                      <tr class="border-b border-slate-800 text-xs text-slate-500 uppercase tracking-wider">
+                        <th class="text-left px-4 py-3 font-semibold">Model</th>
+                        <th class="text-right px-4 py-3 font-semibold">RPS</th>
+                        <th class="text-right px-4 py-3 font-semibold">Log-Loss</th>
+                        <th class="text-right px-4 py-3 font-semibold">Brier</th>
+                        <th class="text-right px-4 py-3 font-semibold">ECE</th>
+                        <th class="text-right px-4 py-3 font-semibold">Sharpness</th>
+                        <th class="text-right px-4 py-3 font-semibold">Badge</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {Object.entries(rel.models).map(([mk, md]) => (
+                        <tr class="border-b border-slate-800/60 last:border-0 hover:bg-slate-800/30">
+                          <td class="px-4 py-3 text-slate-200 font-medium">{formatModelName(mk)}</td>
+                          <td class="px-4 py-3 text-right font-mono text-xs">
+                            <span class={md.beats_uniform ? 'text-green-400' : 'text-rose-400'}>
+                              {md.rps.toFixed(4)}
+                            </span>
+                          </td>
+                          <td class="px-4 py-3 text-right font-mono text-xs text-slate-300">{md.log_loss.toFixed(4)}</td>
+                          <td class="px-4 py-3 text-right font-mono text-xs text-slate-300">{md.brier.toFixed(4)}</td>
+                          <td class="px-4 py-3 text-right font-mono text-xs text-slate-300">{md.ece.toFixed(4)}</td>
+                          <td class="px-4 py-3 text-right font-mono text-xs text-slate-300">{md.sharpness.toFixed(4)}</td>
+                          <td class="px-4 py-3 text-right">
+                            <span class:list={[
+                              'px-2 py-0.5 rounded-full text-xs border capitalize',
+                              badgeClass(md.calibration_badge),
+                            ]}>
+                              {md.calibration_badge}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </section>
+            )}
+          </div>
+        )}
+
+        <!-- Calibration buckets table -->
+        {cal?.buckets && cal.buckets.length > 0 && (
+          <section>
+            <h2 class="text-lg font-semibold text-slate-200 mb-1">Calibration Buckets</h2>
+            <p class="text-xs text-slate-500 mb-4">
+              {cal.note || `${cal.total_matches} matches pooled across ${cal.years?.join(', ')} WC group stages.`}
+              {' '}Model: {formatModelName(cal.primary_model)}.
+            </p>
+
+            <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="border-b border-slate-800 text-xs text-slate-500 uppercase tracking-wider">
+                    <th class="text-left px-4 py-3 font-semibold">Bucket</th>
+                    <th class="text-right px-4 py-3 font-semibold">Predicted</th>
+                    <th class="text-right px-4 py-3 font-semibold">Actual</th>
+                    <th class="text-right px-4 py-3 font-semibold">Samples</th>
+                    <th class="text-right px-4 py-3 font-semibold">Gap</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {cal.buckets.map(b => {
+                    const gap = b.gap;
+                    const absGap = Math.abs(gap);
+                    const gapClass = absGap < 0.05
+                      ? 'text-green-400'
+                      : absGap < 0.10 ? 'text-amber-400' : 'text-rose-400';
+                    return (
+                      <tr class="border-b border-slate-800/60 last:border-0 hover:bg-slate-800/30">
+                        <td class="px-4 py-3 font-mono text-xs text-slate-300">{b.bucket}</td>
+                        <td class="px-4 py-3 text-right font-mono text-xs text-slate-300">{(b.predicted * 100).toFixed(1)}%</td>
+                        <td class="px-4 py-3 text-right font-mono text-xs text-slate-300">{(b.actual * 100).toFixed(1)}%</td>
+                        <td class="px-4 py-3 text-right text-slate-400">{b.samples}</td>
+                        <td class:list={['px-4 py-3 text-right font-mono text-xs', gapClass]}>
+                          {gap >= 0 ? '+' : ''}{(gap * 100).toFixed(1)}pp
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+            <p class="text-xs text-slate-600 mt-2">
+              Gap = predicted − actual. Positive = model over-confident in this range.
+            </p>
+          </section>
+        )}
+
+        <!-- Metric explanations -->
+        <section class="bg-slate-900 border border-slate-800 rounded-xl p-5 space-y-3">
+          <h3 class="text-sm font-semibold text-slate-300">Metric Definitions</h3>
+          <dl class="grid sm:grid-cols-2 gap-3 text-xs text-slate-400">
+            <div><dt class="text-slate-300 font-medium">RPS (Ranked Probability Score)</dt>
+              <dd>Measures calibration for ordinal outcomes (home/draw/away). Lower is better. Uniform = 0.25.</dd></div>
+            <div><dt class="text-slate-300 font-medium">Log-Loss</dt>
+              <dd>Penalises wrong confident predictions exponentially. Lower is better. Formula: −(1/N) Σ log(p[outcome]).</dd></div>
+            <div><dt class="text-slate-300 font-medium">Brier Score</dt>
+              <dd>Mean squared error across all 3 outcome probabilities. Lower is better. Perfect = 0.</dd></div>
+            <div><dt class="text-slate-300 font-medium">ECE (Expected Calibration Error)</dt>
+              <dd>Weighted mean |predicted − observed| across probability bins. Lower = better calibration. Formula: Σ_b (n_b/N)|conf_b − acc_b|.</dd></div>
+            <div><dt class="text-slate-300 font-medium">Sharpness</dt>
+              <dd>Mean max-probability — how decisive the model is. A uniform model scores ≈ 0.333. Higher means more confident predictions.</dd></div>
+          </dl>
+        </section>
+      </>
+    )}
+  </div>
+</Layout>

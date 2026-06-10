@@ -169,6 +169,177 @@ export interface TournamentStateSummary {
   top_champion_probs: Array<{ team: string; champion: number }>;
 }
 
+export interface Recommendation {
+  match_id: string;
+  home_team: string;
+  away_team: string;
+  group: string;
+  kickoff_at: string | null;
+  recommendation_type: 'no_recommendation' | 'model_gap_detected' | 'market_aligned' | 'avoid' | 'watch';
+  market: string;
+  selection: string | null;
+  model_probability: number | null;
+  market_probability: number | null;
+  blended_probability: number | null;
+  model_market_gap: number | null;
+  confidence: 'low' | 'medium' | 'high' | 'unknown';
+  risk_label: 'low' | 'medium' | 'high' | 'unknown';
+  data_quality: 'complete' | 'partial' | 'missing_market' | 'placeholder' | 'stale' | 'unknown';
+  status: 'pre_match' | 'live' | 'finished' | 'unavailable';
+  reason: string;
+  warnings: string[];
+  is_actionable: boolean;
+  edge_confidence: 'low' | 'medium' | 'high' | 'very_high' | 'none';
+  generated_at: string;
+}
+
+export interface MethodologyInput {
+  model_version: string;
+  goals_model: string;
+  blend_version: string;
+  inputs_used: string[];
+  inputs_not_used: string[];
+  limitations: string[];
+  elo: {
+    name: string;
+    version: string;
+    what_it_is: string;
+    what_it_does: string;
+    strengths: string[];
+    weaknesses: string[];
+  };
+  dixon_coles: {
+    name: string;
+    version: string;
+    what_it_is: string;
+    what_it_does: string;
+    strengths: string[];
+    weaknesses: string[];
+  };
+  market_blend: {
+    name: string;
+    version: string;
+    market_weight: number;
+    model_weight: number;
+    why_it_exists: string;
+    why_not_follow_market_blindly: string;
+    why_calibration_matters: string;
+    caveat: string;
+  };
+  generated_at: string;
+}
+
+export interface CalibrationBucket {
+  bucket: string;
+  predicted: number;
+  actual: number;
+  samples: number;
+  gap: number;
+}
+
+export interface CalibrationHistory {
+  source: string;
+  years: number[];
+  total_matches: number;
+  note: string;
+  primary_model: string;
+  buckets: CalibrationBucket[];
+  models: Record<string, CalibrationBucket[]>;
+  generated_at: string;
+}
+
+export interface ModelReliability {
+  primary_model: string;
+  uniform_rps: number;
+  rps: number | null;
+  log_loss: number | null;
+  brier: number | null;
+  ece: number | null;
+  sharpness: number | null;
+  calibration_badge: 'excellent' | 'good' | 'fair' | 'poor' | 'unknown';
+  note: string;
+  models: Record<string, {
+    model_version: string;
+    n_matches: number;
+    rps: number;
+    log_loss: number;
+    brier: number;
+    ece: number;
+    sharpness: number;
+    calibration_badge: string;
+    beats_uniform: boolean;
+    formulas: Record<string, string>;
+  }>;
+  generated_at: string;
+}
+
+export interface MarketAgreementMatch {
+  match_id: string;
+  home_team: string;
+  away_team: string;
+  group: string;
+  model_home: number | null;
+  model_draw: number | null;
+  model_away: number | null;
+  market_home: number | null;
+  market_draw: number | null;
+  market_away: number | null;
+  max_gap: number | null;
+  has_market_data: boolean;
+  agreement: 'HIGH' | 'MEDIUM' | 'LOW' | 'NO_DATA';
+}
+
+export interface MarketAgreement {
+  matches: MarketAgreementMatch[];
+  summary: {
+    total: number;
+    high: number;
+    medium: number;
+    low: number;
+    no_data: number;
+    thresholds: { high_max_gap: number; medium_max_gap: number; description: string };
+  };
+  generated_at: string;
+}
+
+export interface DataSources {
+  historical_matches: number;
+  world_cup_matches: number;
+  world_cups: number;
+  world_cup_years: number[];
+  qualifier_matches: number;
+  friendly_matches: number;
+  continental_matches: number;
+  n_distinct_tournaments: number;
+  qualifiers: boolean;
+  friendlies: boolean;
+  continental_tournaments: boolean;
+  date_range: { earliest: string | null; latest: string | null };
+  source: string;
+  source_url: string;
+  license: string;
+  note: string;
+  generated_at: string;
+}
+
+export interface RecommendationsSummary {
+  generated_at: string;
+  total_matches: number;
+  n_no_recommendation: number;
+  n_watch: number;
+  n_market_aligned: number;
+  n_model_gap_detected: number;
+  n_avoid: number;
+  n_actionable: number;
+  n_missing_market: number;
+  has_real_market_data: boolean;
+  language_policy: {
+    forbidden_terms: string[];
+    safe_terms: string[];
+  };
+  disclaimer: string;
+}
+
 export interface MatchResult {
   match_id: string;
   home_team: string;

@@ -2,6 +2,7 @@
 
 **The most honest public World Cup 2026 forecaster on the internet.**
 
+> **Status: Week 14 — Responsible Recommendation Engine. Deterministic rules-based engine converts model-market comparison into `no_recommendation` / `watch` / `market_aligned` / `model_gap_detected` signals. Language-safe (no gambling terms). `/recommendations` page added. All 72 group-stage matches evaluated. Python tests passing, 35/35 frontend tests passing.**
 > **Status: Week 13 — Live Tournament State Engine. Match results ingestion, group standings, result-aware Monte Carlo simulation, qualification probabilities, Standings and Probabilities frontend pages. Run `make tournament-state && make export-web` after adding results. Python tests passing, 35/35 frontend tests passing.**
 > **Status: Week 12 — Official fixture data. `data/seed/wc2026_fixtures.json` replaced with all 72 official FIFA 2026 group-stage fixtures (`is_official: true`, `is_placeholder: false`). Official draw (Dec 5 2025) wired into groups, kickoff times (UTC), venues, and cities. `fixture_schedule.json` exported for frontend; matches page shows kickoff + venue. 537/537 Python tests, 35/35 frontend tests passing.**
 > **Status: Week 11 — Canonical fixture seed file. `data/seed/wc2026_fixtures.json` formalises 72 group-stage fixtures (placeholder, `is_placeholder: true`). Pipeline now derives groups from seed file; fixtures flow through simulator, blend, capture, and frontend. `fixture_source` propagated into all artifacts. 535/535 Python tests, 35/35 frontend tests passing.**
@@ -28,6 +29,94 @@ A rigorously calibrated, self-grading tournament forecaster built on three hones
 3. **Publish a live CLV/calibration scoreboard** — grade the model against the market in the open, win or lose.
 
 Read the full design rationale in [docs/FINAL_BLUEPRINT.md](docs/FINAL_BLUEPRINT.md).
+
+---
+
+## Week 14 status
+
+Responsible Recommendation Engine.
+
+**What recommendations are:**
+Transparent probability signals that flag where the Elo model and the market odds disagree.
+The recommendation type reflects the *size* of the disagreement, not its direction or desirability.
+
+**What recommendations are NOT:**
+- Not betting advice.
+- Not a guarantee of any outcome.
+- Not evidence that the model is correct and the market is wrong.
+- Not a profitability engine.
+
+**How model-market gap works:**
+
+For each group-stage match, the engine computes the absolute probability difference on each 1X2 outcome (home win / draw / away win). The selection with the largest absolute gap is used.
+
+| Gap size | Type |
+|---|---|
+| < 4pp | `market_aligned` |
+| 4–8pp | `watch` |
+| ≥ 8pp | `model_gap_detected` |
+
+Why most matches show **no recommendation**: without real market odds (`ODDS_API_KEY` not set), all matches produce `no_recommendation` with `data_quality=missing_market`. This is the correct conservative default.
+
+**What was added:**
+
+- `oracle/recommendations/__init__.py` — new package.
+- `oracle/recommendations/schema.py` — `RecommendationInput`, `Recommendation` dataclasses; `FORBIDDEN_TERMS`, `SAFE_TERMS`, `check_language()`.
+- `oracle/recommendations/rules.py` — deterministic rules engine: `apply_rules()`. Thresholds: `SMALL_GAP_THRESHOLD=0.04`, `MODERATE_GAP_THRESHOLD=0.08`. Never assigns `confidence="high"`. Is actionable only when: market data exists + pre-match + official fixture + non-empty capture status.
+- `oracle/pipeline/recommendations.py` — full pipeline: load comparison/blend/fixtures/results/capture → build inputs → apply rules → write 3 artifacts.
+- `scripts/export_artifacts.py` — added `recommendations.json` and `recommendations_summary.json` exports.
+- `frontend/src/types/index.ts` — added `Recommendation` and `RecommendationsSummary` interfaces.
+- `frontend/src/components/NavBar.astro` — added Recommendations link.
+- `frontend/src/pages/recommendations.astro` — summary cards, sortable table, language-policy footer.
+- `Makefile` — `make recommendations` target.
+- `tests/test_recommendations_schema.py` — 24 tests (schema, enum validation, forbidden language).
+- `tests/test_recommendation_rules.py` — 37 tests (all rules, conservative posture, language safety).
+- `tests/test_recommendations_pipeline.py` — 18 tests (artifacts, counts, no forbidden language, graceful missing data).
+
+**To run:**
+
+```bash
+make recommendations     # generates data/artifacts/recommendations*.{parquet,json}
+make export-web          # copies to frontend/src/data/
+make build-frontend      # builds static site
+```
+
+**With real market data:**
+
+```bash
+export ODDS_API_KEY=your_key
+make ingest-odds
+make blend
+make recommendations
+make export-web
+```
+
+**Example output (with real market data):**
+
+```text
+Match:              England vs Japan
+Type:               Model gap detected
+Market:             1X2
+Selection:          England win (home_win)
+Model probability:  58%
+Market probability: 48%
+Gap:                +10pp
+Confidence:         Medium
+Risk:               Medium
+Reason:             Model probability is 10 percentage points higher than
+                    the market benchmark on home_win.
+Warnings:           Educational signal only — not betting advice.
+                    A model-market gap is not evidence of value.
+                    Market odds may be more accurate than model probabilities.
+```
+
+**Language policy (enforced in code):**
+
+Forbidden: `guaranteed` · `lock` · `sure bet` · `can't lose` · `free money` · `profit` · `must bet` · `bet this now` · `high certainty`
+
+Allowed: `model gap detected` · `watch` · `avoid` · `no recommendation` · `market-aligned` · `low confidence` · `data incomplete` · `educational only` · `probability signal`
+
+> **Warning:** This project does not provide gambling advice or guaranteed returns. A model-market gap is not proof of value. Market odds can be more accurate than model probabilities.
 
 ---
 

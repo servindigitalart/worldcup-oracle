@@ -1,0 +1,89 @@
+{
+  "model_version": "elo-baseline-v0.2",
+  "goals_model": "dixon-coles-v0.3",
+  "blend_version": "market-80-20",
+  "inputs_used": [
+    "historical_results",
+    "elo_rating",
+    "elo_recent_rating",
+    "dixon_coles_attack",
+    "dixon_coles_defense",
+    "time_decay_weights",
+    "market_odds"
+  ],
+  "inputs_not_used": [
+    "injuries",
+    "lineups",
+    "weather",
+    "xg_expected_goals",
+    "player_ratings",
+    "social_media_sentiment",
+    "expert_opinions",
+    "squad_market_value",
+    "referee_assignments",
+    "travel_distance",
+    "altitude",
+    "head_to_head_h2h_records",
+    "home_advantage_per_venue",
+    "fatigue_schedule_density",
+    "psychological_pressure"
+  ],
+  "limitations": [
+    "Based on historical results only \u2014 no squad-level or in-tournament context.",
+    "Thin-data teams (< 20 historical appearances) receive noisy parameter estimates.",
+    "Neutral-venue approximation used; no per-city or per-stadium home-advantage model.",
+    "Market odds are de-vigged but closing-line capture is incomplete pre-tournament.",
+    "All probability estimates carry wide uncertainty at 36\u2013144 match sample sizes.",
+    "Model has not yet been validated against WC 2026 outcomes.",
+    "Market is treated as the primary prior; blend does not correct for systematic market bias.",
+    "Dixon-Coles is re-fit on a fixed training set \u2014 not updated as the tournament progresses.",
+    "Group-stage results only used for backtesting; knockout-round calibration is untested."
+  ],
+  "elo": {
+    "name": "Elo Rating System",
+    "version": "elo-baseline-v0.2",
+    "what_it_is": "A zero-sum rating system where every match transfers rating points from the loser to the winner, scaled by the K-factor and the probability of the result.",
+    "what_it_does": "Converts per-team Elo ratings into 1X2 probabilities via the logistic function.  A 200-point Elo gap corresponds to roughly 75% win probability.",
+    "strengths": [
+      "Robust to missing data \u2014 works even for teams with few appearances.",
+      "Incorporates full match history back to 1872.",
+      "Tournament-importance K-factors (WC=30, competitive=20, friendly=10) weight high-stakes results appropriately.",
+      "Transparent, deterministic, and easy to audit."
+    ],
+    "weaknesses": [
+      "Ignores score margin \u2014 a 1-0 and 5-0 result update ratings identically.",
+      "No squad-level or tactical information.",
+      "Cannot capture within-tournament momentum or injury effects.",
+      "Thin-data teams (debut nations) start at a default rating with high uncertainty."
+    ]
+  },
+  "dixon_coles": {
+    "name": "Dixon-Coles Goal Model",
+    "version": "dixon-coles-v0.3",
+    "what_it_is": "A bivariate Poisson model with a low-score correlation correction (Dixon & Coles, 1997).  Fits per-team attack and defense parameters from historical scorelines.",
+    "what_it_does": "Generates a full score-matrix (e.g., P(1-0), P(2-1), ...) from which 1X2 probabilities, over/under, and exact-score odds can be derived.  Time-decay weights (xi=0.0018, half-life \u2248385 days) down-weight older matches.",
+    "strengths": [
+      "Uses scorelines \u2014 more information per match than Elo.",
+      "Separates attack from defense strength.",
+      "Time-decay naturally reduces the influence of results from distant tournaments.",
+      "Generates a full distributional forecast, not just win probabilities."
+    ],
+    "weaknesses": [
+      "Requires more data per team to fit reliably than Elo.",
+      "Score matrix computation is slower than a simple Elo lookup.",
+      "Low-score correlation correction (rho) adds a fitted parameter that may over-fit on small samples.",
+      "Neutral-venue is approximated as a binary flag, not modelled per-venue."
+    ]
+  },
+  "market_blend": {
+    "name": "Market Blend",
+    "version": "market-80-20",
+    "market_weight": 0.8,
+    "model_weight": 0.2,
+    "why_it_exists": "The closing line is empirically the most accurate pre-match probability estimate in liquid markets.  An 80/20 blend treats the market as the primary prior and the model as a corrective signal.",
+    "why_not_follow_market_blindly": "Markets can be illiquid or slow-to-open for non-marquee matches.  The model provides a structural prior that is not subject to short-term line movement or bettor sentiment.",
+    "why_calibration_matters": "A model that says 60% should be right 60% of the time across many similar predictions.  Without calibration, stated probabilities are uninterpretable and edges vs market cannot be assessed.",
+    "caveat": "Blend weights have NOT been optimised for any financial objective.  They will be revisited once WC 2026 calibration data accumulates."
+  },
+  "generated_at": "2026-06-10T17:19:26.386723+00:00"
+}
