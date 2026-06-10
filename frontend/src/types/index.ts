@@ -350,6 +350,35 @@ export interface MatchResult {
   status: string;
 }
 
+export interface RefreshStep {
+  name: string;
+  status: 'success' | 'skipped' | 'failed' | 'warning';
+  started_at: string;
+  finished_at: string;
+  duration_seconds: number;
+  message: string;
+  artifacts: string[];
+}
+
+export interface RefreshReport {
+  generated_at: string;
+  success: boolean;
+  strict: boolean;
+  build_frontend: boolean;
+  include_market_capture: boolean;
+  steps: RefreshStep[];
+  artifacts_written: string[];
+  warnings: string[];
+  errors: string[];
+  summary: string;
+  n_steps_total: number;
+  n_steps_success: number;
+  n_steps_failed: number;
+  n_steps_skipped: number;
+  n_steps_warning: number;
+  total_duration_seconds: number;
+}
+
 export interface CaptureStatus {
   generated_at: string;
   has_real_api_key: boolean;

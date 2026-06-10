@@ -1,10 +1,34 @@
 {
-  "generated_date": "2026-06-08",
-  "n_snapshots": 9,
-  "n_matches": 2,
+  "generated_date": "2026-06-10",
+  "n_snapshots": 180,
+  "n_matches": 4,
   "using_dummy_data": false,
   "snapshot_label": "snapshot_movement",
   "market_baseline": [
+    {
+      "match_id": "wc2026_B_01",
+      "home_team": "mexico",
+      "away_team": "france",
+      "market_probs": {
+        "away": 0.3114,
+        "draw": 0.2706,
+        "home": 0.4181
+      },
+      "n_bookmakers": 1,
+      "latest_captured_at": "2026-06-11T15:00:00Z"
+    },
+    {
+      "match_id": "wc2026_C_01",
+      "home_team": "canada",
+      "away_team": "germany",
+      "market_probs": {
+        "away": 0.4819,
+        "draw": 0.2702,
+        "home": 0.2479
+      },
+      "n_bookmakers": 1,
+      "latest_captured_at": "2026-06-12T10:00:00Z"
+    },
     {
       "match_id": "wc2026_m001",
       "home_team": "usa",

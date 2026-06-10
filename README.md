@@ -2,6 +2,8 @@
 
 **The most honest public World Cup 2026 forecaster on the internet.**
 
+> **Status: Week 16 — One-command refresh pipeline. `make refresh` / `make refresh-build` / `make refresh-with-market` orchestrate the full artifact pipeline in dependency order after adding match results. `RefreshReport` artifact tracks step log, timings, and status. `/status` page added. 821+ Python tests passing, 35/35 frontend tests passing.**
+> **Status: Week 15 — Transparency, Auditability, Calibration, Explainability. Methodology, calibration, reliability, data-provenance, and market-agreement artifacts + `/methodology`, `/calibration`, `/data` pages. ECE=0.058 (fair). 154 new tests. 821 Python tests passing.**
 > **Status: Week 14 — Responsible Recommendation Engine. Deterministic rules-based engine converts model-market comparison into `no_recommendation` / `watch` / `market_aligned` / `model_gap_detected` signals. Language-safe (no gambling terms). `/recommendations` page added. All 72 group-stage matches evaluated. Python tests passing, 35/35 frontend tests passing.**
 > **Status: Week 13 — Live Tournament State Engine. Match results ingestion, group standings, result-aware Monte Carlo simulation, qualification probabilities, Standings and Probabilities frontend pages. Run `make tournament-state && make export-web` after adding results. Python tests passing, 35/35 frontend tests passing.**
 > **Status: Week 12 — Official fixture data. `data/seed/wc2026_fixtures.json` replaced with all 72 official FIFA 2026 group-stage fixtures (`is_official: true`, `is_placeholder: false`). Official draw (Dec 5 2025) wired into groups, kickoff times (UTC), venues, and cities. `fixture_schedule.json` exported for frontend; matches page shows kickoff + venue. 537/537 Python tests, 35/35 frontend tests passing.**
@@ -29,6 +31,120 @@ A rigorously calibrated, self-grading tournament forecaster built on three hones
 3. **Publish a live CLV/calibration scoreboard** — grade the model against the market in the open, win or lose.
 
 Read the full design rationale in [docs/FINAL_BLUEPRINT.md](docs/FINAL_BLUEPRINT.md).
+
+---
+
+## Week 16 status
+
+One-command live refresh pipeline.
+
+### What the refresh pipeline does
+
+After adding a match result to `data/seed/wc2026_results.json`, run one command to update all static artifacts in the correct dependency order:
+
+1. Ingest fixtures into DuckDB
+2. Ingest 2026 results
+3. Rebuild group standings + result-aware simulation + qualification probabilities
+4. Optionally capture market odds (requires `ODDS_API_KEY`)
+5. Rebuild model-market blend
+6. Rebuild recommendations
+7. Rebuild methodology, reliability, calibration history, data sources, market agreement artifacts
+8. Export all JSON for the frontend
+9. Optionally rebuild the static frontend
+
+### What the refresh pipeline does NOT do
+
+- Does not auto-detect new results — you still add them manually to `data/seed/wc2026_results.json`
+- Does not connect to a live score feed
+- Does not guarantee "real-time" updates
+- Does not introduce a backend server, database, or cron job
+- Does not make betting recommendations
+
+### Command reference
+
+```bash
+make refresh                  # Full artifact refresh, export JSON. Does not rebuild frontend.
+make refresh-build            # Full artifact refresh + frontend static build.
+make refresh-with-market      # Capture odds first, then full refresh + export.
+
+# Flags (CLI only):
+python3 -m oracle.pipeline.refresh --non-strict          # Continue on recoverable failures
+python3 -m oracle.pipeline.refresh --build-frontend
+python3 -m oracle.pipeline.refresh --include-market-capture
+```
+
+### Example post-match update flow
+
+1. Match finishes. Edit `data/seed/wc2026_results.json`:
+
+```json
+{
+  "match_id": "wc2026_A_01",
+  "home_team": "mexico",
+  "away_team": "south_africa",
+  "home_goals": 2,
+  "away_goals": 0,
+  "status": "finished",
+  "finished_at": "2026-06-11T23:00:00Z",
+  "source": "manual",
+  "notes": null
+}
+```
+
+2. Run:
+
+```bash
+make refresh-build
+```
+
+This regenerates: standings, qualification probabilities, recommendations, calibration artifacts, all frontend JSON, and the static build.
+
+### Strict vs non-strict mode
+
+| Mode | Behavior |
+|---|---|
+| `strict=True` (default) | Stop on any step failure. Guarantees a consistent artifact set. |
+| `--non-strict` | Collect warnings and continue where safe. Useful if optional data is missing. |
+
+### Market capture flag
+
+`--include-market-capture` runs `oracle.pipeline.capture` before the blend step. This calls the odds API if `ODDS_API_KEY` is set, otherwise uses the dummy provider (no real data, no network calls).
+
+Without the flag, the pipeline skips market capture but still runs blend (using any previously captured snapshots, falling back to model-only).
+
+### Generated artifacts
+
+| Artifact | Description |
+|---|---|
+| `group_standings.json` | Live group standings |
+| `qualification_probs.json` | Per-team stage probabilities |
+| `tournament_state_summary.json` | Simulation metadata, top champion probs |
+| `recommendations.json` | Probability signals per match |
+| `model_reliability.json` | RPS, ECE, Brier, Log-Loss, Sharpness |
+| `refresh_report.json` | Step log, timings, artifact list, warnings |
+
+Frontend data files at `frontend/src/data/` are updated by the `export_web` step.
+
+### Pipeline limitations
+
+- Group-stage only: no knockout bracket yet
+- Positional bracket simulation (not official FIFA R16 pairings)
+- No squad, injury, or lineup data
+- Market data requires `ODDS_API_KEY` (the-odds-api.com)
+- Historical market odds not available for backtesting the blend
+- `refresh_report.json` shows one run's status, not a full history
+
+### What was added (Week 16)
+
+- `oracle/pipeline/refresh.py` — `RefreshStep`, `RefreshReport` dataclasses; `refresh_tournament()` orchestrator; CLI with `--build-frontend`, `--include-market-capture`, `--non-strict`
+- `data/artifacts/refresh_report.json` — step log written after every run
+- `scripts/export_artifacts.py` — `refresh_report.json` export added
+- `frontend/src/types/index.ts` — `RefreshStep`, `RefreshReport` interfaces
+- `frontend/src/pages/status.astro` — `/status` page with step table, flags, artifacts, warnings
+- `frontend/src/pages/index.astro` — Last Refresh summary card on homepage
+- `frontend/src/components/NavBar.astro` — Status link added
+- `Makefile` — `refresh`, `refresh-build`, `refresh-with-market` targets
+- `tests/test_refresh.py` — 40+ tests (schema, step ordering, strict/non-strict, idempotency, CLI, market logic)
 
 ---
 

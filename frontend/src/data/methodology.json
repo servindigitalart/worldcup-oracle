@@ -85,5 +85,5 @@
     "why_calibration_matters": "A model that says 60% should be right 60% of the time across many similar predictions.  Without calibration, stated probabilities are uninterpretable and edges vs market cannot be assessed.",
     "caveat": "Blend weights have NOT been optimised for any financial objective.  They will be revisited once WC 2026 calibration data accumulates."
   },
-  "generated_at": "2026-06-10T17:19:26.386723+00:00"
+  "generated_at": "2026-06-10T19:14:08.164206+00:00"
 }

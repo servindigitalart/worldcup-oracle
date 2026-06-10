@@ -1,0 +1,249 @@
+---
+import Layout from '../layouts/Layout.astro';
+import EmptyState from '../components/EmptyState.astro';
+import { loadJson } from '../utils/load';
+import type { RefreshReport } from '../types';
+
+const report = loadJson<RefreshReport | null>('refresh_report.json', null);
+
+function stepStatusClass(s: string): string {
+  switch (s) {
+    case 'success': return 'bg-green-900/50 text-green-300 border-green-700/40';
+    case 'skipped': return 'bg-slate-800 text-slate-500 border-slate-700';
+    case 'failed':  return 'bg-red-900/50 text-red-300 border-red-700/40';
+    case 'warning': return 'bg-amber-900/40 text-amber-300 border-amber-700/40';
+    default:        return 'bg-slate-800 text-slate-400 border-slate-700';
+  }
+}
+
+function overallStatusClass(success: boolean): string {
+  return success
+    ? 'bg-green-900/40 border-green-700/40 text-green-300'
+    : 'bg-red-900/30 border-red-700/40 text-red-300';
+}
+
+function formatDuration(s: number): string {
+  if (s < 1) return `${(s * 1000).toFixed(0)}ms`;
+  if (s < 60) return `${s.toFixed(1)}s`;
+  return `${Math.floor(s / 60)}m ${(s % 60).toFixed(0)}s`;
+}
+
+function formatTs(ts: string): string {
+  try {
+    return new Date(ts).toLocaleString('en-US', {
+      month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit',
+      hour12: false, timeZone: 'UTC', timeZoneName: 'short',
+    });
+  } catch {
+    return ts;
+  }
+}
+---
+<Layout title="Status" description="Refresh pipeline status — last run, step log, artifacts">
+  <div class="space-y-8">
+
+    <div>
+      <h1 class="text-3xl font-bold text-slate-100">Pipeline Status</h1>
+      <p class="mt-2 text-slate-400">
+        Last artifact refresh — step log, timings, artifacts updated.
+      </p>
+    </div>
+
+    {!report || !report.generated_at ? (
+      <EmptyState
+        title="No refresh report found"
+        message="Run the refresh pipeline to generate a status report."
+        command="make refresh"
+      />
+    ) : (
+      <>
+        <!-- Overall status banner -->
+        <div class:list={[
+          'rounded-xl border px-5 py-4',
+          overallStatusClass(report.success),
+        ]}>
+          <div class="flex items-start justify-between flex-wrap gap-3">
+            <div>
+              <p class="font-semibold text-base">
+                {report.success ? 'Refresh succeeded' : 'Refresh failed'}
+              </p>
+              <p class="mt-0.5 text-sm opacity-80">{report.summary}</p>
+            </div>
+            <div class="text-right text-xs opacity-70 shrink-0">
+              <div>{formatTs(report.generated_at)}</div>
+              <div class="mt-0.5">{formatDuration(report.total_duration_seconds)} total</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Summary stat cards -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+          {[
+            { label: 'Total steps',   value: report.n_steps_total,   cls: 'text-slate-200' },
+            { label: 'Succeeded',     value: report.n_steps_success,  cls: 'text-green-400' },
+            { label: 'Skipped',       value: report.n_steps_skipped,  cls: 'text-slate-500' },
+            { label: 'Warnings',      value: report.n_steps_warning,  cls: report.n_steps_warning > 0 ? 'text-amber-400' : 'text-slate-500' },
+            { label: 'Failed',        value: report.n_steps_failed,   cls: report.n_steps_failed > 0 ? 'text-red-400' : 'text-slate-500' },
+            { label: 'Artifacts',     value: report.artifacts_written.length, cls: 'text-blue-400' },
+          ].map(card => (
+            <div class="rounded-xl border border-slate-700 bg-slate-800/30 px-4 py-3 text-center">
+              <p class:list={['text-2xl font-bold', card.cls]}>{card.value}</p>
+              <p class="mt-1 text-xs text-slate-500">{card.label}</p>
+            </div>
+          ))}
+        </div>
+
+        <!-- Flags row -->
+        <div class="flex flex-wrap gap-3 text-xs">
+          <span class:list={[
+            'px-3 py-1 rounded-full border font-medium',
+            report.strict
+              ? 'bg-slate-800 text-slate-300 border-slate-700'
+              : 'bg-amber-900/30 text-amber-300 border-amber-700/40',
+          ]}>
+            {report.strict ? 'Strict mode' : 'Non-strict mode'}
+          </span>
+          <span class:list={[
+            'px-3 py-1 rounded-full border font-medium',
+            report.include_market_capture
+              ? 'bg-blue-900/40 text-blue-300 border-blue-700/40'
+              : 'bg-slate-800 text-slate-500 border-slate-700',
+          ]}>
+            Market capture: {report.include_market_capture ? 'included' : 'not included'}
+          </span>
+          <span class:list={[
+            'px-3 py-1 rounded-full border font-medium',
+            report.build_frontend
+              ? 'bg-indigo-900/40 text-indigo-300 border-indigo-700/40'
+              : 'bg-slate-800 text-slate-500 border-slate-700',
+          ]}>
+            Frontend build: {report.build_frontend ? 'included' : 'not included'}
+          </span>
+        </div>
+
+        <!-- Step table -->
+        <section>
+          <h2 class="text-lg font-semibold text-slate-200 mb-3">Step Log</h2>
+          <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-x-auto">
+            <table class="w-full text-xs">
+              <thead>
+                <tr class="border-b border-slate-800 text-slate-500 uppercase tracking-wider">
+                  <th class="text-left px-4 py-3 font-semibold">#</th>
+                  <th class="text-left px-4 py-3 font-semibold">Step</th>
+                  <th class="text-center px-4 py-3 font-semibold">Status</th>
+                  <th class="text-right px-4 py-3 font-semibold">Duration</th>
+                  <th class="text-left px-4 py-3 font-semibold">Artifacts</th>
+                  <th class="text-left px-4 py-3 font-semibold">Message</th>
+                </tr>
+              </thead>
+              <tbody>
+                {report.steps.map((step, i) => (
+                  <tr class="border-b border-slate-800/50 last:border-0 hover:bg-slate-800/20">
+                    <td class="px-4 py-2.5 text-slate-600 font-mono">{i + 1}</td>
+                    <td class="px-4 py-2.5 text-slate-200 font-mono font-medium">
+                      {step.name}
+                    </td>
+                    <td class="px-4 py-2.5 text-center">
+                      <span class:list={[
+                        'inline-block px-2 py-0.5 rounded text-[11px] border whitespace-nowrap',
+                        stepStatusClass(step.status),
+                      ]}>
+                        {step.status}
+                      </span>
+                    </td>
+                    <td class="px-4 py-2.5 text-right text-slate-400 font-mono">
+                      {step.status !== 'skipped' ? formatDuration(step.duration_seconds) : '—'}
+                    </td>
+                    <td class="px-4 py-2.5 text-slate-500 max-w-xs">
+                      {step.artifacts.length > 0 ? (
+                        <span class="text-slate-400">{step.artifacts.join(', ')}</span>
+                      ) : '—'}
+                    </td>
+                    <td class="px-4 py-2.5 text-slate-600 max-w-xs">
+                      {step.message ? (
+                        <span class:list={[
+                          step.status === 'failed' ? 'text-red-400' :
+                          step.status === 'warning' ? 'text-amber-400' : '',
+                          'line-clamp-2',
+                        ]}>
+                          {step.message}
+                        </span>
+                      ) : '—'}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Artifacts written -->
+        {report.artifacts_written.length > 0 && (
+          <section>
+            <h2 class="text-lg font-semibold text-slate-200 mb-3">Artifacts Updated</h2>
+            <div class="flex flex-wrap gap-2">
+              {report.artifacts_written.map(a => (
+                <span class="px-2.5 py-1 bg-slate-800 border border-slate-700 rounded-lg text-xs text-slate-300 font-mono">
+                  {a}
+                </span>
+              ))}
+            </div>
+          </section>
+        )}
+
+        <!-- Warnings -->
+        {report.warnings.length > 0 && (
+          <section class="bg-amber-950/20 border border-amber-800/30 rounded-xl p-5">
+            <h3 class="text-sm font-semibold text-amber-400 mb-2">Warnings ({report.warnings.length})</h3>
+            <ul class="space-y-1">
+              {report.warnings.map(w => (
+                <li class="text-xs text-amber-300/80 flex gap-2">
+                  <span class="text-amber-500 shrink-0">!</span>
+                  {w}
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        <!-- Errors -->
+        {report.errors.length > 0 && (
+          <section class="bg-red-950/20 border border-red-800/30 rounded-xl p-5">
+            <h3 class="text-sm font-semibold text-red-400 mb-2">Errors ({report.errors.length})</h3>
+            <ul class="space-y-1">
+              {report.errors.map(e => (
+                <li class="text-xs text-red-300/80 flex gap-2">
+                  <span class="text-red-500 shrink-0">✗</span>
+                  {e}
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        <!-- How to refresh -->
+        <section class="bg-slate-900 border border-slate-800 rounded-xl p-5">
+          <h3 class="text-sm font-semibold text-slate-300 mb-3">How to Refresh</h3>
+          <dl class="grid sm:grid-cols-2 gap-3 text-xs text-slate-400">
+            <div>
+              <dt class="text-slate-300 font-medium font-mono mb-1">make refresh</dt>
+              <dd>Refresh all artifacts and export frontend JSON. Does not rebuild the frontend.</dd>
+            </div>
+            <div>
+              <dt class="text-slate-300 font-medium font-mono mb-1">make refresh-build</dt>
+              <dd>Refresh artifacts and rebuild the static frontend.</dd>
+            </div>
+            <div>
+              <dt class="text-slate-300 font-medium font-mono mb-1">make refresh-with-market</dt>
+              <dd>Capture market odds first, then refresh all artifacts.</dd>
+            </div>
+            <div>
+              <dt class="text-slate-300 font-medium font-mono mb-1">--non-strict</dt>
+              <dd>Continue on recoverable failures (missing optional data) instead of stopping.</dd>
+            </div>
+          </dl>
+        </section>
+      </>
+    )}
+  </div>
+</Layout>

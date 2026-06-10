@@ -23,7 +23,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "algeria_vs_jordan",
@@ -49,7 +50,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "argentina_vs_algeria",
@@ -75,7 +77,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "argentina_vs_austria",
@@ -101,7 +104,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "argentina_vs_jordan",
@@ -127,7 +131,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "australia_vs_turkey",
@@ -153,7 +158,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "austria_vs_jordan",
@@ -179,7 +185,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "belgium_vs_egypt",
@@ -205,7 +212,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "belgium_vs_iran",
@@ -231,7 +239,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "belgium_vs_new_zealand",
@@ -257,7 +266,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "bosnia_herzegovina_vs_qatar",
@@ -283,7 +293,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "bosnia_herzegovina_vs_switzerland",
@@ -309,7 +320,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "brazil_vs_haiti",
@@ -335,7 +347,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "brazil_vs_morocco",
@@ -361,7 +374,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "brazil_vs_scotland",
@@ -387,7 +401,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "canada_vs_bosnia_herzegovina",
@@ -413,7 +428,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "canada_vs_qatar",
@@ -439,7 +455,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "canada_vs_switzerland",
@@ -465,7 +482,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "cape_verde_vs_saudi_arabia",
@@ -491,7 +509,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "cape_verde_vs_uruguay",
@@ -517,7 +536,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "cote_divoire_vs_ecuador",
@@ -543,7 +563,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "croatia_vs_ghana",
@@ -569,7 +590,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "croatia_vs_panama",
@@ -595,7 +617,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "curacao_vs_cote_divoire",
@@ -621,7 +644,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "curacao_vs_ecuador",
@@ -647,7 +671,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "dr_congo_vs_colombia",
@@ -673,7 +698,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "dr_congo_vs_uzbekistan",
@@ -699,7 +725,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "egypt_vs_iran",
@@ -725,7 +752,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "egypt_vs_new_zealand",
@@ -751,7 +779,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "england_vs_croatia",
@@ -777,7 +806,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "england_vs_ghana",
@@ -803,7 +833,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "england_vs_panama",
@@ -829,7 +860,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "france_vs_iraq",
@@ -855,7 +887,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "france_vs_norway",
@@ -881,7 +914,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "france_vs_senegal",
@@ -907,7 +941,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "germany_vs_cote_divoire",
@@ -933,7 +968,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "germany_vs_curacao",
@@ -959,7 +995,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "germany_vs_ecuador",
@@ -985,7 +1022,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "ghana_vs_panama",
@@ -1011,7 +1049,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "haiti_vs_scotland",
@@ -1037,7 +1076,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "iran_vs_new_zealand",
@@ -1063,7 +1103,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "iraq_vs_norway",
@@ -1089,7 +1130,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "japan_vs_sweden",
@@ -1115,7 +1157,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "japan_vs_tunisia",
@@ -1141,7 +1184,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "mexico_vs_czech_republic",
@@ -1167,7 +1211,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "mexico_vs_south_africa",
@@ -1193,7 +1238,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "mexico_vs_south_korea",
@@ -1219,7 +1265,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "morocco_vs_haiti",
@@ -1245,7 +1292,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "morocco_vs_scotland",
@@ -1271,7 +1319,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "netherlands_vs_japan",
@@ -1297,7 +1346,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "netherlands_vs_sweden",
@@ -1323,7 +1373,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "netherlands_vs_tunisia",
@@ -1349,7 +1400,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "paraguay_vs_australia",
@@ -1375,7 +1427,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "paraguay_vs_turkey",
@@ -1401,7 +1454,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "portugal_vs_colombia",
@@ -1427,7 +1481,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "portugal_vs_dr_congo",
@@ -1453,7 +1508,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "portugal_vs_uzbekistan",
@@ -1479,7 +1535,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "qatar_vs_switzerland",
@@ -1505,7 +1562,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "saudi_arabia_vs_uruguay",
@@ -1531,7 +1589,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "senegal_vs_iraq",
@@ -1557,7 +1616,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "senegal_vs_norway",
@@ -1583,7 +1643,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "south_africa_vs_czech_republic",
@@ -1609,7 +1670,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "south_africa_vs_south_korea",
@@ -1635,7 +1697,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "south_korea_vs_czech_republic",
@@ -1661,7 +1724,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "spain_vs_cape_verde",
@@ -1687,7 +1751,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "spain_vs_saudi_arabia",
@@ -1713,7 +1778,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "spain_vs_uruguay",
@@ -1739,7 +1805,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "sweden_vs_tunisia",
@@ -1765,7 +1832,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "united_states_vs_australia",
@@ -1791,7 +1859,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "united_states_vs_paraguay",
@@ -1817,7 +1886,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "united_states_vs_turkey",
@@ -1843,7 +1913,8 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   },
   {
     "match_id": "uzbekistan_vs_colombia",
@@ -1869,6 +1940,7 @@
       "Market odds may be more accurate than model probabilities."
     ],
     "is_actionable": false,
-    "generated_at": "2026-06-10T01:33:18.097738+00:00"
+    "edge_confidence": "none",
+    "generated_at": "2026-06-10T19:14:08.148621+00:00"
   }
 ]

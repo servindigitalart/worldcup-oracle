@@ -5,11 +5,12 @@ import StatCard from '../components/StatCard.astro';
 import EmptyState from '../components/EmptyState.astro';
 import { loadJson } from '../utils/load';
 import { formatTeamName, formatPct, formatDate } from '../utils/format';
-import type { SimSummary, MarketBlend, CaptureStatus } from '../types';
+import type { SimSummary, MarketBlend, CaptureStatus, RefreshReport } from '../types';
 
 const sim     = loadJson<SimSummary | null>('sim_summary.json', null);
 const blend   = loadJson<MarketBlend | null>('market_blend.json', null);
 const capture = loadJson<CaptureStatus | null>('capture_status.json', null);
+const refresh = loadJson<RefreshReport | null>('refresh_report.json', null);
 ---
 <Layout title="Overview">
   <div class="space-y-8">
@@ -95,6 +96,33 @@ const capture = loadJson<CaptureStatus | null>('capture_status.json', null);
             )}
           </div>
         </section>
+
+        <!-- Last refresh status -->
+        {refresh && (
+          <section>
+            <h2 class="text-lg font-semibold text-slate-200 mb-3">Last Refresh</h2>
+            <a href="/status" class="block bg-slate-900 border border-slate-800 rounded-xl p-4 hover:border-slate-600 transition-colors">
+              <div class="flex items-center justify-between flex-wrap gap-3">
+                <div class="flex items-center gap-3">
+                  <span class:list={[
+                    'w-2.5 h-2.5 rounded-full shrink-0',
+                    refresh.success ? 'bg-green-500' : 'bg-red-500',
+                  ]} />
+                  <div>
+                    <div class="text-sm font-medium text-slate-200">
+                      {refresh.success ? 'Refresh succeeded' : 'Refresh failed'}
+                    </div>
+                    <div class="text-xs text-slate-500 mt-0.5">{refresh.summary}</div>
+                  </div>
+                </div>
+                <div class="text-right text-xs text-slate-600 shrink-0">
+                  <div>{refresh.n_steps_success}/{refresh.n_steps_total} steps</div>
+                  <div class="mt-0.5">{refresh.total_duration_seconds.toFixed(1)}s</div>
+                </div>
+              </div>
+            </a>
+          </section>
+        )}
 
         <!-- Disclaimers -->
         <section>

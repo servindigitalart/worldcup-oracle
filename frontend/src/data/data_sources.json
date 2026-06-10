@@ -42,5 +42,5 @@
   "source_url": "https://github.com/martj42/international_results",
   "license": "CC BY 4.0",
   "note": "Counts include all matches with non-null scores in the martj42 dataset.  WC 2026 group-stage results are added incrementally via data/seed/wc2026_results.json.",
-  "generated_at": "2026-06-10T17:31:19.114322+00:00"
+  "generated_at": "2026-06-10T19:14:08.522056+00:00"
 }

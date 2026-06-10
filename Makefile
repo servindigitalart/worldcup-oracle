@@ -1,4 +1,4 @@
-.PHONY: install test lint clean ingest-results ingest-fixtures holdout backtest simulate ingest-odds market-baseline blend capture-odds export-web dev-frontend build-frontend test-frontend ingest-results-2026 tournament-state recommendations methodology data-sources calibration-history reliability market-agreement transparency
+.PHONY: install test lint clean ingest-results ingest-fixtures holdout backtest simulate ingest-odds market-baseline blend capture-odds export-web dev-frontend build-frontend test-frontend ingest-results-2026 tournament-state recommendations methodology data-sources calibration-history reliability market-agreement transparency refresh refresh-build refresh-with-market
 
 install:
 	pip install -e ".[dev]"
@@ -178,6 +178,32 @@ market-agreement:
 
 # Run all Week 15 transparency pipelines in one shot
 transparency: methodology data-sources calibration-history reliability market-agreement
+
+# ── Week 16: one-command refresh ─────────────────────────────────────────────
+#
+# Refresh all artifacts after adding match results to data/seed/wc2026_results.json.
+#
+# Workflow:
+#   1. Edit data/seed/wc2026_results.json with the new result(s)
+#   2. Run one of the make targets below
+#
+# Artifacts updated:
+#   group standings, qualification probs, simulation, blend, recommendations,
+#   methodology, reliability, calibration history, data sources, market agreement,
+#   frontend JSON exports, optional frontend build.
+
+# Full artifact refresh — does NOT rebuild the frontend static site.
+refresh:
+	python3 -m oracle.pipeline.refresh
+
+# Refresh artifacts AND rebuild the static frontend.
+refresh-build:
+	python3 -m oracle.pipeline.refresh --build-frontend
+
+# Capture fresh market odds, then refresh all artifacts.
+# Requires ODDS_API_KEY env var for real market data; uses dummy provider otherwise.
+refresh-with-market:
+	python3 -m oracle.pipeline.refresh --include-market-capture
 
 clean:
 	find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true

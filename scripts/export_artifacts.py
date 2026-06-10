@@ -146,6 +146,8 @@ def export() -> None:
     _write("calibration_history.json", _read_json(ARTIFACTS / "calibration_history.json"))
     _write("model_reliability.json",   _read_json(ARTIFACTS / "model_reliability.json"))
     _write("market_agreement.json",    _read_json(ARTIFACTS / "market_agreement.json"))
+    # Week 16: refresh pipeline report
+    _write("refresh_report.json",      _read_json(ARTIFACTS / "refresh_report.json", {}))
 
 
 if __name__ == "__main__":
