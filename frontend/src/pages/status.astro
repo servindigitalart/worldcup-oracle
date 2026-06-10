@@ -2,9 +2,10 @@
 import Layout from '../layouts/Layout.astro';
 import EmptyState from '../components/EmptyState.astro';
 import { loadJson } from '../utils/load';
-import type { RefreshReport } from '../types';
+import type { RefreshReport, ResultsFeedReport } from '../types';
 
 const report = loadJson<RefreshReport | null>('refresh_report.json', null);
+const feed   = loadJson<ResultsFeedReport | null>('results_feed_report.json', null);
 
 function stepStatusClass(s: string): string {
   switch (s) {
@@ -218,6 +219,114 @@ function formatTs(ts: string): string {
                 </li>
               ))}
             </ul>
+          </section>
+        )}
+
+        <!-- Result feed report -->
+        {feed && feed.generated_at ? (
+          <section>
+            <h2 class="text-lg font-semibold text-slate-200 mb-3">Result Feed</h2>
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 space-y-4">
+              <!-- counts -->
+              <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+                {[
+                  { label: 'Merged',    value: feed.n_merged,    cls: 'text-slate-200' },
+                  { label: 'Manual',    value: feed.n_manual,    cls: 'text-blue-400' },
+                  { label: 'External',  value: feed.n_external,  cls: feed.n_external > 0 ? 'text-indigo-400' : 'text-slate-500' },
+                  { label: 'Finished',  value: feed.n_finished,  cls: feed.n_finished > 0 ? 'text-green-400' : 'text-slate-500' },
+                  { label: 'Live',      value: feed.n_live,      cls: feed.n_live > 0 ? 'text-amber-400' : 'text-slate-500' },
+                  { label: 'Unresolved', value: feed.unresolved.length, cls: feed.unresolved.length > 0 ? 'text-red-400' : 'text-slate-500' },
+                ].map(card => (
+                  <div class="rounded-lg border border-slate-700 bg-slate-800/40 px-3 py-2.5 text-center">
+                    <p class:list={['text-xl font-bold', card.cls]}>{card.value}</p>
+                    <p class="mt-0.5 text-xs text-slate-500">{card.label}</p>
+                  </div>
+                ))}
+              </div>
+
+              <!-- source flags -->
+              <div class="flex flex-wrap gap-2 text-xs">
+                <span class:list={[
+                  'px-3 py-1 rounded-full border font-medium',
+                  'bg-blue-900/30 text-blue-300 border-blue-700/40',
+                ]}>
+                  Manual seed: {feed.n_manual} result{feed.n_manual !== 1 ? 's' : ''}
+                </span>
+                <span class:list={[
+                  'px-3 py-1 rounded-full border font-medium',
+                  feed.provider_json_present
+                    ? 'bg-indigo-900/30 text-indigo-300 border-indigo-700/40'
+                    : 'bg-slate-800 text-slate-500 border-slate-700',
+                ]}>
+                  External JSON: {feed.provider_json_present ? `${feed.n_external} result${feed.n_external !== 1 ? 's' : ''}` : 'not present'}
+                </span>
+                {feed.n_duplicates > 0 && (
+                  <span class="px-3 py-1 rounded-full border font-medium bg-amber-900/30 text-amber-300 border-amber-700/40">
+                    {feed.n_duplicates} manual override{feed.n_duplicates !== 1 ? 's' : ''}
+                  </span>
+                )}
+              </div>
+
+              <!-- overrides -->
+              {feed.overrides.length > 0 && (
+                <div>
+                  <p class="text-xs font-semibold text-slate-400 mb-2">Manual Overrides</p>
+                  <ul class="space-y-1">
+                    {feed.overrides.map(o => (
+                      <li class="text-xs text-slate-500 font-mono">
+                        <span class="text-slate-300">{o.match_id}</span>
+                        {' '} manual={o.manual_goals} ({o.manual_status})
+                        {' '} external={o.external_goals} ({o.external_status})
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              <!-- unresolved -->
+              {feed.unresolved.length > 0 && (
+                <div>
+                  <p class="text-xs font-semibold text-rose-400 mb-2">Unresolved ({feed.unresolved.length})</p>
+                  <ul class="space-y-1">
+                    {feed.unresolved.map(u => (
+                      <li class="text-xs text-rose-300/70 flex gap-2">
+                        <span class="text-rose-600 shrink-0">✗</span>
+                        {u.home_team} vs {u.away_team}: {u.reason}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              <!-- warnings -->
+              {feed.warnings.length > 0 && (
+                <div>
+                  <p class="text-xs font-semibold text-amber-400 mb-1">Feed Warnings</p>
+                  <ul class="space-y-1">
+                    {feed.warnings.map(w => (
+                      <li class="text-xs text-amber-300/70 flex gap-2">
+                        <span class="text-amber-500 shrink-0">!</span>{w}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              <p class="text-[11px] text-slate-600">
+                Manual seed: <span class="font-mono">{feed.manual_seed_path}</span>
+                {feed.provider_json_present && (
+                  <> · External: <span class="font-mono">{feed.provider_json_path}</span></>
+                )}
+              </p>
+            </div>
+          </section>
+        ) : (
+          <section class="bg-slate-900 border border-slate-800 rounded-xl p-5">
+            <h2 class="text-lg font-semibold text-slate-200 mb-2">Result Feed</h2>
+            <p class="text-sm text-slate-500">
+              No feed report yet. Run <code class="text-slate-400">make results-feed</code> or{' '}
+              <code class="text-slate-400">make refresh</code>.
+            </p>
           </section>
         )}
 

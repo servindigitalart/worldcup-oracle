@@ -172,6 +172,8 @@ _ALIAS_MAP: dict[str, str] = {
     "qatar":                         "qatar",
     # Haiti
     "haiti":                         "haiti",
+    # Mexico (accented variant)
+    "méxico":                        "mexico",
 }
 
 

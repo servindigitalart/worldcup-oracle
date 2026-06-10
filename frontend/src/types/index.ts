@@ -350,6 +350,49 @@ export interface MatchResult {
   status: string;
 }
 
+export interface LiveResult {
+  match_id: string;
+  home_team: string;
+  away_team: string;
+  group: string;
+  home_goals: number | null;
+  away_goals: number | null;
+  status: 'scheduled' | 'live' | 'finished' | 'postponed' | 'cancelled' | 'unknown';
+  source: 'manual' | 'local_json' | string;
+  source_event_id: string | null;
+  kickoff_at: string | null;
+  finished_at: string | null;
+  captured_at: string;
+}
+
+export interface ResultsFeedReport {
+  generated_at: string;
+  n_manual: number;
+  n_external: number;
+  n_merged: number;
+  n_duplicates: number;
+  n_finished: number;
+  n_live: number;
+  overrides: Array<{
+    match_id: string;
+    manual_status: string;
+    external_status: string;
+    manual_goals: string;
+    external_goals: string;
+  }>;
+  unresolved: Array<{
+    source: string;
+    home_team: string;
+    away_team: string;
+    match_id: string | null;
+    reason: string;
+  }>;
+  warnings: string[];
+  manual_seed_path: string;
+  provider_json_path: string;
+  provider_json_present: boolean;
+}
+
 export interface RefreshStep {
   name: string;
   status: 'success' | 'skipped' | 'failed' | 'warning';

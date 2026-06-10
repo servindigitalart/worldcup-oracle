@@ -48,17 +48,26 @@ def run(n_sims: int = N_SIMS, seed: int = 42) -> None:
     _ARTIFACTS.mkdir(parents=True, exist_ok=True)
     t_start = time.perf_counter()
 
-    # ── Step 1: ingest 2026 results ───────────────────────────────────────────
-    _LOG.info("Ingesting 2026 results …")
-    result_summary = ingest_results_2026(artifacts_dir=_ARTIFACTS)
-    _LOG.info(
-        "  %d results total, %d finished",
-        result_summary["n_results"],
-        result_summary["n_finished"],
-    )
-
-    # ── Step 2: load results parquet (may be empty) ───────────────────────────
-    results_df = pl.read_parquet(_ARTIFACTS / "match_results.parquet")
+    # ── Step 1: load results ──────────────────────────────────────────────────
+    # Prefer live_results.parquet (merged feed) when it exists; otherwise fall
+    # back to the manual seed via ingest_results_2026.
+    live_results_path = _ARTIFACTS / "live_results.parquet"
+    if live_results_path.exists():
+        _LOG.info("Loading merged live results from live_results.parquet …")
+        results_df = pl.read_parquet(live_results_path)
+        n_finished = int((results_df["status"] == "finished").sum())
+        _LOG.info("  %d results total, %d finished (from live_results.parquet)", len(results_df), n_finished)
+    else:
+        _LOG.info("Ingesting 2026 results from manual seed …")
+        result_summary = ingest_results_2026(artifacts_dir=_ARTIFACTS)
+        n_finished = result_summary["n_finished"]
+        _LOG.info(
+            "  %d results total, %d finished",
+            result_summary["n_results"],
+            n_finished,
+        )
+        # ── Step 2: load results parquet (may be empty) ───────────────────────
+        results_df = pl.read_parquet(_ARTIFACTS / "match_results.parquet")
     finished_df = results_df.filter(pl.col("status") == "finished")
 
     # ── Step 3: build known_results dict for simulation ───────────────────────
@@ -150,7 +159,7 @@ def run(n_sims: int = N_SIMS, seed: int = 42) -> None:
         "goals_model":       mc["goals_model"],
         "goals_model_version": DC_MODEL_VERSION,
         "n_known_results":   len(known_results),
-        "n_finished":        result_summary["n_finished"],
+        "n_finished":        n_finished,
         "fixture_source": {
             "source":         fixture_meta.get("source"),
             "is_official":    fixture_meta.get("is_official", False),

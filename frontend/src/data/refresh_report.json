@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-10T19:13:38.687345+00:00",
+  "generated_at": "2026-06-10T22:44:22.480306+00:00",
   "success": true,
   "strict": true,
   "build_frontend": false,
@@ -8,30 +8,31 @@
     {
       "name": "ingest_fixtures",
       "status": "success",
-      "started_at": "2026-06-10T19:13:38.687764+00:00",
-      "finished_at": "2026-06-10T19:13:39.655411+00:00",
-      "duration_seconds": 0.968,
+      "started_at": "2026-06-10T22:44:22.480823+00:00",
+      "finished_at": "2026-06-10T22:44:23.337017+00:00",
+      "duration_seconds": 0.856,
       "message": "",
       "artifacts": []
     },
     {
-      "name": "ingest_results_2026",
+      "name": "results_feed",
       "status": "success",
-      "started_at": "2026-06-10T19:13:39.655489+00:00",
-      "finished_at": "2026-06-10T19:13:39.660014+00:00",
-      "duration_seconds": 0.005,
+      "started_at": "2026-06-10T22:44:23.337100+00:00",
+      "finished_at": "2026-06-10T22:44:23.345424+00:00",
+      "duration_seconds": 0.008,
       "message": "",
       "artifacts": [
-        "match_results.parquet",
-        "match_results_summary.json"
+        "live_results.parquet",
+        "live_results.json",
+        "results_feed_report.json"
       ]
     },
     {
       "name": "tournament_state",
       "status": "success",
-      "started_at": "2026-06-10T19:13:39.660101+00:00",
-      "finished_at": "2026-06-10T19:14:07.577654+00:00",
-      "duration_seconds": 27.918,
+      "started_at": "2026-06-10T22:44:23.345531+00:00",
+      "finished_at": "2026-06-10T22:44:50.812981+00:00",
+      "duration_seconds": 27.468,
       "message": "",
       "artifacts": [
         "group_standings.parquet",
@@ -44,8 +45,8 @@
     {
       "name": "market_capture",
       "status": "skipped",
-      "started_at": "2026-06-10T19:14:07.577825+00:00",
-      "finished_at": "2026-06-10T19:14:07.577825+00:00",
+      "started_at": "2026-06-10T22:44:50.813137+00:00",
+      "finished_at": "2026-06-10T22:44:50.813137+00:00",
       "duration_seconds": 0.0,
       "message": "not requested (pass --include-market-capture)",
       "artifacts": []
@@ -53,9 +54,9 @@
     {
       "name": "market_baseline",
       "status": "success",
-      "started_at": "2026-06-10T19:14:07.579586+00:00",
-      "finished_at": "2026-06-10T19:14:07.595247+00:00",
-      "duration_seconds": 0.016,
+      "started_at": "2026-06-10T22:44:50.814870+00:00",
+      "finished_at": "2026-06-10T22:44:50.827926+00:00",
+      "duration_seconds": 0.013,
       "message": "",
       "artifacts": [
         "market_snapshots.parquet",
@@ -65,9 +66,9 @@
     {
       "name": "blend",
       "status": "success",
-      "started_at": "2026-06-10T19:14:07.595339+00:00",
-      "finished_at": "2026-06-10T19:14:08.144466+00:00",
-      "duration_seconds": 0.549,
+      "started_at": "2026-06-10T22:44:50.828036+00:00",
+      "finished_at": "2026-06-10T22:44:51.546885+00:00",
+      "duration_seconds": 0.623,
       "message": "",
       "artifacts": [
         "model_market_comparison.parquet",
@@ -78,9 +79,9 @@
     {
       "name": "recommendations",
       "status": "success",
-      "started_at": "2026-06-10T19:14:08.144570+00:00",
-      "finished_at": "2026-06-10T19:14:08.159192+00:00",
-      "duration_seconds": 0.015,
+      "started_at": "2026-06-10T22:44:51.547018+00:00",
+      "finished_at": "2026-06-10T22:44:51.560560+00:00",
+      "duration_seconds": 0.014,
       "message": "",
       "artifacts": [
         "recommendations.parquet",
@@ -91,9 +92,9 @@
     {
       "name": "methodology",
       "status": "success",
-      "started_at": "2026-06-10T19:14:08.159314+00:00",
-      "finished_at": "2026-06-10T19:14:08.164650+00:00",
-      "duration_seconds": 0.005,
+      "started_at": "2026-06-10T22:44:51.560675+00:00",
+      "finished_at": "2026-06-10T22:44:51.564454+00:00",
+      "duration_seconds": 0.004,
       "message": "",
       "artifacts": [
         "methodology.json"
@@ -102,8 +103,8 @@
     {
       "name": "reliability",
       "status": "success",
-      "started_at": "2026-06-10T19:14:08.164717+00:00",
-      "finished_at": "2026-06-10T19:14:08.172295+00:00",
+      "started_at": "2026-06-10T22:44:51.564534+00:00",
+      "finished_at": "2026-06-10T22:44:51.572644+00:00",
       "duration_seconds": 0.008,
       "message": "",
       "artifacts": [
@@ -113,8 +114,8 @@
     {
       "name": "calibration_history",
       "status": "success",
-      "started_at": "2026-06-10T19:14:08.172382+00:00",
-      "finished_at": "2026-06-10T19:14:08.174137+00:00",
+      "started_at": "2026-06-10T22:44:51.572739+00:00",
+      "finished_at": "2026-06-10T22:44:51.574518+00:00",
       "duration_seconds": 0.002,
       "message": "",
       "artifacts": [
@@ -124,9 +125,9 @@
     {
       "name": "data_sources",
       "status": "success",
-      "started_at": "2026-06-10T19:14:08.174202+00:00",
-      "finished_at": "2026-06-10T19:14:08.535517+00:00",
-      "duration_seconds": 0.361,
+      "started_at": "2026-06-10T22:44:51.574594+00:00",
+      "finished_at": "2026-06-10T22:44:51.942954+00:00",
+      "duration_seconds": 0.368,
       "message": "",
       "artifacts": [
         "data_sources.json"
@@ -135,8 +136,8 @@
     {
       "name": "market_agreement",
       "status": "success",
-      "started_at": "2026-06-10T19:14:08.535643+00:00",
-      "finished_at": "2026-06-10T19:14:08.539633+00:00",
+      "started_at": "2026-06-10T22:44:51.943086+00:00",
+      "finished_at": "2026-06-10T22:44:51.946636+00:00",
       "duration_seconds": 0.004,
       "message": "",
       "artifacts": [
@@ -146,25 +147,26 @@
     {
       "name": "export_web",
       "status": "success",
-      "started_at": "2026-06-10T19:14:08.539714+00:00",
-      "finished_at": "2026-06-10T19:14:08.571787+00:00",
-      "duration_seconds": 0.032,
+      "started_at": "2026-06-10T22:44:51.946716+00:00",
+      "finished_at": "2026-06-10T22:44:51.971964+00:00",
+      "duration_seconds": 0.025,
       "message": "",
       "artifacts": []
     },
     {
       "name": "build_frontend",
       "status": "skipped",
-      "started_at": "2026-06-10T19:14:08.571933+00:00",
-      "finished_at": "2026-06-10T19:14:08.571933+00:00",
+      "started_at": "2026-06-10T22:44:51.972047+00:00",
+      "finished_at": "2026-06-10T22:44:51.972047+00:00",
       "duration_seconds": 0.0,
       "message": "not requested (pass --build-frontend)",
       "artifacts": []
     }
   ],
   "artifacts_written": [
-    "match_results.parquet",
-    "match_results_summary.json",
+    "live_results.parquet",
+    "live_results.json",
+    "results_feed_report.json",
     "group_standings.parquet",
     "group_standings.json",
     "qualification_probs.parquet",
@@ -186,11 +188,11 @@
   ],
   "warnings": [],
   "errors": [],
-  "summary": "Refresh complete: 12 steps succeeded, 2 skipped. Total time: 29.9s.",
+  "summary": "Refresh complete: 12 steps succeeded, 2 skipped. Total time: 29.4s.",
   "n_steps_total": 14,
   "n_steps_success": 12,
   "n_steps_failed": 0,
   "n_steps_skipped": 2,
   "n_steps_warning": 0,
-  "total_duration_seconds": 29.882
+  "total_duration_seconds": 29.393
 }

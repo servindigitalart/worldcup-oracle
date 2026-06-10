@@ -1,0 +1,15 @@
+{
+  "generated_at": "2026-06-10T22:44:23.340773+00:00",
+  "n_manual": 0,
+  "n_external": 0,
+  "n_merged": 0,
+  "n_duplicates": 0,
+  "overrides": [],
+  "unresolved": [],
+  "warnings": [],
+  "n_finished": 0,
+  "n_live": 0,
+  "manual_seed_path": "data/seed/wc2026_results.json",
+  "provider_json_path": "data/raw/results/provider_results.json",
+  "provider_json_present": false
+}

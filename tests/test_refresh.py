@@ -315,8 +315,8 @@ class TestRefreshTournament:
         report = self._run_mocked(tmp_path)
         names = [s.name for s in report.steps]
         # Core mandatory ordering
-        assert names.index("ingest_fixtures") < names.index("ingest_results_2026")
-        assert names.index("ingest_results_2026") < names.index("tournament_state")
+        assert names.index("ingest_fixtures") < names.index("results_feed")
+        assert names.index("results_feed") < names.index("tournament_state")
         assert names.index("tournament_state") < names.index("blend")
         assert names.index("blend") < names.index("recommendations")
         assert names.index("recommendations") < names.index("export_web")

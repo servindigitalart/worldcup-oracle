@@ -1,4 +1,4 @@
-.PHONY: install test lint clean ingest-results ingest-fixtures holdout backtest simulate ingest-odds market-baseline blend capture-odds export-web dev-frontend build-frontend test-frontend ingest-results-2026 tournament-state recommendations methodology data-sources calibration-history reliability market-agreement transparency refresh refresh-build refresh-with-market
+.PHONY: install test lint clean ingest-results ingest-fixtures holdout backtest simulate ingest-odds market-baseline blend capture-odds export-web dev-frontend build-frontend test-frontend ingest-results-2026 tournament-state recommendations methodology data-sources calibration-history reliability market-agreement transparency refresh refresh-build refresh-with-market results-feed refresh-live
 
 install:
 	pip install -e ".[dev]"
@@ -204,6 +204,25 @@ refresh-build:
 # Requires ODDS_API_KEY env var for real market data; uses dummy provider otherwise.
 refresh-with-market:
 	python3 -m oracle.pipeline.refresh --include-market-capture
+
+# ── Week 17: result feed ──────────────────────────────────────────────────────
+#
+# Merge match results from the manual seed and optional external JSON provider.
+#
+# Manual seed:    data/seed/wc2026_results.json   (edit this to add results)
+# External JSON:  data/raw/results/provider_results.json  (optional)
+#
+# Manual seed always overrides external provider on conflicts.
+# External data is never written to data/seed/.
+
+# Build merged live results artifacts only — no full refresh.
+# Output: data/artifacts/live_results.{parquet,json} + results_feed_report.json
+results-feed:
+	python3 -m oracle.pipeline.results_feed
+
+# Results feed + full refresh pipeline (standings, sim, recommendations, export).
+refresh-live:
+	python3 -m oracle.pipeline.refresh
 
 clean:
 	find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true

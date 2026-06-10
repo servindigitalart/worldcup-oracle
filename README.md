@@ -2,6 +2,7 @@
 
 **The most honest public World Cup 2026 forecaster on the internet.**
 
+> **Status: Week 17 — Live result feed ingestion. `oracle/results/` package merges manual seed + optional external JSON provider into `live_results.parquet`. Manual seed always wins on conflict. `make results-feed` / `make refresh-live` for post-match updates. 942 Python tests passing, 35/35 frontend tests passing.**
 > **Status: Week 16 — One-command refresh pipeline. `make refresh` / `make refresh-build` / `make refresh-with-market` orchestrate the full artifact pipeline in dependency order after adding match results. `RefreshReport` artifact tracks step log, timings, and status. `/status` page added. 821+ Python tests passing, 35/35 frontend tests passing.**
 > **Status: Week 15 — Transparency, Auditability, Calibration, Explainability. Methodology, calibration, reliability, data-provenance, and market-agreement artifacts + `/methodology`, `/calibration`, `/data` pages. ECE=0.058 (fair). 154 new tests. 821 Python tests passing.**
 > **Status: Week 14 — Responsible Recommendation Engine. Deterministic rules-based engine converts model-market comparison into `no_recommendation` / `watch` / `market_aligned` / `model_gap_detected` signals. Language-safe (no gambling terms). `/recommendations` page added. All 72 group-stage matches evaluated. Python tests passing, 35/35 frontend tests passing.**
@@ -31,6 +32,105 @@ A rigorously calibrated, self-grading tournament forecaster built on three hones
 3. **Publish a live CLV/calibration scoreboard** — grade the model against the market in the open, win or lose.
 
 Read the full design rationale in [docs/FINAL_BLUEPRINT.md](docs/FINAL_BLUEPRINT.md).
+
+---
+
+## Week 17 status
+
+Live result feed ingestion with multi-source merging.
+
+### How the result feed works
+
+The `oracle/results/` package merges results from two sources in strict priority order:
+
+1. **Manual seed** (`data/seed/wc2026_results.json`) — always wins on conflict
+2. **External JSON provider** (`data/raw/results/provider_results.json`) — optional; ignored if absent
+
+Results flow: raw → normalized (fixture-resolved, canonical team IDs) → merged → `live_results.parquet` → tournament state pipeline.
+
+### Adding a result manually
+
+Edit `data/seed/wc2026_results.json` and add an entry:
+
+```json
+{
+  "match_id": "wc2026_m001",
+  "home_team": "mexico",
+  "away_team": "south_africa",
+  "home_goals": 2,
+  "away_goals": 0,
+  "status": "finished"
+}
+```
+
+Then run:
+
+```bash
+make refresh-live       # feed + full artifact refresh
+make refresh-build      # feed + full refresh + frontend build
+```
+
+### Using an external JSON provider
+
+Create `data/raw/results/provider_results.json` with the schema:
+
+```json
+{
+  "metadata": { "source": "my_provider", "captured_at": "2026-06-11T23:00:00Z" },
+  "results": [
+    {
+      "home_team": "Mexico",
+      "away_team": "South Africa",
+      "home_goals": 2,
+      "away_goals": 0,
+      "status": "finished"
+    }
+  ]
+}
+```
+
+- `match_id` is optional — the engine resolves fixtures via canonical team names if omitted
+- Team names are resolved via the alias map in `oracle/teams.py`
+- External data is NEVER written to `data/seed/` — only to `data/artifacts/`
+- Manual seed entries always override external on the same match
+
+### Provider precedence
+
+| Priority | Source | File | Mutated by pipeline? |
+|----------|--------|------|----------------------|
+| 1 (wins) | Manual seed | `data/seed/wc2026_results.json` | Never |
+| 2 | Local JSON provider | `data/raw/results/provider_results.json` | Never |
+
+### Commands added (Week 17)
+
+| Command | What it does |
+|---------|-------------|
+| `make results-feed` | Merge manual + external → `live_results.parquet` only |
+| `make refresh-live` | `results-feed` + full artifact refresh (standings, sim, recommendations, export) |
+
+### Artifacts added (Week 17)
+
+| Artifact | Description |
+|----------|-------------|
+| `data/artifacts/live_results.parquet` | Merged, normalised results (all statuses) |
+| `data/artifacts/live_results.json` | Same as JSON array |
+| `data/artifacts/results_feed_report.json` | Merge counts, overrides, unresolved, warnings |
+
+### What was added (Week 17)
+
+- `oracle/results/provider.py` — `RawResult`, `NormalizedResult`, `MergeReport`, `ResultProviderError`, `VALID_STATUSES`
+- `oracle/results/manual.py` — `ManualSeedProvider` (reads + validates seed file)
+- `oracle/results/external.py` — `LocalJsonResultProvider` (reads optional external JSON, never raises on absent file)
+- `oracle/results/normalize.py` — `normalize_raw()` + `merge_results()` (team alias resolution, fixture lookup, provider precedence)
+- `oracle/pipeline/results_feed.py` — standalone pipeline: `make results-feed`
+- `oracle/pipeline/refresh.py` — `results_feed` step added before `tournament_state`
+- `oracle/pipeline/state.py` — prefers `live_results.parquet` when present; falls back to manual seed
+- `scripts/export_artifacts.py` — exports `live_results.json` + `results_feed_report.json`
+- `frontend/src/types/index.ts` — `LiveResult` + `ResultsFeedReport` types
+- `frontend/src/pages/status.astro` — feed report section (counts, overrides, unresolved, warnings)
+- `tests/test_results_providers.py` — 32 tests (manual + external provider validation)
+- `tests/test_results_normalize.py` — 28 tests (normalization + merge engine)
+- `tests/test_results_feed.py` — 20 tests (pipeline artifacts, counts, idempotency, source columns)
 
 ---
 

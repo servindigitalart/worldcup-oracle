@@ -209,6 +209,18 @@ def _step_ingest_results() -> None:
     )
 
 
+def _step_results_feed() -> None:
+    from oracle.pipeline.results_feed import run as feed_run
+    report = feed_run(artifacts_dir=_ARTIFACTS)
+    log.info(
+        "  merged=%d  manual=%d  external=%d  unresolved=%d",
+        report.get("n_merged", 0),
+        report.get("n_manual", 0),
+        report.get("n_external", 0),
+        len(report.get("unresolved", [])),
+    )
+
+
 def _step_tournament_state() -> None:
     from oracle.pipeline.state import run as state_run
     state_run()
@@ -361,14 +373,15 @@ def refresh_tournament(
     # ── 1. Ingest fixtures ────────────────────────────────────────────────────
     _try("ingest_fixtures", _step_ingest_fixtures)
 
-    # ── 2. Ingest 2026 results ────────────────────────────────────────────────
+    # ── 2. Results feed (merge manual seed + optional external provider) ──────
     _try(
-        "ingest_results_2026",
-        _step_ingest_results,
-        ["match_results.parquet", "match_results_summary.json"],
+        "results_feed",
+        _step_results_feed,
+        ["live_results.parquet", "live_results.json", "results_feed_report.json"],
     )
 
     # ── 3. Tournament state (standings + simulation + qualification probs) ─────
+    # state.py reads live_results.parquet when present (written by step 2)
     _try(
         "tournament_state",
         _step_tournament_state,
