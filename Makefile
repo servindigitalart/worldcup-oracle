@@ -1,4 +1,4 @@
-.PHONY: install test lint clean ingest-results ingest-fixtures holdout backtest simulate ingest-odds market-baseline blend capture-odds export-web dev-frontend build-frontend test-frontend ingest-results-2026 tournament-state recommendations methodology data-sources calibration-history reliability market-agreement transparency refresh refresh-build refresh-with-market results-feed refresh-live
+.PHONY: install test lint clean ingest-results ingest-fixtures holdout backtest simulate ingest-odds market-baseline blend capture-odds export-web dev-frontend build-frontend test-frontend ingest-results-2026 tournament-state recommendations methodology data-sources calibration-history reliability market-agreement transparency refresh refresh-build refresh-with-market results-feed refresh-live prediction-ledger grading closing-lines bracket
 
 install:
 	pip install -e ".[dev]"
@@ -223,6 +223,31 @@ results-feed:
 # Results feed + full refresh pipeline (standings, sim, recommendations, export).
 refresh-live:
 	python3 -m oracle.pipeline.refresh
+
+# ── Week 18: prediction grading ───────────────────────────────────────────────
+#
+# Capture current predictions before matches start.
+# Predictions are stored in data/artifacts/prediction_ledger.parquet (append-only).
+prediction-ledger:
+	python3 -m oracle.pipeline.prediction_ledger
+
+# Grade finished predictions and write performance artifacts.
+# Reads live_results.parquet + prediction_ledger.parquet.
+# Writes grading_summary.json, clv_summary.json, true_clv_summary.json, etc.
+grading:
+	python3 -m oracle.pipeline.grading
+
+# Build market lifecycle checkpoints and market movement artifact.
+# Reads market_snapshots.parquet; writes closing_lines.parquet,
+# closing_line_summary.json, and market_movement.json.
+closing-lines:
+	python3 -m oracle.pipeline.closing_lines
+
+# Generate knockout bracket structure, path difficulty, and R32 projections.
+# Reads group_standings.json; writes best_thirds.json, bracket_structure.json,
+# bracket_paths.json, and knockout_projection.json.
+bracket:
+	python3 -m oracle.pipeline.bracket
 
 clean:
 	find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true

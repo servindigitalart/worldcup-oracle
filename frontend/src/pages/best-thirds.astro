@@ -1,0 +1,146 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { loadJson } from '../utils/load';
+import { formatTeamName } from '../utils/format';
+import type { BestThirdsArtifact, BestThird } from '../types';
+
+const data = loadJson<BestThirdsArtifact | null>('best_thirds.json', null);
+
+const hasData = data !== null && (data.n_thirds_ranked ?? 0) > 0;
+const allThirds: BestThird[] = data?.all_thirds ?? [];
+const qualifying = allThirds.filter(t => t.qualifies);
+const eliminated = allThirds.filter(t => !t.qualifies);
+---
+
+<Layout title="Best Thirds" description="Best third-place team rankings and knockout qualification status.">
+  <h1 class="text-2xl font-bold text-white mb-1">Best Third-Place Teams</h1>
+  <p class="text-slate-400 text-sm mb-6">
+    All 12 third-place finishers ranked to determine the 8 that advance to the knockout stage.
+    Tiebreak: points → goal difference → goals for → fair play → alphabetical.
+  </p>
+
+  {!hasData && (
+    <div class="rounded-lg border border-slate-700 bg-slate-900 px-6 py-10 text-center">
+      <p class="text-slate-400 text-sm">No third-place data yet.</p>
+      <p class="text-slate-500 text-xs mt-2">
+        Run <code class="font-mono">make bracket</code> or
+        <code class="font-mono">make refresh</code> to generate bracket artifacts.
+      </p>
+    </div>
+  )}
+
+  {hasData && (
+    <>
+      <!-- Summary stats -->
+      <div class="grid grid-cols-3 sm:grid-cols-3 gap-3 mb-6">
+        <div class="rounded-lg border border-slate-700 bg-slate-900 p-4">
+          <div class="text-xl font-bold text-white">{data?.n_groups ?? 0}</div>
+          <div class="text-xs text-slate-500 mt-1">Groups</div>
+        </div>
+        <div class="rounded-lg border border-emerald-800 bg-emerald-950/30 p-4">
+          <div class="text-xl font-bold text-emerald-400">{data?.n_qualifying ?? 0}</div>
+          <div class="text-xs text-slate-500 mt-1">Qualifying</div>
+        </div>
+        <div class="rounded-lg border border-slate-700 bg-slate-900 p-4">
+          <div class="text-xl font-bold text-slate-400">
+            {(data?.n_thirds_ranked ?? 0) - (data?.n_qualifying ?? 0)}
+          </div>
+          <div class="text-xs text-slate-500 mt-1">Eliminated</div>
+        </div>
+      </div>
+
+      <!-- Qualifying thirds -->
+      {qualifying.length > 0 && (
+        <div class="mb-6">
+          <h2 class="text-sm font-semibold text-emerald-400 uppercase tracking-wider mb-3">
+            Qualifying — Top 8
+          </h2>
+          <div class="overflow-x-auto rounded-lg border border-slate-700">
+            <table class="w-full text-sm">
+              <thead class="bg-slate-800 text-slate-400 text-xs uppercase tracking-wider">
+                <tr>
+                  <th class="text-left px-3 py-2">Rank</th>
+                  <th class="text-left px-3 py-2">Team</th>
+                  <th class="text-left px-3 py-2">Group</th>
+                  <th class="text-right px-3 py-2">Pts</th>
+                  <th class="text-right px-3 py-2">GD</th>
+                  <th class="text-right px-3 py-2">GF</th>
+                  <th class="text-center px-3 py-2">Status</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-800">
+                {qualifying.map((t) => (
+                  <tr class="hover:bg-slate-800/50 transition-colors">
+                    <td class="px-3 py-2 text-slate-500 text-xs font-mono">{t.rank}</td>
+                    <td class="px-3 py-2 text-slate-200 font-medium">{formatTeamName(t.team)}</td>
+                    <td class="px-3 py-2 text-slate-400">Group {t.group}</td>
+                    <td class="px-3 py-2 text-right text-white font-semibold">{t.points}</td>
+                    <td class="px-3 py-2 text-right text-slate-400">
+                      {t.gd > 0 ? `+${t.gd}` : t.gd}
+                    </td>
+                    <td class="px-3 py-2 text-right text-slate-400">{t.gf}</td>
+                    <td class="px-3 py-2 text-center">
+                      <span class="inline-block rounded-full bg-emerald-900/50 border border-emerald-700 text-emerald-400 text-xs px-2 py-0.5">
+                        Qualifies
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      <!-- Eliminated thirds -->
+      {eliminated.length > 0 && (
+        <div>
+          <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-3">
+            Eliminated — Bottom 4
+          </h2>
+          <div class="overflow-x-auto rounded-lg border border-slate-700">
+            <table class="w-full text-sm opacity-60">
+              <thead class="bg-slate-800 text-slate-500 text-xs uppercase tracking-wider">
+                <tr>
+                  <th class="text-left px-3 py-2">Rank</th>
+                  <th class="text-left px-3 py-2">Team</th>
+                  <th class="text-left px-3 py-2">Group</th>
+                  <th class="text-right px-3 py-2">Pts</th>
+                  <th class="text-right px-3 py-2">GD</th>
+                  <th class="text-right px-3 py-2">GF</th>
+                  <th class="text-center px-3 py-2">Status</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-800">
+                {eliminated.map((t) => (
+                  <tr>
+                    <td class="px-3 py-2 text-slate-600 text-xs font-mono">{t.rank}</td>
+                    <td class="px-3 py-2 text-slate-500">{formatTeamName(t.team)}</td>
+                    <td class="px-3 py-2 text-slate-600">Group {t.group}</td>
+                    <td class="px-3 py-2 text-right text-slate-500">{t.points}</td>
+                    <td class="px-3 py-2 text-right text-slate-600">
+                      {t.gd > 0 ? `+${t.gd}` : t.gd}
+                    </td>
+                    <td class="px-3 py-2 text-right text-slate-600">{t.gf}</td>
+                    <td class="px-3 py-2 text-center">
+                      <span class="inline-block rounded-full bg-slate-800 border border-slate-700 text-slate-500 text-xs px-2 py-0.5">
+                        Eliminated
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {data?.note && (
+        <p class="text-slate-600 text-xs mt-4">{data.note}</p>
+      )}
+      <p class="text-slate-700 text-xs mt-1">
+        Generated {data?.generated_at ? new Date(data.generated_at).toLocaleString() : '—'}.
+      </p>
+    </>
+  )}
+</Layout>

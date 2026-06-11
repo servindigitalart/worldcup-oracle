@@ -226,6 +226,17 @@ def _step_tournament_state() -> None:
     state_run()
 
 
+def _step_bracket_generation() -> None:
+    from oracle.pipeline.bracket import run as bracket_run
+    summary = bracket_run()
+    log.info(
+        "  groups=%d  best_thirds=%d  r32_matches=%d",
+        summary.get("n_groups", 0),
+        summary.get("n_qualifying_thirds", 0),
+        summary.get("n_r32_matches", 0),
+    )
+
+
 def _step_market_capture() -> None:
     from oracle.pipeline.capture import run as capture_run
     capture_run(output_dir=_ARTIFACTS)
@@ -269,6 +280,39 @@ def _step_data_sources() -> None:
 def _step_market_agreement() -> None:
     from oracle.pipeline.market_agreement import run as ma_run
     ma_run()
+
+
+def _step_prediction_ledger_capture() -> None:
+    from oracle.pipeline.prediction_ledger import run as pl_run
+    summary = pl_run()
+    log.info(
+        "  appended=%d  skipped=%d  total_ledger=%d",
+        summary.get("n_appended", 0),
+        summary.get("n_skipped", 0),
+        summary.get("total_predictions", 0),
+    )
+
+
+def _step_closing_lines() -> None:
+    from oracle.pipeline.closing_lines import run as cl_run
+    summary = cl_run()
+    log.info(
+        "  n_matches=%d  n_closing_locked=%d  movement_rows=%d",
+        summary.get("n_matches", 0),
+        summary.get("n_closing_locked", 0),
+        summary.get("n_with_closing", 0),
+    )
+
+
+def _step_grading() -> None:
+    from oracle.pipeline.grading import run as grade_run
+    summary = grade_run()
+    log.info(
+        "  graded=%d  pending=%d  newly_graded=%d",
+        summary.get("graded_predictions", 0),
+        summary.get("pending_predictions", 0),
+        summary.get("newly_graded", 0),
+    )
 
 
 def _step_export_web() -> None:
@@ -394,7 +438,19 @@ def refresh_tournament(
         ],
     )
 
-    # ── 4. Market capture (optional) ──────────────────────────────────────────
+    # ── 4. Bracket generation (Week 21) ──────────────────────────────────────
+    _try(
+        "bracket_generation",
+        _step_bracket_generation,
+        [
+            "best_thirds.json",
+            "bracket_structure.json",
+            "bracket_paths.json",
+            "knockout_projection.json",
+        ],
+    )
+
+    # ── 5. Market capture (optional) ──────────────────────────────────────────
     if include_market_capture:
         _try(
             "market_capture",
@@ -404,7 +460,7 @@ def refresh_tournament(
     else:
         _skip_step("market_capture", "not requested (pass --include-market-capture)", report)
 
-    # ── 5. Market baseline ────────────────────────────────────────────────────
+    # ── 6. Market baseline ────────────────────────────────────────────────────
     has_market = include_market_capture or _market_artifacts_exist()
     if has_market:
         _try(
@@ -419,7 +475,7 @@ def refresh_tournament(
             report,
         )
 
-    # ── 6. Model-market blend ─────────────────────────────────────────────────
+    # ── 7. Model-market blend ─────────────────────────────────────────────────
     _try(
         "blend",
         _step_blend,
@@ -456,10 +512,44 @@ def refresh_tournament(
     # ── 12. Market agreement ──────────────────────────────────────────────────
     _try("market_agreement", _step_market_agreement, ["market_agreement.json"])
 
-    # ── 13. Export frontend JSON ──────────────────────────────────────────────
+    # ── 13. Prediction ledger capture (Week 18) ───────────────────────────────
+    _try(
+        "prediction_ledger_capture",
+        _step_prediction_ledger_capture,
+        ["prediction_ledger.parquet", "prediction_ledger_summary.json"],
+    )
+
+    # ── 14. Closing lines + market movement (Week 20) ─────────────────────────
+    _try(
+        "closing_lines",
+        _step_closing_lines,
+        [
+            "closing_lines.parquet",
+            "closing_line_summary.json",
+            "market_movement.json",
+        ],
+    )
+
+    # ── 15. Prediction grading (Week 18/20) ───────────────────────────────────
+    _try(
+        "grading",
+        _step_grading,
+        [
+            "prediction_grades.parquet",
+            "grading_summary.json",
+            "clv_summary.json",
+            "true_clv_summary.json",
+            "recommendation_performance.json",
+            "recommendation_clv.json",
+            "model_vs_market.json",
+            "performance_trends.json",
+        ],
+    )
+
+    # ── 16. Export frontend JSON ──────────────────────────────────────────────
     _try("export_web", _step_export_web)
 
-    # ── 14. Build frontend (optional) ─────────────────────────────────────────
+    # ── 17. Build frontend (optional) ─────────────────────────────────────────
     if build_frontend:
         _try("build_frontend", _step_build_frontend)
     else:

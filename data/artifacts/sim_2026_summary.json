@@ -1,5 +1,5 @@
 {
-  "generated_date": "2026-06-08",
+  "generated_date": "2026-06-10",
   "n_sims": 10000,
   "seed": 42,
   "locked_model": "elo-baseline-v0.2",

@@ -38,8 +38,8 @@ from typing import Any
 
 from oracle.sim.group import simulate_group
 from oracle.sim.groups import BEST_THIRD_COUNT, WC2026_GROUPS
-from oracle.sim.bracket import simulate_knockout
-from oracle.sim.tiebreak import sort_standings
+from oracle.sim.bracket import simulate_knockout_from_template
+from oracle.bracket.third_place import select_best_thirds
 
 N_SIMS = 10_000
 LOCKED_MODEL_VERSION = "elo-baseline-v0.2"
@@ -77,7 +77,6 @@ def run_tournament(
     """
     active_groups = groups if groups is not None else WC2026_GROUPS
     group_standings: dict[str, list[dict]] = {}
-    third_place_rows: list[dict] = []
 
     for letter, teams in active_groups.items():
         standings = simulate_group(
@@ -86,11 +85,9 @@ def run_tournament(
             known_results=known_results,
         )
         group_standings[letter] = standings
-        third = standings[2]  # 3rd-place finisher (0-indexed)
-        third_place_rows.append({**third, "group": letter})
 
-    # Select best 8 of 12 third-place teams
-    best_third = sort_standings(third_place_rows, rng=rng)[:BEST_THIRD_COUNT]
+    # Select best 8 of 12 third-place teams using official ranking cascade
+    best_third = select_best_thirds(group_standings, BEST_THIRD_COUNT, rng=rng)
     best_third_teams = {r["team"] for r in best_third}
 
     qualified: dict[str, str] = {}
@@ -100,17 +97,15 @@ def run_tournament(
         if standings[2]["team"] in best_third_teams:
             qualified[standings[2]["team"]] = "3rd_best"
 
-    # Build seeding list: 12 group winners, 12 runners-up, 8 best-third
-    # Order within each tier follows group letter order (A→L).
-    group_order = list(active_groups.keys())
-    seeds: list[str] = (
-        [group_standings[g][0]["team"] for g in group_order] +
-        [group_standings[g][1]["team"] for g in group_order] +
-        [r["team"] for r in best_third]
-    )
-    assert len(seeds) == 32
+    # Build slot assignment for official FIFA 2026 bracket template
+    slot_assignment: dict[str, str] = {}
+    for letter, standings in group_standings.items():
+        slot_assignment[f"{letter}1"] = standings[0]["team"]
+        slot_assignment[f"{letter}2"] = standings[1]["team"]
+    for i, row in enumerate(best_third, start=1):
+        slot_assignment[f"T{i}"] = row["team"]
 
-    ko = simulate_knockout(seeds, elo, rng)
+    ko = simulate_knockout_from_template(slot_assignment, elo, rng)
 
     return {
         "groups":     group_standings,

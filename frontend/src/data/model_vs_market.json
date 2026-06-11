@@ -1,0 +1,21 @@
+{
+  "n_graded": 0,
+  "winner": null,
+  "brier": {
+    "model": null,
+    "market": null,
+    "blend": null
+  },
+  "rps": {
+    "model": null,
+    "market": null,
+    "blend": null
+  },
+  "log_loss": {
+    "model": null,
+    "market": null,
+    "blend": null
+  },
+  "disclaimer": "Comparison is based on historical prediction grading only. Small sample sizes (< 20 matches) produce unstable estimates. This is not investment advice.",
+  "generated_at": "2026-06-11T00:29:47.998587+00:00"
+}

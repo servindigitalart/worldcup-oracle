@@ -1,0 +1,537 @@
+{
+  "bracket_note": "Cross-bracket pairing: Group A\u2013F winners face Group G\u2013L runners-up and vice versa. Same-group rematch not possible before the Final. Third-place teams fill 4 of 16 R32 matches (T1\u2013T8 in R32 matches 07, 08, 15, 16). Structural status: best_available \u2014 based on FIFA 2026 48-team format rules; exact third-place slot assignment may be updated when official table is published.",
+  "generated_at": "2026-06-11T00:29:46.481844+00:00",
+  "rounds": [
+    {
+      "round_name": "R32",
+      "n_matches": 16,
+      "matches": [
+        {
+          "match_id": "R32_01",
+          "round_name": "R32",
+          "match_index": 0,
+          "slot_a": "A1",
+          "slot_b": "G2",
+          "team_a": {
+            "team": "czech_republic",
+            "slot": "A1",
+            "group": "A",
+            "finish": "1st"
+          },
+          "team_b": {
+            "team": "egypt",
+            "slot": "G2",
+            "group": "G",
+            "finish": "2nd"
+          },
+          "winner": null,
+          "p_a_wins": null
+        },
+        {
+          "match_id": "R32_02",
+          "round_name": "R32",
+          "match_index": 1,
+          "slot_a": "B1",
+          "slot_b": "H2",
+          "team_a": {
+            "team": "bosnia_herzegovina",
+            "slot": "B1",
+            "group": "B",
+            "finish": "1st"
+          },
+          "team_b": {
+            "team": "saudi_arabia",
+            "slot": "H2",
+            "group": "H",
+            "finish": "2nd"
+          },
+          "winner": null,
+          "p_a_wins": null
+        },
+        {
+          "match_id": "R32_03",
+          "round_name": "R32",
+          "match_index": 2,
+          "slot_a": "C1",
+          "slot_b": "I2",
+          "team_a": {
+            "team": "brazil",
+            "slot": "C1",
+            "group": "C",
+            "finish": "1st"
+          },
+          "team_b": {
+            "team": "iraq",
+            "slot": "I2",
+            "group": "I",
+            "finish": "2nd"
+          },
+          "winner": null,
+          "p_a_wins": null
+        },
+        {
+          "match_id": "R32_04",
+          "round_name": "R32",
+          "match_index": 3,
+          "slot_a": "D1",
+          "slot_b": "J2",
+          "team_a": {
+            "team": "australia",
+            "slot": "D1",
+            "group": "D",
+            "finish": "1st"
+          },
+          "team_b": {
+            "team": "argentina",
+            "slot": "J2",
+            "group": "J",
+            "finish": "2nd"
+          },
+          "winner": null,
+          "p_a_wins": null
+        },
+        {
+          "match_id": "R32_05",
+          "round_name": "R32",
+          "match_index": 4,
+          "slot_a": "E1",
+          "slot_b": "K2",
+          "team_a": {
+            "team": "cote_divoire",
+            "slot": "E1",
+            "group": "E",
+            "finish": "1st"
+          },
+          "team_b": {
+            "team": "dr_congo",
+            "slot": "K2",
+            "group": "K",
+            "finish": "2nd"
+          },
+          "winner": null,
+          "p_a_wins": null
+        },
+        {
+          "match_id": "R32_06",
+          "round_name": "R32",
+          "match_index": 5,
+          "slot_a": "F1",
+          "slot_b": "L2",
+          "team_a": {
+            "team": "japan",
+            "slot": "F1",
+            "group": "F",
+            "finish": "1st"
+          },
+          "team_b": {
+            "team": "england",
+            "slot": "L2",
+            "group": "L",
+            "finish": "2nd"
+          },
+          "winner": null,
+          "p_a_wins": null
+        },
+        {
+          "match_id": "R32_07",
+          "round_name": "R32",
+          "match_index": 6,
+          "slot_a": "T1",
+          "slot_b": "T2",
+          "team_a": {
+            "team": "austria",
+            "slot": "T1",
+            "group": "J",
+            "finish": "3rd"
+          },
+          "team_b": {
+            "team": "ecuador",
+            "slot": "T2",
+            "group": "E",
+            "finish": "3rd"
+          },
+          "winner": null,
+          "p_a_wins": null
+        },
+        {
+          "match_id": "R32_08",
+          "round_name": "R32",
+          "match_index": 7,
+          "slot_a": "T3",
+          "slot_b": "T4",
+          "team_a": {
+            "team": "ghana",
+            "slot": "T3",
+            "group": "L",
+            "finish": "3rd"
+          },
+          "team_b": {
+            "team": "iran",
+            "slot": "T4",
+            "group": "G",
+            "finish": "3rd"
+          },
+          "winner": null,
+          "p_a_wins": null
+        },
+        {
+          "match_id": "R32_09",
+          "round_name": "R32",
+          "match_index": 8,
+          "slot_a": "G1",
+          "slot_b": "A2",
+          "team_a": {
+            "team": "belgium",
+            "slot": "G1",
+            "group": "G",
+            "finish": "1st"
+          },
+          "team_b": {
+            "team": "mexico",
+            "slot": "A2",
+            "group": "A",
+            "finish": "2nd"
+          },
+          "winner": null,
+          "p_a_wins": null
+        },
+        {
+          "match_id": "R32_10",
+          "round_name": "R32",
+          "match_index": 9,
+          "slot_a": "H1",
+          "slot_b": "B2",
+          "team_a": {
+            "team": "cape_verde",
+            "slot": "H1",
+            "group": "H",
+            "finish": "1st"
+          },
+          "team_b": {
+            "team": "canada",
+            "slot": "B2",
+            "group": "B",
+            "finish": "2nd"
+          },
+          "winner": null,
+          "p_a_wins": null
+        },
+        {
+          "match_id": "R32_11",
+          "round_name": "R32",
+          "match_index": 10,
+          "slot_a": "I1",
+          "slot_b": "C2",
+          "team_a": {
+            "team": "france",
+            "slot": "I1",
+            "group": "I",
+            "finish": "1st"
+          },
+          "team_b": {
+            "team": "haiti",
+            "slot": "C2",
+            "group": "C",
+            "finish": "2nd"
+          },
+          "winner": null,
+          "p_a_wins": null
+        },
+        {
+          "match_id": "R32_12",
+          "round_name": "R32",
+          "match_index": 11,
+          "slot_a": "J1",
+          "slot_b": "D2",
+          "team_a": {
+            "team": "algeria",
+            "slot": "J1",
+            "group": "J",
+            "finish": "1st"
+          },
+          "team_b": {
+            "team": "paraguay",
+            "slot": "D2",
+            "group": "D",
+            "finish": "2nd"
+          },
+          "winner": null,
+          "p_a_wins": null
+        },
+        {
+          "match_id": "R32_13",
+          "round_name": "R32",
+          "match_index": 12,
+          "slot_a": "K1",
+          "slot_b": "E2",
+          "team_a": {
+            "team": "colombia",
+            "slot": "K1",
+            "group": "K",
+            "finish": "1st"
+          },
+          "team_b": {
+            "team": "curacao",
+            "slot": "E2",
+            "group": "E",
+            "finish": "2nd"
+          },
+          "winner": null,
+          "p_a_wins": null
+        },
+        {
+          "match_id": "R32_14",
+          "round_name": "R32",
+          "match_index": 13,
+          "slot_a": "L1",
+          "slot_b": "F2",
+          "team_a": {
+            "team": "croatia",
+            "slot": "L1",
+            "group": "L",
+            "finish": "1st"
+          },
+          "team_b": {
+            "team": "netherlands",
+            "slot": "F2",
+            "group": "F",
+            "finish": "2nd"
+          },
+          "winner": null,
+          "p_a_wins": null
+        },
+        {
+          "match_id": "R32_15",
+          "round_name": "R32",
+          "match_index": 14,
+          "slot_a": "T5",
+          "slot_b": "T6",
+          "team_a": {
+            "team": "morocco",
+            "slot": "T5",
+            "group": "C",
+            "finish": "3rd"
+          },
+          "team_b": {
+            "team": "norway",
+            "slot": "T6",
+            "group": "I",
+            "finish": "3rd"
+          },
+          "winner": null,
+          "p_a_wins": null
+        },
+        {
+          "match_id": "R32_16",
+          "round_name": "R32",
+          "match_index": 15,
+          "slot_a": "T7",
+          "slot_b": "T8",
+          "team_a": {
+            "team": "portugal",
+            "slot": "T7",
+            "group": "K",
+            "finish": "3rd"
+          },
+          "team_b": {
+            "team": "qatar",
+            "slot": "T8",
+            "group": "B",
+            "finish": "3rd"
+          },
+          "winner": null,
+          "p_a_wins": null
+        }
+      ]
+    },
+    {
+      "round_name": "R16",
+      "n_matches": 8,
+      "matches": [
+        {
+          "match_id": "R16_01",
+          "round_name": "R16",
+          "match_index": 0,
+          "slot_a": "W(R32_01)",
+          "slot_b": "W(R32_02)",
+          "team_a": null,
+          "team_b": null,
+          "winner": null,
+          "p_a_wins": null
+        },
+        {
+          "match_id": "R16_02",
+          "round_name": "R16",
+          "match_index": 1,
+          "slot_a": "W(R32_03)",
+          "slot_b": "W(R32_04)",
+          "team_a": null,
+          "team_b": null,
+          "winner": null,
+          "p_a_wins": null
+        },
+        {
+          "match_id": "R16_03",
+          "round_name": "R16",
+          "match_index": 2,
+          "slot_a": "W(R32_05)",
+          "slot_b": "W(R32_06)",
+          "team_a": null,
+          "team_b": null,
+          "winner": null,
+          "p_a_wins": null
+        },
+        {
+          "match_id": "R16_04",
+          "round_name": "R16",
+          "match_index": 3,
+          "slot_a": "W(R32_07)",
+          "slot_b": "W(R32_08)",
+          "team_a": null,
+          "team_b": null,
+          "winner": null,
+          "p_a_wins": null
+        },
+        {
+          "match_id": "R16_05",
+          "round_name": "R16",
+          "match_index": 4,
+          "slot_a": "W(R32_09)",
+          "slot_b": "W(R32_10)",
+          "team_a": null,
+          "team_b": null,
+          "winner": null,
+          "p_a_wins": null
+        },
+        {
+          "match_id": "R16_06",
+          "round_name": "R16",
+          "match_index": 5,
+          "slot_a": "W(R32_11)",
+          "slot_b": "W(R32_12)",
+          "team_a": null,
+          "team_b": null,
+          "winner": null,
+          "p_a_wins": null
+        },
+        {
+          "match_id": "R16_07",
+          "round_name": "R16",
+          "match_index": 6,
+          "slot_a": "W(R32_13)",
+          "slot_b": "W(R32_14)",
+          "team_a": null,
+          "team_b": null,
+          "winner": null,
+          "p_a_wins": null
+        },
+        {
+          "match_id": "R16_08",
+          "round_name": "R16",
+          "match_index": 7,
+          "slot_a": "W(R32_15)",
+          "slot_b": "W(R32_16)",
+          "team_a": null,
+          "team_b": null,
+          "winner": null,
+          "p_a_wins": null
+        }
+      ]
+    },
+    {
+      "round_name": "QF",
+      "n_matches": 4,
+      "matches": [
+        {
+          "match_id": "QF_01",
+          "round_name": "QF",
+          "match_index": 0,
+          "slot_a": "W(R16_01)",
+          "slot_b": "W(R16_02)",
+          "team_a": null,
+          "team_b": null,
+          "winner": null,
+          "p_a_wins": null
+        },
+        {
+          "match_id": "QF_02",
+          "round_name": "QF",
+          "match_index": 1,
+          "slot_a": "W(R16_03)",
+          "slot_b": "W(R16_04)",
+          "team_a": null,
+          "team_b": null,
+          "winner": null,
+          "p_a_wins": null
+        },
+        {
+          "match_id": "QF_03",
+          "round_name": "QF",
+          "match_index": 2,
+          "slot_a": "W(R16_05)",
+          "slot_b": "W(R16_06)",
+          "team_a": null,
+          "team_b": null,
+          "winner": null,
+          "p_a_wins": null
+        },
+        {
+          "match_id": "QF_04",
+          "round_name": "QF",
+          "match_index": 3,
+          "slot_a": "W(R16_07)",
+          "slot_b": "W(R16_08)",
+          "team_a": null,
+          "team_b": null,
+          "winner": null,
+          "p_a_wins": null
+        }
+      ]
+    },
+    {
+      "round_name": "SF",
+      "n_matches": 2,
+      "matches": [
+        {
+          "match_id": "SF_01",
+          "round_name": "SF",
+          "match_index": 0,
+          "slot_a": "W(QF_01)",
+          "slot_b": "W(QF_02)",
+          "team_a": null,
+          "team_b": null,
+          "winner": null,
+          "p_a_wins": null
+        },
+        {
+          "match_id": "SF_02",
+          "round_name": "SF",
+          "match_index": 1,
+          "slot_a": "W(QF_03)",
+          "slot_b": "W(QF_04)",
+          "team_a": null,
+          "team_b": null,
+          "winner": null,
+          "p_a_wins": null
+        }
+      ]
+    },
+    {
+      "round_name": "Final",
+      "n_matches": 1,
+      "matches": [
+        {
+          "match_id": "Final",
+          "round_name": "Final",
+          "match_index": 0,
+          "slot_a": "W(SF_01)",
+          "slot_b": "W(SF_02)",
+          "team_a": null,
+          "team_b": null,
+          "winner": null,
+          "p_a_wins": null
+        }
+      ]
+    }
+  ]
+}

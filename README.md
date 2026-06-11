@@ -2,6 +2,8 @@
 
 **The most honest public World Cup 2026 forecaster on the internet.**
 
+> **Status: Week 20 — True Closing Line Engine & Market Lifecycle Tracking. `oracle/market/lifecycle.py` extracts opening/24h/12h/6h/1h/closing checkpoints from odds snapshots. `oracle/grading/true_clv.py` computes True CLV (model − closing market) valid only when `closing_locked`. Market movement analysis (opening→closing drift) in `oracle/market/movement_analysis.py`. `/market-history` page added. 17 Astro pages, ~1150+ Python tests.**
+> **Status: Week 18 — Prediction grading, CLV tracking & recommendation performance. `oracle/grading/` package grades predictions after match results arrive. Append-only `prediction_ledger.parquet` captures pre-match snapshots; grading fills in Brier, RPS, Log Loss, CLV, and correct-side per entry. `/performance` + `/history` pages added. 1051 Python tests, 35/35 frontend tests, 14 Astro pages.**
 > **Status: Week 17 — Live result feed ingestion. `oracle/results/` package merges manual seed + optional external JSON provider into `live_results.parquet`. Manual seed always wins on conflict. `make results-feed` / `make refresh-live` for post-match updates. 942 Python tests passing, 35/35 frontend tests passing.**
 > **Status: Week 16 — One-command refresh pipeline. `make refresh` / `make refresh-build` / `make refresh-with-market` orchestrate the full artifact pipeline in dependency order after adding match results. `RefreshReport` artifact tracks step log, timings, and status. `/status` page added. 821+ Python tests passing, 35/35 frontend tests passing.**
 > **Status: Week 15 — Transparency, Auditability, Calibration, Explainability. Methodology, calibration, reliability, data-provenance, and market-agreement artifacts + `/methodology`, `/calibration`, `/data` pages. ECE=0.058 (fair). 154 new tests. 821 Python tests passing.**
@@ -32,6 +34,190 @@ A rigorously calibrated, self-grading tournament forecaster built on three hones
 3. **Publish a live CLV/calibration scoreboard** — grade the model against the market in the open, win or lose.
 
 Read the full design rationale in [docs/FINAL_BLUEPRINT.md](docs/FINAL_BLUEPRINT.md).
+
+---
+
+## Week 20 status
+
+True Closing-Line Engine and Market Lifecycle Tracking.
+
+### Lifecycle checkpoints
+
+Odds snapshots are structured into six named checkpoints per match:
+
+| Checkpoint | Time window before kickoff |
+|-----------|---------------------------|
+| Opening   | Earliest available snapshot |
+| 24h       | 18h–30h before kickoff |
+| 12h       | 8h–16h before kickoff |
+| 6h        | 4h–8h before kickoff |
+| 1h        | 15min–1h45min before kickoff |
+| Closing   | Latest pre-kickoff snapshot |
+
+Rules: only pre-kickoff snapshots used; never inferred; missing windows left as null.  
+Probabilities averaged across bookmakers at the selected timestamp.
+
+### True CLV vs Snapshot CLV
+
+| | Snapshot CLV (Week 18) | True CLV (Week 20) |
+|-|----------------------|------------------|
+| Formula | model_prob − market_prob_at_capture | model_prob − closing_market_prob |
+| Valid when | Always (snapshot exists) | `closing_locked` only |
+| Reliability | Pre-match diagnostic | True market-efficiency benchmark |
+
+### Market movement
+
+Opening→closing probability drift tracked per match.  
+`max_abs_move` is the largest absolute shift across home/draw/away.  
+Movement reflects market opinion, not model edge.
+
+### New commands (Week 20)
+
+| Command | What it does |
+|---------|-------------|
+| `make closing-lines` | Build lifecycle checkpoints + market movement artifact |
+| `make refresh-live`  | Full pipeline including closing-lines + grading |
+
+### New artifacts (Week 20)
+
+| Artifact | Description |
+|----------|-------------|
+| `closing_lines.parquet` | One row per match, all lifecycle checkpoints flattened |
+| `closing_line_summary.json` | Aggregate by closing_status, validation warnings |
+| `market_movement.json` | Opening→closing drift per match |
+| `true_clv_summary.json` | True CLV aggregate (closing_locked only) |
+| `recommendation_clv.json` | True CLV for model_gap_detected recommendations |
+
+### What was added (Week 20)
+
+- `oracle/market/lifecycle.py` — `LifecycleEntry`, `CheckpointSnapshot`, checkpoint selection
+- `oracle/market/validation.py` — prob-sum + ordering + post-kickoff validation
+- `oracle/market/movement_analysis.py` — `analyze_match_movement()`, `build_market_movement()`
+- `oracle/grading/true_clv.py` — `compute_true_clv()`, `compute_entry_true_clv()`, `aggregate_true_clv()`
+- `oracle/grading/recommendation_clv.py` — `compute_recommendation_clv()`
+- `oracle/pipeline/closing_lines.py` — lifecycle + market movement pipeline (`make closing-lines`)
+- `oracle/pipeline/grading.py` — extended with `true_clv_summary.json` + `recommendation_clv.json`
+- `oracle/pipeline/refresh.py` — `closing_lines` step inserted as step 14 (grading now step 15)
+- `scripts/export_artifacts.py` — 5 new artifact exports
+- `frontend/src/types/index.ts` — 5 new interfaces
+- `frontend/src/pages/market-history.astro` — new `/market-history` page
+- `frontend/src/pages/performance.astro` — True CLV section added
+- `frontend/src/pages/history.astro` — snapshot CLV column added
+- `frontend/src/components/NavBar.astro` — Mkt History link added
+- `tests/test_market_lifecycle.py` — ~35 tests
+- `tests/test_true_clv.py` — ~35 tests
+- `tests/test_closing_lines_pipeline.py` — ~25 tests
+
+---
+
+## Week 18 status
+
+Prediction grading, CLV tracking, and recommendation performance evaluation.
+
+### Prediction lifecycle
+
+```
+make refresh-live
+  ↓
+prediction_ledger_capture  — snapshots blend + recommendations for unfinished matches
+  ↓
+grading                    — fills in outcome, Brier, RPS, Log Loss, CLV once result is known
+  ↓
+export_web                 — prediction_ledger.json, prediction_grades.json, grading_summary.json, …
+```
+
+### Prediction capture
+
+Each `make refresh-live` run snapshots current predictions for matches that have not yet finished.  
+Prediction ID is deterministic (`sha256(match_id + YYYY-MM-DD)[:16]`) — re-running the same day produces zero new entries.  
+The ledger is append-only: prediction columns never change after capture.
+
+### Grading methodology
+
+Once a match status becomes `finished` in `live_results.parquet`:
+
+| Metric | Formula | Range | Lower = better |
+|--------|---------|-------|---------------|
+| Brier  | Σ(p_i − y_i)² for {home, draw, away} | [0, 2] | ✓ |
+| RPS    | Σ(CDF_pred − CDF_actual)² / 2 | [0, 1] | ✓ |
+| Log Loss | −log(p_outcome) | [0, ∞) | ✓ |
+| Surprise | 1 − p_outcome | [0, 1] | higher = more surprising |
+
+Computed separately for model, market, and blend probabilities.
+
+### CLV methodology
+
+`CLV_side = model_prob_side − market_prob_side` at prediction capture time.
+
+- Positive CLV → model was more confident on that side than the market.
+- Uses snapshot probabilities (not guaranteed closing lines until `closing_locked` status is available).
+- Never used for profit or bankroll calculation — scientific evaluation only.
+
+### Recommendation evaluation
+
+| Term | Meaning |
+|------|---------|
+| Won | `model_gap_detected` selection matched actual outcome |
+| Lost | Selection did not match |
+| Push | No directional selection (`no_recommendation`, `watch`) |
+
+Tracked by edge bucket (small/medium/large) and confidence level.  
+No profit, ROI, or bankroll calculation anywhere in the codebase.
+
+### Model vs Market
+
+Compares mean Brier, RPS, and Log Loss across model, market, and blend.  
+Winner is the source with lowest mean Brier over all graded matches.  
+Small samples (< 20 matches) produce unstable estimates.
+
+### Performance pages
+
+| Page | URL | Content |
+|------|-----|---------|
+| Performance | `/performance` | Grading summary, model-vs-market, CLV stats, rolling windows, recommendation hit rates |
+| History | `/history` | Full prediction ledger table with outcomes, scores, correct-side indicator |
+
+### Commands added (Week 18)
+
+| Command | What it does |
+|---------|-------------|
+| `make prediction-ledger` | Capture current predictions (standalone, no full refresh) |
+| `make grading` | Grade finished predictions and write performance artifacts (standalone) |
+| `make refresh-live` | Full pipeline including ledger capture + grading |
+
+### Artifacts added (Week 18)
+
+| Artifact | Description |
+|----------|-------------|
+| `prediction_ledger.parquet` | Append-only prediction snapshots + graded outcomes |
+| `prediction_grades.parquet` | Graded subset only |
+| `prediction_grades.json` | Same as JSON array |
+| `grading_summary.json` | Overall accuracy, Brier, RPS, Log Loss |
+| `clv_summary.json` | CLV aggregate statistics |
+| `recommendation_performance.json` | Hit rates by edge bucket and confidence |
+| `model_vs_market.json` | Model/market/blend comparison |
+| `performance_trends.json` | Rolling windows: last 10, 25, 50, all-time |
+
+### What was added (Week 18)
+
+- `oracle/grading/__init__.py`
+- `oracle/grading/ledger.py` — `PredictionLedgerEntry`, append-only parquet I/O
+- `oracle/grading/grade.py` — Brier, RPS, Log Loss, surprise score, `grade_prediction()`
+- `oracle/grading/clv.py` — `compute_clv()`, `compute_entry_clv()`, `aggregate_clv()`
+- `oracle/grading/recommendations.py` — `grade_recommendation()`, `aggregate_recommendation_performance()`
+- `oracle/grading/trends.py` — `build_performance_trends()` with rolling windows
+- `oracle/grading/comparison.py` — `compute_model_vs_market()`
+- `oracle/pipeline/prediction_ledger.py` — capture pipeline (`make prediction-ledger`)
+- `oracle/pipeline/grading.py` — grading pipeline (`make grading`)
+- `oracle/pipeline/refresh.py` — `prediction_ledger_capture` + `grading` steps added (steps 13–14)
+- `scripts/export_artifacts.py` — 7 new artifact exports
+- `frontend/src/types/index.ts` — 7 new interfaces
+- `frontend/src/pages/performance.astro` — new `/performance` page
+- `frontend/src/pages/history.astro` — new `/history` page
+- `frontend/src/components/NavBar.astro` — Performance + History links
+- `tests/test_grading_ledger.py` — 23 tests (ledger I/O, ID generation)
+- `tests/test_grading_metrics.py` — 57 tests (Brier, RPS, Log Loss, CLV, recommendations, trends, comparison)
+- `tests/test_grading_pipelines.py` — 29 tests (capture + grading pipeline integration)
 
 ---
 

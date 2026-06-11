@@ -1,0 +1,303 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { loadJson } from '../utils/load';
+import { formatPct, formatRps } from '../utils/format';
+import type {
+  GradingSummary,
+  ClvSummary,
+  TrueClvSummary,
+  RecommendationPerformance,
+  ModelVsMarket,
+  PerformanceTrends,
+  PerformanceTrendsWindow,
+} from '../types';
+
+const grading  = loadJson<GradingSummary | null>('grading_summary.json', null);
+const clv      = loadJson<ClvSummary | null>('clv_summary.json', null);
+const trueClv  = loadJson<TrueClvSummary | null>('true_clv_summary.json', null);
+const recPerf  = loadJson<RecommendationPerformance | null>('recommendation_performance.json', null);
+const mvs      = loadJson<ModelVsMarket | null>('model_vs_market.json', null);
+const trends   = loadJson<PerformanceTrends | null>('performance_trends.json', null);
+
+const hasData     = grading !== null && (grading.graded_predictions ?? 0) > 0;
+const allTimeWindow = trends?.windows?.find((w: PerformanceTrendsWindow) => w.window === null);
+
+function fmt4(v: number | null | undefined): string {
+  if (v == null || !isFinite(v)) return '—';
+  return v.toFixed(4);
+}
+
+function fmtClv(v: number | null | undefined): string {
+  if (v == null || !isFinite(v)) return '—';
+  const sign = v > 0 ? '+' : '';
+  return sign + (v * 100).toFixed(2) + 'pp';
+}
+
+function winnerLabel(w: string | null | undefined): string {
+  if (!w) return '—';
+  return w.charAt(0).toUpperCase() + w.slice(1);
+}
+
+function winnerClass(w: string | null | undefined, key: string): string {
+  return w === key ? 'text-emerald-400 font-semibold' : 'text-slate-300';
+}
+---
+
+<Layout title="Performance" description="Historical prediction grading, CLV, and model-vs-market evaluation.">
+  <h1 class="text-2xl font-bold text-white mb-1">Prediction Performance</h1>
+  <p class="text-slate-400 text-sm mb-6">
+    Historical evaluation of prediction accuracy, calibration quality, and model-vs-market comparison.
+    Scientific evaluation only — no profit or bankroll calculations.
+  </p>
+
+  {!hasData && (
+    <div class="rounded-lg border border-slate-700 bg-slate-900 px-6 py-10 text-center">
+      <p class="text-slate-400 text-sm">No graded predictions yet.</p>
+      <p class="text-slate-500 text-xs mt-2">
+        Predictions are graded automatically after match results are added and
+        <code class="font-mono">make refresh-live</code> is run.
+      </p>
+    </div>
+  )}
+
+  {hasData && grading && (
+    <>
+      {/* ── Summary cards ──────────────────────────────────────────────────── */}
+      <section class="mb-8">
+        <h2 class="text-lg font-semibold text-slate-200 mb-3">Overall accuracy</h2>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+          <div class="rounded-lg border border-slate-700 bg-slate-900 p-4">
+            <div class="text-xs text-slate-500 mb-1">Predictions graded</div>
+            <div class="text-2xl font-bold text-white">{grading.graded_predictions}</div>
+            <div class="text-xs text-slate-500">{grading.pending_predictions} pending</div>
+          </div>
+          <div class="rounded-lg border border-slate-700 bg-slate-900 p-4">
+            <div class="text-xs text-slate-500 mb-1">Correct side (model)</div>
+            <div class="text-2xl font-bold text-white">{formatPct(grading.accuracy_rate)}</div>
+            <div class="text-xs text-slate-500">{grading.n_correct_side} / {grading.graded_predictions}</div>
+          </div>
+          <div class="rounded-lg border border-slate-700 bg-slate-900 p-4">
+            <div class="text-xs text-slate-500 mb-1">Mean Brier score</div>
+            <div class="text-2xl font-bold text-white">{fmt4(grading.mean_brier)}</div>
+            <div class="text-xs text-slate-500">lower = better</div>
+          </div>
+          <div class="rounded-lg border border-slate-700 bg-slate-900 p-4">
+            <div class="text-xs text-slate-500 mb-1">Mean RPS</div>
+            <div class="text-2xl font-bold text-white">{fmt4(grading.mean_rps)}</div>
+            <div class="text-xs text-slate-500">lower = better</div>
+          </div>
+          <div class="rounded-lg border border-slate-700 bg-slate-900 p-4">
+            <div class="text-xs text-slate-500 mb-1">Positive CLV rate</div>
+            <div class="text-2xl font-bold text-white">{clv ? formatPct(clv.positive_clv_rate) : '—'}</div>
+            <div class="text-xs text-slate-500">model vs market</div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Model vs Market ────────────────────────────────────────────────── */}
+      {mvs && mvs.n_graded > 0 && (
+        <section class="mb-8">
+          <h2 class="text-lg font-semibold text-slate-200 mb-3">
+            Model vs Market vs Blend
+            {mvs.winner && (
+              <span class="ml-2 text-sm font-normal text-slate-400">
+                — <span class="text-emerald-400">{winnerLabel(mvs.winner)}</span> wins on Brier
+              </span>
+            )}
+          </h2>
+          <div class="rounded-lg border border-slate-700 bg-slate-900 overflow-hidden">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="border-b border-slate-700 text-xs text-slate-500 uppercase tracking-wide">
+                  <th class="px-4 py-3 text-left">Metric</th>
+                  <th class="px-4 py-3 text-right">Model</th>
+                  <th class="px-4 py-3 text-right">Market</th>
+                  <th class="px-4 py-3 text-right">Blend</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="border-b border-slate-800">
+                  <td class="px-4 py-3 text-slate-400">Mean Brier</td>
+                  <td class={`px-4 py-3 text-right font-mono ${winnerClass(mvs.winner, 'model')}`}>{fmt4(mvs.brier.model)}</td>
+                  <td class={`px-4 py-3 text-right font-mono ${winnerClass(mvs.winner, 'market')}`}>{fmt4(mvs.brier.market)}</td>
+                  <td class={`px-4 py-3 text-right font-mono ${winnerClass(mvs.winner, 'blend')}`}>{fmt4(mvs.brier.blend)}</td>
+                </tr>
+                <tr class="border-b border-slate-800">
+                  <td class="px-4 py-3 text-slate-400">Mean RPS</td>
+                  <td class="px-4 py-3 text-right font-mono text-slate-300">{fmt4(mvs.rps.model)}</td>
+                  <td class="px-4 py-3 text-right font-mono text-slate-300">{fmt4(mvs.rps.market)}</td>
+                  <td class="px-4 py-3 text-right font-mono text-slate-300">{fmt4(mvs.rps.blend)}</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-3 text-slate-400">Mean Log Loss</td>
+                  <td class="px-4 py-3 text-right font-mono text-slate-300">{fmt4(mvs.log_loss.model)}</td>
+                  <td class="px-4 py-3 text-right font-mono text-slate-300">{fmt4(mvs.log_loss.market)}</td>
+                  <td class="px-4 py-3 text-right font-mono text-slate-300">{fmt4(mvs.log_loss.blend)}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="text-xs text-slate-600 mt-2">{mvs.disclaimer}</p>
+        </section>
+      )}
+
+      {/* ── CLV summary ────────────────────────────────────────────────────── */}
+      {clv && clv.n > 0 && (
+        <section class="mb-8">
+          <h2 class="text-lg font-semibold text-slate-200 mb-3">Closing Line Value (CLV)</h2>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-3">
+            <div class="rounded-lg border border-slate-700 bg-slate-900 p-4">
+              <div class="text-xs text-slate-500 mb-1">Samples</div>
+              <div class="text-xl font-bold text-white">{clv.n}</div>
+            </div>
+            <div class="rounded-lg border border-slate-700 bg-slate-900 p-4">
+              <div class="text-xs text-slate-500 mb-1">Average CLV</div>
+              <div class={`text-xl font-bold ${(clv.average_clv ?? 0) >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                {fmtClv(clv.average_clv)}
+              </div>
+            </div>
+            <div class="rounded-lg border border-slate-700 bg-slate-900 p-4">
+              <div class="text-xs text-slate-500 mb-1">Median CLV</div>
+              <div class={`text-xl font-bold ${(clv.median_clv ?? 0) >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                {fmtClv(clv.median_clv)}
+              </div>
+            </div>
+            <div class="rounded-lg border border-slate-700 bg-slate-900 p-4">
+              <div class="text-xs text-slate-500 mb-1">Positive CLV %</div>
+              <div class="text-xl font-bold text-white">{formatPct(clv.positive_clv_rate)}</div>
+            </div>
+          </div>
+          <p class="text-xs text-slate-600">{clv.note}</p>
+        </section>
+      )}
+
+      {/* ── True CLV (closing-locked only) ────────────────────────────────── */}
+      {trueClv && trueClv.n > 0 && (
+        <section class="mb-8">
+          <h2 class="text-lg font-semibold text-slate-200 mb-3">
+            True Closing-Line Value
+            <span class="ml-2 text-xs font-normal text-slate-500">closing_locked snapshots only</span>
+          </h2>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-3">
+            <div class="rounded-lg border border-slate-700 bg-slate-900 p-4">
+              <div class="text-xs text-slate-500 mb-1">Samples</div>
+              <div class="text-xl font-bold text-white">{trueClv.n}</div>
+            </div>
+            <div class="rounded-lg border border-slate-700 bg-slate-900 p-4">
+              <div class="text-xs text-slate-500 mb-1">Avg True CLV</div>
+              <div class={`text-xl font-bold ${(trueClv.average_true_clv ?? 0) >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                {fmtClv(trueClv.average_true_clv)}
+              </div>
+            </div>
+            <div class="rounded-lg border border-slate-700 bg-slate-900 p-4">
+              <div class="text-xs text-slate-500 mb-1">Median True CLV</div>
+              <div class={`text-xl font-bold ${(trueClv.median_true_clv ?? 0) >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                {fmtClv(trueClv.median_true_clv)}
+              </div>
+            </div>
+            <div class="rounded-lg border border-slate-700 bg-slate-900 p-4">
+              <div class="text-xs text-slate-500 mb-1">Positive True CLV %</div>
+              <div class="text-xl font-bold text-white">{formatPct(trueClv.positive_true_clv_rate)}</div>
+            </div>
+          </div>
+          <p class="text-xs text-slate-600">{trueClv.note}</p>
+        </section>
+      )}
+
+      {/* ── Rolling window trends ──────────────────────────────────────────── */}
+      {trends && trends.windows && trends.windows.length > 0 && (
+        <section class="mb-8">
+          <h2 class="text-lg font-semibold text-slate-200 mb-3">Rolling window metrics</h2>
+          <div class="rounded-lg border border-slate-700 bg-slate-900 overflow-hidden">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="border-b border-slate-700 text-xs text-slate-500 uppercase tracking-wide">
+                  <th class="px-4 py-3 text-left">Window</th>
+                  <th class="px-4 py-3 text-right">Matches</th>
+                  <th class="px-4 py-3 text-right">Brier</th>
+                  <th class="px-4 py-3 text-right">RPS</th>
+                  <th class="px-4 py-3 text-right">+CLV%</th>
+                  <th class="px-4 py-3 text-right">Rec hit%</th>
+                </tr>
+              </thead>
+              <tbody>
+                {trends.windows.map((w: PerformanceTrendsWindow, i: number) => (
+                  <tr class={i < trends.windows.length - 1 ? 'border-b border-slate-800' : ''}>
+                    <td class="px-4 py-3 text-slate-300 font-medium">
+                      {w.window === null ? 'All-time' : `Last ${w.window}`}
+                    </td>
+                    <td class="px-4 py-3 text-right text-slate-400">{w.n_matches}</td>
+                    <td class="px-4 py-3 text-right font-mono text-slate-300">{fmt4(w.mean_brier)}</td>
+                    <td class="px-4 py-3 text-right font-mono text-slate-300">{fmt4(w.mean_rps)}</td>
+                    <td class="px-4 py-3 text-right text-slate-300">{formatPct(w.positive_clv_rate)}</td>
+                    <td class="px-4 py-3 text-right text-slate-300">{formatPct(w.rec_hit_rate)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p class="text-xs text-slate-600 mt-2">{trends.disclaimer}</p>
+        </section>
+      )}
+
+      {/* ── Recommendation performance ─────────────────────────────────────── */}
+      {recPerf && (
+        <section class="mb-8">
+          <h2 class="text-lg font-semibold text-slate-200 mb-3">Recommendation quality</h2>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
+            <div class="rounded-lg border border-slate-700 bg-slate-900 p-4">
+              <div class="text-xs text-slate-500 mb-1">Actionable recs graded</div>
+              <div class="text-2xl font-bold text-white">{recPerf.n_actionable}</div>
+            </div>
+            <div class="rounded-lg border border-slate-700 bg-slate-900 p-4">
+              <div class="text-xs text-slate-500 mb-1">Hit rate</div>
+              <div class="text-2xl font-bold text-white">{formatPct(recPerf.hit_rate)}</div>
+              <div class="text-xs text-slate-500">{recPerf.n_won}W / {recPerf.n_lost}L</div>
+            </div>
+            <div class="rounded-lg border border-slate-700 bg-slate-900 p-4">
+              <div class="text-xs text-slate-500 mb-1">Push (no selection)</div>
+              <div class="text-2xl font-bold text-white">{recPerf.n_push}</div>
+            </div>
+            <div class="rounded-lg border border-slate-700 bg-slate-900 p-4">
+              <div class="text-xs text-slate-500 mb-1">Total evaluated</div>
+              <div class="text-2xl font-bold text-white">{recPerf.n_total}</div>
+            </div>
+          </div>
+
+          {recPerf.n_actionable > 0 && (
+            <div class="rounded-lg border border-slate-700 bg-slate-900 overflow-hidden">
+              <div class="px-4 py-3 border-b border-slate-700 text-xs text-slate-500 uppercase tracking-wide font-medium">
+                By edge size
+              </div>
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="border-b border-slate-700 text-xs text-slate-500">
+                    <th class="px-4 py-2 text-left">Bucket</th>
+                    <th class="px-4 py-2 text-right">n</th>
+                    <th class="px-4 py-2 text-right">Won</th>
+                    <th class="px-4 py-2 text-right">Lost</th>
+                    <th class="px-4 py-2 text-right">Hit rate</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {Object.entries(recPerf.by_edge_bucket).map(([bucket, data]) => (
+                    <tr class="border-b border-slate-800 last:border-0">
+                      <td class="px-4 py-2 text-slate-300 capitalize">{bucket}</td>
+                      <td class="px-4 py-2 text-right text-slate-400">{data.n}</td>
+                      <td class="px-4 py-2 text-right text-emerald-400">{data.won}</td>
+                      <td class="px-4 py-2 text-right text-red-400">{data.lost}</td>
+                      <td class="px-4 py-2 text-right text-slate-300">{formatPct(data.hit_rate)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+          <p class="text-xs text-slate-600 mt-2">{recPerf.note}</p>
+        </section>
+      )}
+
+      <p class="text-xs text-slate-600 mt-4">{grading.disclaimer}</p>
+    </>
+  )}
+</Layout>

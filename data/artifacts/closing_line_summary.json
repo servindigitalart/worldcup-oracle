@@ -1,0 +1,21 @@
+{
+  "generated_at": "2026-06-11T00:29:47.987274+00:00",
+  "n_matches": 76,
+  "n_with_opening": 4,
+  "n_with_closing": 4,
+  "n_with_h24": 0,
+  "n_closing_locked": 0,
+  "by_closing_status": {
+    "no_market_data": 72,
+    "opening_only": 2,
+    "latest_available": 2,
+    "closing_candidate": 0,
+    "closing_locked": 0
+  },
+  "validation": {
+    "n_valid": 76,
+    "n_with_warnings": 0,
+    "warnings": []
+  },
+  "note": "closing_locked means kickoff has passed and the latest snapshot is a true closing line. Only closing_locked entries support True CLV."
+}

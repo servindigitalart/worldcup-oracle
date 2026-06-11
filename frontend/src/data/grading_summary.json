@@ -1,0 +1,13 @@
+{
+  "generated_at": "2026-06-11T00:29:47.998587+00:00",
+  "total_predictions": 144,
+  "graded_predictions": 0,
+  "pending_predictions": 144,
+  "newly_graded": 0,
+  "n_correct_side": 0,
+  "accuracy_rate": null,
+  "mean_brier": null,
+  "mean_rps": null,
+  "mean_log_loss": null,
+  "disclaimer": "Accuracy metrics are historical evaluation only \u2014 not predictive of future performance."
+}

@@ -1,0 +1,156 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { loadJson } from '../utils/load';
+import { formatTeamName } from '../utils/format';
+import type { BracketStructure, BracketMatch, KnockoutProjection } from '../types';
+
+const structure  = loadJson<BracketStructure | null>('bracket_structure.json', null);
+const projection = loadJson<KnockoutProjection | null>('knockout_projection.json', null);
+
+const hasData = structure !== null && structure.rounds?.length > 0;
+const r32Round = structure?.rounds?.find(r => r.round_name === 'R32');
+const r32Matches: BracketMatch[] = r32Round?.matches ?? [];
+
+const projMap: Record<string, number> = {};
+if (projection?.r32_matches) {
+  for (const m of projection.r32_matches) {
+    if (m.match_id && m.p_a_wins != null) {
+      projMap[m.match_id + '_a'] = m.p_a_wins;
+      projMap[m.match_id + '_b'] = m.p_b_wins ?? (1 - m.p_a_wins);
+    }
+  }
+}
+
+function fmtPct(v: number | null | undefined): string {
+  if (v == null || !isFinite(v)) return '—';
+  return (v * 100).toFixed(1) + '%';
+}
+
+function matchClass(pWin: number | null | undefined): string {
+  if (pWin == null) return 'text-slate-400';
+  if (pWin >= 0.65) return 'text-emerald-400 font-medium';
+  if (pWin >= 0.50) return 'text-slate-300';
+  return 'text-slate-500';
+}
+
+const upperHalf = r32Matches.slice(0, 8);
+const lowerHalf = r32Matches.slice(8, 16);
+---
+
+<Layout title="Bracket" description="Official FIFA 2026 knockout bracket — R32 pairings and Elo-based win projections.">
+  <h1 class="text-2xl font-bold text-white mb-1">Knockout Bracket</h1>
+  <p class="text-slate-400 text-sm mb-6">
+    Official FIFA 2026 cross-bracket R32 pairings.
+    Win probabilities are Elo-based estimates at neutral venue.
+  </p>
+
+  {!hasData && (
+    <div class="rounded-lg border border-slate-700 bg-slate-900 px-6 py-10 text-center">
+      <p class="text-slate-400 text-sm">No bracket data yet.</p>
+      <p class="text-slate-500 text-xs mt-2">
+        Run <code class="font-mono">make bracket</code> or
+        <code class="font-mono">make refresh</code> to generate bracket artifacts.
+      </p>
+    </div>
+  )}
+
+  {hasData && (
+    <>
+      {structure?.bracket_note && (
+        <div class="rounded-lg border border-slate-700 bg-slate-800/50 px-4 py-3 mb-6">
+          <p class="text-slate-400 text-xs">{structure.bracket_note}</p>
+        </div>
+      )}
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <!-- Upper bracket half -->
+        <div>
+          <h2 class="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-3">
+            Upper Half — Groups A–F
+          </h2>
+          <div class="space-y-2">
+            {upperHalf.map((m) => {
+              const pA = projMap[m.match_id + '_a'];
+              const pB = projMap[m.match_id + '_b'];
+              return (
+                <div class="rounded-lg border border-slate-700 bg-slate-900 p-3">
+                  <div class="flex items-center justify-between gap-2">
+                    <span class="text-xs text-slate-500 font-mono w-12 shrink-0">{m.match_id}</span>
+                    <div class="flex-1 flex items-center gap-3">
+                      <div class="flex-1">
+                        <div class="flex items-center justify-between">
+                          <span class={`text-sm ${matchClass(pA)}`}>
+                            {m.team_a ? formatTeamName(m.team_a.team) : m.slot_a}
+                          </span>
+                          <span class="text-xs text-slate-500">{fmtPct(pA)}</span>
+                        </div>
+                        <div class="text-xs text-slate-600">{m.slot_a}</div>
+                      </div>
+                      <span class="text-slate-600 text-xs">vs</span>
+                      <div class="flex-1 text-right">
+                        <div class="flex items-center justify-between">
+                          <span class="text-xs text-slate-500">{fmtPct(pB)}</span>
+                          <span class={`text-sm ${matchClass(pB)}`}>
+                            {m.team_b ? formatTeamName(m.team_b.team) : m.slot_b}
+                          </span>
+                        </div>
+                        <div class="text-xs text-slate-600 text-right">{m.slot_b}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        <!-- Lower bracket half -->
+        <div>
+          <h2 class="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-3">
+            Lower Half — Groups G–L
+          </h2>
+          <div class="space-y-2">
+            {lowerHalf.map((m) => {
+              const pA = projMap[m.match_id + '_a'];
+              const pB = projMap[m.match_id + '_b'];
+              return (
+                <div class="rounded-lg border border-slate-700 bg-slate-900 p-3">
+                  <div class="flex items-center justify-between gap-2">
+                    <span class="text-xs text-slate-500 font-mono w-12 shrink-0">{m.match_id}</span>
+                    <div class="flex-1 flex items-center gap-3">
+                      <div class="flex-1">
+                        <div class="flex items-center justify-between">
+                          <span class={`text-sm ${matchClass(pA)}`}>
+                            {m.team_a ? formatTeamName(m.team_a.team) : m.slot_a}
+                          </span>
+                          <span class="text-xs text-slate-500">{fmtPct(pA)}</span>
+                        </div>
+                        <div class="text-xs text-slate-600">{m.slot_a}</div>
+                      </div>
+                      <span class="text-slate-600 text-xs">vs</span>
+                      <div class="flex-1 text-right">
+                        <div class="flex items-center justify-between">
+                          <span class="text-xs text-slate-500">{fmtPct(pB)}</span>
+                          <span class={`text-sm ${matchClass(pB)}`}>
+                            {m.team_b ? formatTeamName(m.team_b.team) : m.slot_b}
+                          </span>
+                        </div>
+                        <div class="text-xs text-slate-600 text-right">{m.slot_b}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      <p class="text-slate-600 text-xs mt-4">
+        Disclaimer: Win probabilities are Elo-based estimates for neutral venue.
+        These are structural projections, not predictions of actual results.
+        Generated {structure?.generated_at ? new Date(structure.generated_at).toLocaleString() : '—'}.
+      </p>
+    </>
+  )}
+</Layout>

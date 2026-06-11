@@ -1,0 +1,50 @@
+{
+  "n_matches_with_movement": 2,
+  "avg_max_abs_movement": 0.02549,
+  "matches": [
+    {
+      "match_id": "wc2026_B_01",
+      "home_team": "",
+      "away_team": "",
+      "kickoff_at": null,
+      "closing_status": "latest_available",
+      "opening_captured_at": "2026-06-11T08:00:00Z",
+      "closing_captured_at": "2026-06-11T15:00:00Z",
+      "opening_home_prob": 0.406898,
+      "opening_draw_prob": 0.268967,
+      "opening_away_prob": 0.324136,
+      "closing_home_prob": 0.429207,
+      "closing_draw_prob": 0.272147,
+      "closing_away_prob": 0.298646,
+      "home_move": 0.02231,
+      "draw_move": 0.00318,
+      "away_move": -0.02549,
+      "max_abs_move": 0.02549,
+      "biggest_mover": "away",
+      "biggest_mover_direction": "down"
+    },
+    {
+      "match_id": "wc2026_m001",
+      "home_team": "",
+      "away_team": "",
+      "kickoff_at": null,
+      "closing_status": "latest_available",
+      "opening_captured_at": "2026-06-11T08:00:00Z",
+      "closing_captured_at": "2026-06-11T15:00:00Z",
+      "opening_home_prob": 0.406898,
+      "opening_draw_prob": 0.268967,
+      "opening_away_prob": 0.324136,
+      "closing_home_prob": 0.429207,
+      "closing_draw_prob": 0.272147,
+      "closing_away_prob": 0.298646,
+      "home_move": 0.02231,
+      "draw_move": 0.00318,
+      "away_move": -0.02549,
+      "max_abs_move": 0.02549,
+      "biggest_mover": "away",
+      "biggest_mover_direction": "down"
+    }
+  ],
+  "disclaimer": "Market movement shows how odds drifted from opening to closing. It reflects market opinion shifts \u2014 not model edge or predictions.",
+  "generated_at": "2026-06-11T00:29:47.987274+00:00"
+}

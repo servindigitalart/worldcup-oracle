@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-10T22:44:22.480306+00:00",
+  "generated_at": "2026-06-11T00:29:18.306033+00:00",
   "success": true,
   "strict": true,
   "build_frontend": false,
@@ -8,17 +8,17 @@
     {
       "name": "ingest_fixtures",
       "status": "success",
-      "started_at": "2026-06-10T22:44:22.480823+00:00",
-      "finished_at": "2026-06-10T22:44:23.337017+00:00",
-      "duration_seconds": 0.856,
+      "started_at": "2026-06-11T00:29:18.306446+00:00",
+      "finished_at": "2026-06-11T00:29:19.166760+00:00",
+      "duration_seconds": 0.86,
       "message": "",
       "artifacts": []
     },
     {
       "name": "results_feed",
       "status": "success",
-      "started_at": "2026-06-10T22:44:23.337100+00:00",
-      "finished_at": "2026-06-10T22:44:23.345424+00:00",
+      "started_at": "2026-06-11T00:29:19.166850+00:00",
+      "finished_at": "2026-06-11T00:29:19.174944+00:00",
       "duration_seconds": 0.008,
       "message": "",
       "artifacts": [
@@ -30,9 +30,9 @@
     {
       "name": "tournament_state",
       "status": "success",
-      "started_at": "2026-06-10T22:44:23.345531+00:00",
-      "finished_at": "2026-06-10T22:44:50.812981+00:00",
-      "duration_seconds": 27.468,
+      "started_at": "2026-06-11T00:29:19.175050+00:00",
+      "finished_at": "2026-06-11T00:29:46.481230+00:00",
+      "duration_seconds": 27.307,
       "message": "",
       "artifacts": [
         "group_standings.parquet",
@@ -43,10 +43,24 @@
       ]
     },
     {
+      "name": "bracket_generation",
+      "status": "success",
+      "started_at": "2026-06-11T00:29:46.481394+00:00",
+      "finished_at": "2026-06-11T00:29:47.018313+00:00",
+      "duration_seconds": 0.537,
+      "message": "",
+      "artifacts": [
+        "best_thirds.json",
+        "bracket_structure.json",
+        "bracket_paths.json",
+        "knockout_projection.json"
+      ]
+    },
+    {
       "name": "market_capture",
       "status": "skipped",
-      "started_at": "2026-06-10T22:44:50.813137+00:00",
-      "finished_at": "2026-06-10T22:44:50.813137+00:00",
+      "started_at": "2026-06-11T00:29:47.018432+00:00",
+      "finished_at": "2026-06-11T00:29:47.018432+00:00",
       "duration_seconds": 0.0,
       "message": "not requested (pass --include-market-capture)",
       "artifacts": []
@@ -54,8 +68,8 @@
     {
       "name": "market_baseline",
       "status": "success",
-      "started_at": "2026-06-10T22:44:50.814870+00:00",
-      "finished_at": "2026-06-10T22:44:50.827926+00:00",
+      "started_at": "2026-06-11T00:29:47.020160+00:00",
+      "finished_at": "2026-06-11T00:29:47.033155+00:00",
       "duration_seconds": 0.013,
       "message": "",
       "artifacts": [
@@ -66,9 +80,9 @@
     {
       "name": "blend",
       "status": "success",
-      "started_at": "2026-06-10T22:44:50.828036+00:00",
-      "finished_at": "2026-06-10T22:44:51.546885+00:00",
-      "duration_seconds": 0.623,
+      "started_at": "2026-06-11T00:29:47.033263+00:00",
+      "finished_at": "2026-06-11T00:29:47.582031+00:00",
+      "duration_seconds": 0.549,
       "message": "",
       "artifacts": [
         "model_market_comparison.parquet",
@@ -79,9 +93,9 @@
     {
       "name": "recommendations",
       "status": "success",
-      "started_at": "2026-06-10T22:44:51.547018+00:00",
-      "finished_at": "2026-06-10T22:44:51.560560+00:00",
-      "duration_seconds": 0.014,
+      "started_at": "2026-06-11T00:29:47.582154+00:00",
+      "finished_at": "2026-06-11T00:29:47.595179+00:00",
+      "duration_seconds": 0.013,
       "message": "",
       "artifacts": [
         "recommendations.parquet",
@@ -92,8 +106,8 @@
     {
       "name": "methodology",
       "status": "success",
-      "started_at": "2026-06-10T22:44:51.560675+00:00",
-      "finished_at": "2026-06-10T22:44:51.564454+00:00",
+      "started_at": "2026-06-11T00:29:47.595281+00:00",
+      "finished_at": "2026-06-11T00:29:47.598806+00:00",
       "duration_seconds": 0.004,
       "message": "",
       "artifacts": [
@@ -103,8 +117,8 @@
     {
       "name": "reliability",
       "status": "success",
-      "started_at": "2026-06-10T22:44:51.564534+00:00",
-      "finished_at": "2026-06-10T22:44:51.572644+00:00",
+      "started_at": "2026-06-11T00:29:47.598876+00:00",
+      "finished_at": "2026-06-11T00:29:47.606548+00:00",
       "duration_seconds": 0.008,
       "message": "",
       "artifacts": [
@@ -114,9 +128,9 @@
     {
       "name": "calibration_history",
       "status": "success",
-      "started_at": "2026-06-10T22:44:51.572739+00:00",
-      "finished_at": "2026-06-10T22:44:51.574518+00:00",
-      "duration_seconds": 0.002,
+      "started_at": "2026-06-11T00:29:47.606628+00:00",
+      "finished_at": "2026-06-11T00:29:47.608037+00:00",
+      "duration_seconds": 0.001,
       "message": "",
       "artifacts": [
         "calibration_history.json"
@@ -125,9 +139,9 @@
     {
       "name": "data_sources",
       "status": "success",
-      "started_at": "2026-06-10T22:44:51.574594+00:00",
-      "finished_at": "2026-06-10T22:44:51.942954+00:00",
-      "duration_seconds": 0.368,
+      "started_at": "2026-06-11T00:29:47.608107+00:00",
+      "finished_at": "2026-06-11T00:29:47.965763+00:00",
+      "duration_seconds": 0.358,
       "message": "",
       "artifacts": [
         "data_sources.json"
@@ -136,28 +150,71 @@
     {
       "name": "market_agreement",
       "status": "success",
-      "started_at": "2026-06-10T22:44:51.943086+00:00",
-      "finished_at": "2026-06-10T22:44:51.946636+00:00",
-      "duration_seconds": 0.004,
+      "started_at": "2026-06-11T00:29:47.965890+00:00",
+      "finished_at": "2026-06-11T00:29:47.969221+00:00",
+      "duration_seconds": 0.003,
       "message": "",
       "artifacts": [
         "market_agreement.json"
       ]
     },
     {
+      "name": "prediction_ledger_capture",
+      "status": "success",
+      "started_at": "2026-06-11T00:29:47.969299+00:00",
+      "finished_at": "2026-06-11T00:29:47.984173+00:00",
+      "duration_seconds": 0.015,
+      "message": "",
+      "artifacts": [
+        "prediction_ledger.parquet",
+        "prediction_ledger_summary.json"
+      ]
+    },
+    {
+      "name": "closing_lines",
+      "status": "success",
+      "started_at": "2026-06-11T00:29:47.984313+00:00",
+      "finished_at": "2026-06-11T00:29:47.996952+00:00",
+      "duration_seconds": 0.013,
+      "message": "",
+      "artifacts": [
+        "closing_lines.parquet",
+        "closing_line_summary.json",
+        "market_movement.json"
+      ]
+    },
+    {
+      "name": "grading",
+      "status": "success",
+      "started_at": "2026-06-11T00:29:47.997054+00:00",
+      "finished_at": "2026-06-11T00:29:48.009963+00:00",
+      "duration_seconds": 0.013,
+      "message": "",
+      "artifacts": [
+        "prediction_grades.parquet",
+        "grading_summary.json",
+        "clv_summary.json",
+        "true_clv_summary.json",
+        "recommendation_performance.json",
+        "recommendation_clv.json",
+        "model_vs_market.json",
+        "performance_trends.json"
+      ]
+    },
+    {
       "name": "export_web",
       "status": "success",
-      "started_at": "2026-06-10T22:44:51.946716+00:00",
-      "finished_at": "2026-06-10T22:44:51.971964+00:00",
-      "duration_seconds": 0.025,
+      "started_at": "2026-06-11T00:29:48.010106+00:00",
+      "finished_at": "2026-06-11T00:29:48.057402+00:00",
+      "duration_seconds": 0.047,
       "message": "",
       "artifacts": []
     },
     {
       "name": "build_frontend",
       "status": "skipped",
-      "started_at": "2026-06-10T22:44:51.972047+00:00",
-      "finished_at": "2026-06-10T22:44:51.972047+00:00",
+      "started_at": "2026-06-11T00:29:48.057492+00:00",
+      "finished_at": "2026-06-11T00:29:48.057492+00:00",
       "duration_seconds": 0.0,
       "message": "not requested (pass --build-frontend)",
       "artifacts": []
@@ -172,6 +229,10 @@
     "qualification_probs.parquet",
     "qualification_probs.json",
     "tournament_state_summary.json",
+    "best_thirds.json",
+    "bracket_structure.json",
+    "bracket_paths.json",
+    "knockout_projection.json",
     "market_snapshots.parquet",
     "market_baseline_summary.json",
     "model_market_comparison.parquet",
@@ -184,15 +245,28 @@
     "model_reliability.json",
     "calibration_history.json",
     "data_sources.json",
-    "market_agreement.json"
+    "market_agreement.json",
+    "prediction_ledger.parquet",
+    "prediction_ledger_summary.json",
+    "closing_lines.parquet",
+    "closing_line_summary.json",
+    "market_movement.json",
+    "prediction_grades.parquet",
+    "grading_summary.json",
+    "clv_summary.json",
+    "true_clv_summary.json",
+    "recommendation_performance.json",
+    "recommendation_clv.json",
+    "model_vs_market.json",
+    "performance_trends.json"
   ],
   "warnings": [],
   "errors": [],
-  "summary": "Refresh complete: 12 steps succeeded, 2 skipped. Total time: 29.4s.",
-  "n_steps_total": 14,
-  "n_steps_success": 12,
+  "summary": "Refresh complete: 16 steps succeeded, 2 skipped. Total time: 29.7s.",
+  "n_steps_total": 18,
+  "n_steps_success": 16,
   "n_steps_failed": 0,
   "n_steps_skipped": 2,
   "n_steps_warning": 0,
-  "total_duration_seconds": 29.393
+  "total_duration_seconds": 29.749
 }

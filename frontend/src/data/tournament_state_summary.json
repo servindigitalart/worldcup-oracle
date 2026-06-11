@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-10T22:44:50.806994+00:00",
+  "generated_at": "2026-06-11T00:29:46.475345+00:00",
   "generated_date": "2026-06-10",
   "n_sims": 10000,
   "seed": 42,
@@ -22,11 +22,11 @@
   "top_champion_probs": [
     {
       "team": "spain",
-      "champion": 0.1624
+      "champion": 0.172
     },
     {
       "team": "argentina",
-      "champion": 0.129
+      "champion": 0.1476
     },
     {
       "team": "france",
@@ -34,71 +34,71 @@
     },
     {
       "team": "brazil",
-      "champion": 0.0754
+      "champion": 0.0602
     },
     {
       "team": "england",
-      "champion": 0.0513
+      "champion": 0.0573
     },
     {
       "team": "portugal",
-      "champion": 0.0429
+      "champion": 0.0464
     },
     {
       "team": "germany",
-      "champion": 0.0427
-    },
-    {
-      "team": "japan",
-      "champion": 0.038
+      "champion": 0.0407
     },
     {
       "team": "netherlands",
-      "champion": 0.0354
+      "champion": 0.0363
     },
     {
-      "team": "morocco",
-      "champion": 0.0318
-    },
-    {
-      "team": "ecuador",
-      "champion": 0.0303
-    },
-    {
-      "team": "mexico",
-      "champion": 0.028
-    },
-    {
-      "team": "uruguay",
-      "champion": 0.0277
-    },
-    {
-      "team": "belgium",
-      "champion": 0.0261
+      "team": "japan",
+      "champion": 0.0308
     },
     {
       "team": "colombia",
-      "champion": 0.024
+      "champion": 0.0307
     },
     {
-      "team": "switzerland",
-      "champion": 0.0199
+      "team": "morocco",
+      "champion": 0.028
+    },
+    {
+      "team": "belgium",
+      "champion": 0.0276
+    },
+    {
+      "team": "ecuador",
+      "champion": 0.0272
+    },
+    {
+      "team": "uruguay",
+      "champion": 0.0245
     },
     {
       "team": "croatia",
-      "champion": 0.019
+      "champion": 0.024
+    },
+    {
+      "team": "mexico",
+      "champion": 0.0211
     },
     {
       "team": "iran",
-      "champion": 0.0182
+      "champion": 0.0201
     },
     {
-      "team": "turkey",
-      "champion": 0.0138
+      "team": "switzerland",
+      "champion": 0.0152
     },
     {
-      "team": "australia",
-      "champion": 0.0131
+      "team": "senegal",
+      "champion": 0.0124
+    },
+    {
+      "team": "south_korea",
+      "champion": 0.0114
     }
   ]
 }

@@ -151,6 +151,25 @@ def export() -> None:
     # Week 17: result feed
     _write("live_results.json",        _read_json(ARTIFACTS / "live_results.json", []))
     _write("results_feed_report.json", _read_json(ARTIFACTS / "results_feed_report.json", {}))
+    # Week 18: prediction grading
+    _write("prediction_ledger.json",          _read_parquet(ARTIFACTS / "prediction_ledger.parquet"))
+    _write("prediction_grades.json",          _read_parquet(ARTIFACTS / "prediction_grades.parquet"))
+    _write("grading_summary.json",            _read_json(ARTIFACTS / "grading_summary.json", {}))
+    _write("clv_summary.json",                _read_json(ARTIFACTS / "clv_summary.json", {}))
+    _write("recommendation_performance.json", _read_json(ARTIFACTS / "recommendation_performance.json", {}))
+    _write("model_vs_market.json",            _read_json(ARTIFACTS / "model_vs_market.json", {}))
+    _write("performance_trends.json",         _read_json(ARTIFACTS / "performance_trends.json", {}))
+    # Week 20: market lifecycle & true CLV
+    _write("closing_line_summary.json",  _read_json(ARTIFACTS / "closing_line_summary.json", {}))
+    _write("market_movement.json",       _read_json(ARTIFACTS / "market_movement.json", {}))
+    _write("true_clv_summary.json",      _read_json(ARTIFACTS / "true_clv_summary.json", {}))
+    _write("recommendation_clv.json",    _read_json(ARTIFACTS / "recommendation_clv.json", {}))
+    _write("closing_lines.json",         _read_parquet(ARTIFACTS / "closing_lines.parquet"))
+    # Week 21: knockout bracket engine
+    _write("best_thirds.json",           _read_json(ARTIFACTS / "best_thirds.json", {}))
+    _write("bracket_structure.json",     _read_json(ARTIFACTS / "bracket_structure.json", {}))
+    _write("bracket_paths.json",         _read_json(ARTIFACTS / "bracket_paths.json", {}))
+    _write("knockout_projection.json",   _read_json(ARTIFACTS / "knockout_projection.json", {}))
 
 
 if __name__ == "__main__":

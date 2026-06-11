@@ -1,0 +1,180 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { loadJson } from '../utils/load';
+import { formatTeamName } from '../utils/format';
+import type { ClosingLineSummary, MarketMovementEntry, MarketMovement } from '../types';
+
+const summary  = loadJson<ClosingLineSummary | null>('closing_line_summary.json', null);
+const movement = loadJson<MarketMovement | null>('market_movement.json', null);
+
+const hasData = summary !== null && (summary.n_matches ?? 0) > 0;
+const movements: MarketMovementEntry[] = movement?.matches ?? [];
+const hasMovement = movements.length > 0;
+
+function fmtStatus(s: string): string {
+  return s.replace(/_/g, ' ');
+}
+
+function statusClass(s: string): string {
+  if (s === 'closing_locked')    return 'text-emerald-400';
+  if (s === 'closing_candidate') return 'text-amber-400';
+  if (s === 'opening_only')      return 'text-slate-400';
+  return 'text-slate-500';
+}
+
+function fmtMove(v: number | null | undefined): string {
+  if (v == null || !isFinite(v)) return '—';
+  const sign = v > 0 ? '+' : '';
+  return sign + (v * 100).toFixed(2) + 'pp';
+}
+
+function moveClass(v: number | null | undefined): string {
+  if (v == null) return 'text-slate-500';
+  if (v > 0.02)  return 'text-emerald-400';
+  if (v < -0.02) return 'text-red-400';
+  return 'text-slate-400';
+}
+
+function fmtPct(v: number | null | undefined): string {
+  if (v == null || !isFinite(v)) return '—';
+  return (v * 100).toFixed(1) + '%';
+}
+---
+
+<Layout title="Market History" description="Lifecycle checkpoints, closing lines, and market movement analysis.">
+  <h1 class="text-2xl font-bold text-white mb-1">Market History</h1>
+  <p class="text-slate-400 text-sm mb-6">
+    Odds lifecycle checkpoints and opening→closing market movement.
+    True CLV is only valid for <code class="font-mono text-slate-300">closing_locked</code> snapshots.
+  </p>
+
+  {!hasData && (
+    <div class="rounded-lg border border-slate-700 bg-slate-900 px-6 py-10 text-center">
+      <p class="text-slate-400 text-sm">No market lifecycle data yet.</p>
+      <p class="text-slate-500 text-xs mt-2">
+        Run <code class="font-mono">make closing-lines</code> or
+        <code class="font-mono">make refresh-live</code> to build lifecycle artifacts.
+      </p>
+    </div>
+  )}
+
+  {hasData && summary && (
+    <>
+      {/* ── Status overview ─────────────────────────────────────────────── */}
+      <section class="mb-8">
+        <h2 class="text-lg font-semibold text-slate-200 mb-3">Closing-line status</h2>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+          {Object.entries(summary.by_closing_status ?? {}).map(([status, count]) => (
+            <div class="rounded-lg border border-slate-700 bg-slate-900 p-4">
+              <div class={`text-xs mb-1 ${statusClass(status)}`}>{fmtStatus(status)}</div>
+              <div class="text-2xl font-bold text-white">{count as number}</div>
+            </div>
+          ))}
+        </div>
+        <div class="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div class="rounded-lg border border-slate-700 bg-slate-900 p-4">
+            <div class="text-xs text-slate-500 mb-1">Total matches</div>
+            <div class="text-xl font-bold text-white">{summary.n_matches}</div>
+          </div>
+          <div class="rounded-lg border border-slate-700 bg-slate-900 p-4">
+            <div class="text-xs text-slate-500 mb-1">With opening line</div>
+            <div class="text-xl font-bold text-white">{summary.n_with_opening}</div>
+          </div>
+          <div class="rounded-lg border border-slate-700 bg-slate-900 p-4">
+            <div class="text-xs text-slate-500 mb-1">With closing line</div>
+            <div class="text-xl font-bold text-white">{summary.n_with_closing}</div>
+          </div>
+          <div class="rounded-lg border border-slate-700 bg-slate-900 p-4">
+            <div class="text-xs text-slate-500 mb-1">Closing locked</div>
+            <div class="text-xl font-bold text-emerald-400">{summary.n_closing_locked}</div>
+          </div>
+        </div>
+        <p class="text-xs text-slate-600 mt-2">{summary.note}</p>
+      </section>
+
+      {/* ── Market movement table ────────────────────────────────────────── */}
+      {hasMovement && (
+        <section class="mb-8">
+          <h2 class="text-lg font-semibold text-slate-200 mb-3">
+            Opening → closing movement
+            {movement?.avg_max_abs_movement != null && (
+              <span class="ml-2 text-sm font-normal text-slate-400">
+                — avg max move {fmtMove(movement.avg_max_abs_movement)}
+              </span>
+            )}
+          </h2>
+          <div class="rounded-lg border border-slate-700 bg-slate-900 overflow-x-auto">
+            <table class="w-full text-xs sm:text-sm min-w-[800px]">
+              <thead>
+                <tr class="border-b border-slate-700 text-xs text-slate-500 uppercase tracking-wide">
+                  <th class="px-3 py-3 text-left">Match</th>
+                  <th class="px-3 py-3 text-center">Status</th>
+                  <th class="px-3 py-3 text-right">Opening H/D/A</th>
+                  <th class="px-3 py-3 text-right">Closing H/D/A</th>
+                  <th class="px-3 py-3 text-right">Move H</th>
+                  <th class="px-3 py-3 text-right">Move D</th>
+                  <th class="px-3 py-3 text-right">Move A</th>
+                  <th class="px-3 py-3 text-right">Max |Δ|</th>
+                </tr>
+              </thead>
+              <tbody>
+                {movements.sort((a, b) => (b.max_abs_move ?? 0) - (a.max_abs_move ?? 0))
+                  .map((m: MarketMovementEntry, i: number) => (
+                  <tr class={`${i < movements.length - 1 ? 'border-b border-slate-800' : ''} hover:bg-slate-800/30`}>
+                    <td class="px-3 py-2.5 text-slate-300 whitespace-nowrap">
+                      <span class="text-slate-200">{formatTeamName(m.home_team)}</span>
+                      <span class="text-slate-600 mx-1">vs</span>
+                      <span class="text-slate-200">{formatTeamName(m.away_team)}</span>
+                    </td>
+                    <td class="px-3 py-2.5 text-center">
+                      <span class={`text-xs ${statusClass(m.closing_status)}`}>
+                        {fmtStatus(m.closing_status)}
+                      </span>
+                    </td>
+                    <td class="px-3 py-2.5 text-right font-mono text-slate-500 whitespace-nowrap">
+                      {fmtPct(m.opening_home_prob)} /
+                      {fmtPct(m.opening_draw_prob)} /
+                      {fmtPct(m.opening_away_prob)}
+                    </td>
+                    <td class="px-3 py-2.5 text-right font-mono text-slate-400 whitespace-nowrap">
+                      {fmtPct(m.closing_home_prob)} /
+                      {fmtPct(m.closing_draw_prob)} /
+                      {fmtPct(m.closing_away_prob)}
+                    </td>
+                    <td class={`px-3 py-2.5 text-right font-mono ${moveClass(m.home_move)}`}>
+                      {fmtMove(m.home_move)}
+                    </td>
+                    <td class={`px-3 py-2.5 text-right font-mono ${moveClass(m.draw_move)}`}>
+                      {fmtMove(m.draw_move)}
+                    </td>
+                    <td class={`px-3 py-2.5 text-right font-mono ${moveClass(m.away_move)}`}>
+                      {fmtMove(m.away_move)}
+                    </td>
+                    <td class="px-3 py-2.5 text-right font-mono text-slate-300">
+                      {fmtMove(m.max_abs_move)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p class="text-xs text-slate-600 mt-2">{movement?.disclaimer}</p>
+        </section>
+      )}
+
+      {/* ── Validation warnings (if any) ───────────────────────────────── */}
+      {summary.validation?.n_with_warnings > 0 && (
+        <section class="mb-8">
+          <h2 class="text-lg font-semibold text-amber-400 mb-3">Validation warnings</h2>
+          <div class="rounded-lg border border-amber-800/40 bg-amber-950/20 p-4">
+            <ul class="text-xs text-amber-300 space-y-1 font-mono">
+              {(summary.validation.warnings ?? []).map((w: string) => (
+                <li>· {w}</li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      )}
+    </>
+  )}
+</Layout>

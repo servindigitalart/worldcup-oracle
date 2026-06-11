@@ -1,0 +1,117 @@
+{
+  "generated_at": "2026-06-11T00:29:46.481844+00:00",
+  "n_groups": 12,
+  "n_thirds_ranked": 12,
+  "n_qualifying": 8,
+  "all_thirds": [
+    {
+      "rank": 1,
+      "team": "austria",
+      "group": "J",
+      "points": 0,
+      "gd": 0,
+      "gf": 0,
+      "qualifies": true
+    },
+    {
+      "rank": 2,
+      "team": "ecuador",
+      "group": "E",
+      "points": 0,
+      "gd": 0,
+      "gf": 0,
+      "qualifies": true
+    },
+    {
+      "rank": 3,
+      "team": "ghana",
+      "group": "L",
+      "points": 0,
+      "gd": 0,
+      "gf": 0,
+      "qualifies": true
+    },
+    {
+      "rank": 4,
+      "team": "iran",
+      "group": "G",
+      "points": 0,
+      "gd": 0,
+      "gf": 0,
+      "qualifies": true
+    },
+    {
+      "rank": 5,
+      "team": "morocco",
+      "group": "C",
+      "points": 0,
+      "gd": 0,
+      "gf": 0,
+      "qualifies": true
+    },
+    {
+      "rank": 6,
+      "team": "norway",
+      "group": "I",
+      "points": 0,
+      "gd": 0,
+      "gf": 0,
+      "qualifies": true
+    },
+    {
+      "rank": 7,
+      "team": "portugal",
+      "group": "K",
+      "points": 0,
+      "gd": 0,
+      "gf": 0,
+      "qualifies": true
+    },
+    {
+      "rank": 8,
+      "team": "qatar",
+      "group": "B",
+      "points": 0,
+      "gd": 0,
+      "gf": 0,
+      "qualifies": true
+    },
+    {
+      "rank": 9,
+      "team": "south_africa",
+      "group": "A",
+      "points": 0,
+      "gd": 0,
+      "gf": 0,
+      "qualifies": false
+    },
+    {
+      "rank": 10,
+      "team": "spain",
+      "group": "H",
+      "points": 0,
+      "gd": 0,
+      "gf": 0,
+      "qualifies": false
+    },
+    {
+      "rank": 11,
+      "team": "sweden",
+      "group": "F",
+      "points": 0,
+      "gd": 0,
+      "gf": 0,
+      "qualifies": false
+    },
+    {
+      "rank": 12,
+      "team": "turkey",
+      "group": "D",
+      "points": 0,
+      "gd": 0,
+      "gf": 0,
+      "qualifies": false
+    }
+  ],
+  "note": "Ranked by points \u2192 goal difference \u2192 goals for \u2192 fair play \u2192 alphabetical. Top 8 qualify for the knockout round."
+}

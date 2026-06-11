@@ -1,0 +1,168 @@
+{
+  "generated_at": "2026-06-11T00:29:46.481844+00:00",
+  "n_r32_matches": 16,
+  "r32_matches": [
+    {
+      "match_id": "R32_01",
+      "team_a": "czech_republic",
+      "team_b": "egypt",
+      "slot_a": "A1",
+      "slot_b": "G2",
+      "p_a_wins": 0.5,
+      "p_b_wins": 0.5,
+      "projected_winner": "czech_republic"
+    },
+    {
+      "match_id": "R32_02",
+      "team_a": "bosnia_herzegovina",
+      "team_b": "saudi_arabia",
+      "slot_a": "B1",
+      "slot_b": "H2",
+      "p_a_wins": 0.5,
+      "p_b_wins": 0.5,
+      "projected_winner": "bosnia_herzegovina"
+    },
+    {
+      "match_id": "R32_03",
+      "team_a": "brazil",
+      "team_b": "iraq",
+      "slot_a": "C1",
+      "slot_b": "I2",
+      "p_a_wins": 0.5,
+      "p_b_wins": 0.5,
+      "projected_winner": "brazil"
+    },
+    {
+      "match_id": "R32_04",
+      "team_a": "australia",
+      "team_b": "argentina",
+      "slot_a": "D1",
+      "slot_b": "J2",
+      "p_a_wins": 0.5,
+      "p_b_wins": 0.5,
+      "projected_winner": "australia"
+    },
+    {
+      "match_id": "R32_05",
+      "team_a": "cote_divoire",
+      "team_b": "dr_congo",
+      "slot_a": "E1",
+      "slot_b": "K2",
+      "p_a_wins": 0.5,
+      "p_b_wins": 0.5,
+      "projected_winner": "cote_divoire"
+    },
+    {
+      "match_id": "R32_06",
+      "team_a": "japan",
+      "team_b": "england",
+      "slot_a": "F1",
+      "slot_b": "L2",
+      "p_a_wins": 0.5,
+      "p_b_wins": 0.5,
+      "projected_winner": "japan"
+    },
+    {
+      "match_id": "R32_07",
+      "team_a": "austria",
+      "team_b": "ecuador",
+      "slot_a": "T1",
+      "slot_b": "T2",
+      "p_a_wins": 0.5,
+      "p_b_wins": 0.5,
+      "projected_winner": "austria"
+    },
+    {
+      "match_id": "R32_08",
+      "team_a": "ghana",
+      "team_b": "iran",
+      "slot_a": "T3",
+      "slot_b": "T4",
+      "p_a_wins": 0.5,
+      "p_b_wins": 0.5,
+      "projected_winner": "ghana"
+    },
+    {
+      "match_id": "R32_09",
+      "team_a": "belgium",
+      "team_b": "mexico",
+      "slot_a": "G1",
+      "slot_b": "A2",
+      "p_a_wins": 0.5,
+      "p_b_wins": 0.5,
+      "projected_winner": "belgium"
+    },
+    {
+      "match_id": "R32_10",
+      "team_a": "cape_verde",
+      "team_b": "canada",
+      "slot_a": "H1",
+      "slot_b": "B2",
+      "p_a_wins": 0.5,
+      "p_b_wins": 0.5,
+      "projected_winner": "cape_verde"
+    },
+    {
+      "match_id": "R32_11",
+      "team_a": "france",
+      "team_b": "haiti",
+      "slot_a": "I1",
+      "slot_b": "C2",
+      "p_a_wins": 0.5,
+      "p_b_wins": 0.5,
+      "projected_winner": "france"
+    },
+    {
+      "match_id": "R32_12",
+      "team_a": "algeria",
+      "team_b": "paraguay",
+      "slot_a": "J1",
+      "slot_b": "D2",
+      "p_a_wins": 0.5,
+      "p_b_wins": 0.5,
+      "projected_winner": "algeria"
+    },
+    {
+      "match_id": "R32_13",
+      "team_a": "colombia",
+      "team_b": "curacao",
+      "slot_a": "K1",
+      "slot_b": "E2",
+      "p_a_wins": 0.5,
+      "p_b_wins": 0.5,
+      "projected_winner": "colombia"
+    },
+    {
+      "match_id": "R32_14",
+      "team_a": "croatia",
+      "team_b": "netherlands",
+      "slot_a": "L1",
+      "slot_b": "F2",
+      "p_a_wins": 0.5,
+      "p_b_wins": 0.5,
+      "projected_winner": "croatia"
+    },
+    {
+      "match_id": "R32_15",
+      "team_a": "morocco",
+      "team_b": "norway",
+      "slot_a": "T5",
+      "slot_b": "T6",
+      "p_a_wins": 0.5,
+      "p_b_wins": 0.5,
+      "projected_winner": "morocco"
+    },
+    {
+      "match_id": "R32_16",
+      "team_a": "portugal",
+      "team_b": "qatar",
+      "slot_a": "T7",
+      "slot_b": "T8",
+      "p_a_wins": 0.5,
+      "p_b_wins": 0.5,
+      "projected_winner": "portugal"
+    }
+  ],
+  "bracket_note": "Cross-bracket pairing: Group A\u2013F winners face Group G\u2013L runners-up and vice versa. Same-group rematch not possible before the Final. Third-place teams fill 4 of 16 R32 matches (T1\u2013T8 in R32 matches 07, 08, 15, 16). Structural status: best_available \u2014 based on FIFA 2026 48-team format rules; exact third-place slot assignment may be updated when official table is published.",
+  "disclaimer": "Win probabilities are Elo-based estimates for neutral venue. These are projections, not predictions of actual results."
+}

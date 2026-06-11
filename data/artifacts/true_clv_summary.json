@@ -1,0 +1,8 @@
+{
+  "n": 0,
+  "average_true_clv": null,
+  "median_true_clv": null,
+  "positive_true_clv_rate": null,
+  "note": "True CLV requires closing_locked snapshots (post-kickoff). No qualifying samples yet.",
+  "generated_at": "2026-06-11T00:29:47.998587+00:00"
+}

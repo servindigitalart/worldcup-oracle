@@ -1,0 +1,59 @@
+{
+  "n_graded_total": 0,
+  "windows": [
+    {
+      "window": 10,
+      "n_matches": 0,
+      "mean_brier": null,
+      "mean_rps": null,
+      "mean_log_loss": null,
+      "mean_brier_market": null,
+      "mean_rps_market": null,
+      "mean_brier_blend": null,
+      "mean_rps_blend": null,
+      "positive_clv_rate": null,
+      "rec_hit_rate": null
+    },
+    {
+      "window": 25,
+      "n_matches": 0,
+      "mean_brier": null,
+      "mean_rps": null,
+      "mean_log_loss": null,
+      "mean_brier_market": null,
+      "mean_rps_market": null,
+      "mean_brier_blend": null,
+      "mean_rps_blend": null,
+      "positive_clv_rate": null,
+      "rec_hit_rate": null
+    },
+    {
+      "window": 50,
+      "n_matches": 0,
+      "mean_brier": null,
+      "mean_rps": null,
+      "mean_log_loss": null,
+      "mean_brier_market": null,
+      "mean_rps_market": null,
+      "mean_brier_blend": null,
+      "mean_rps_blend": null,
+      "positive_clv_rate": null,
+      "rec_hit_rate": null
+    },
+    {
+      "window": null,
+      "n_matches": 0,
+      "mean_brier": null,
+      "mean_rps": null,
+      "mean_log_loss": null,
+      "mean_brier_market": null,
+      "mean_rps_market": null,
+      "mean_brier_blend": null,
+      "mean_rps_blend": null,
+      "positive_clv_rate": null,
+      "rec_hit_rate": null
+    }
+  ],
+  "disclaimer": "Performance metrics are based on historical prediction evaluation only. Past accuracy does not predict future accuracy.",
+  "generated_at": "2026-06-11T00:29:47.998587+00:00"
+}

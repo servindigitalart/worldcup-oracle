@@ -1,0 +1,56 @@
+{
+  "n_total": 0,
+  "n_actionable": 0,
+  "n_push": 0,
+  "n_won": 0,
+  "n_lost": 0,
+  "hit_rate": null,
+  "by_edge_bucket": {
+    "small": {
+      "n": 0,
+      "won": 0,
+      "lost": 0,
+      "hit_rate": null
+    },
+    "medium": {
+      "n": 0,
+      "won": 0,
+      "lost": 0,
+      "hit_rate": null
+    },
+    "large": {
+      "n": 0,
+      "won": 0,
+      "lost": 0,
+      "hit_rate": null
+    }
+  },
+  "by_confidence": {
+    "low": {
+      "n": 0,
+      "won": 0,
+      "lost": 0,
+      "hit_rate": null
+    },
+    "medium": {
+      "n": 0,
+      "won": 0,
+      "lost": 0,
+      "hit_rate": null
+    },
+    "high": {
+      "n": 0,
+      "won": 0,
+      "lost": 0,
+      "hit_rate": null
+    },
+    "unknown": {
+      "n": 0,
+      "won": 0,
+      "lost": 0,
+      "hit_rate": null
+    }
+  },
+  "note": "Recommendation quality only \u2014 no profit, bankroll, or ROI calculation. 'Won' means the selected side was the actual match outcome.",
+  "generated_at": "2026-06-11T00:29:47.998587+00:00"
+}

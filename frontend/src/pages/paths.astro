@@ -1,0 +1,116 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { loadJson } from '../utils/load';
+import { formatTeamName } from '../utils/format';
+import type { BracketPaths, PathDifficultyEntry } from '../types';
+
+const data = loadJson<BracketPaths | null>('bracket_paths.json', null);
+
+const hasData = data !== null && (data.paths?.length ?? 0) > 0;
+const paths: PathDifficultyEntry[] = data?.paths ?? [];
+
+function fmtElo(v: number | null | undefined): string {
+  if (v == null || !isFinite(v)) return '—';
+  return v.toFixed(0);
+}
+
+function fmtScore(v: number | null | undefined): string {
+  if (v == null || !isFinite(v)) return '—';
+  return v.toFixed(1);
+}
+
+function difficultyClass(score: number | null | undefined): string {
+  if (score == null) return 'text-slate-500';
+  if (score >= 7.5) return 'text-red-400';
+  if (score >= 5.0) return 'text-amber-400';
+  if (score >= 2.5) return 'text-slate-300';
+  return 'text-emerald-400';
+}
+
+function difficultyBar(score: number | null | undefined): string {
+  if (score == null) return '0%';
+  return `${Math.min(100, Math.max(0, score * 10))}%`;
+}
+---
+
+<Layout title="Path Difficulty" description="Expected bracket path and difficulty score for each qualified team.">
+  <h1 class="text-2xl font-bold text-white mb-1">Path Difficulty</h1>
+  <p class="text-slate-400 text-sm mb-6">
+    Expected opponents at each knockout round, ranked by path difficulty (0–10).
+    Expected opponents are the highest-Elo team in each opposing bracket arm.
+  </p>
+
+  {!hasData && (
+    <div class="rounded-lg border border-slate-700 bg-slate-900 px-6 py-10 text-center">
+      <p class="text-slate-400 text-sm">No path difficulty data yet.</p>
+      <p class="text-slate-500 text-xs mt-2">
+        Run <code class="font-mono">make bracket</code> or
+        <code class="font-mono">make refresh</code> to generate bracket artifacts.
+      </p>
+    </div>
+  )}
+
+  {hasData && (
+    <>
+      <div class="overflow-x-auto rounded-lg border border-slate-700 mb-6">
+        <table class="w-full text-sm">
+          <thead class="bg-slate-800 text-slate-400 text-xs uppercase tracking-wider">
+            <tr>
+              <th class="text-left px-3 py-2">Team</th>
+              <th class="text-left px-3 py-2">Slot</th>
+              <th class="text-left px-3 py-2">R32</th>
+              <th class="text-left px-3 py-2">Exp. R16</th>
+              <th class="text-left px-3 py-2">Exp. QF</th>
+              <th class="text-left px-3 py-2">Exp. SF</th>
+              <th class="text-right px-3 py-2">Avg Elo</th>
+              <th class="text-right px-3 py-2">Max Elo</th>
+              <th class="text-right px-3 py-2">Difficulty</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800">
+            {paths.map((p) => (
+              <tr class="hover:bg-slate-800/50 transition-colors">
+                <td class="px-3 py-2 text-slate-200 font-medium">
+                  {formatTeamName(p.team)}
+                </td>
+                <td class="px-3 py-2 text-slate-500 font-mono text-xs">{p.slot}</td>
+                <td class="px-3 py-2 text-slate-400 text-xs">
+                  {p.r32_opponent ? formatTeamName(p.r32_opponent) : '—'}
+                </td>
+                <td class="px-3 py-2 text-slate-400 text-xs">
+                  {p.expected_r16_opponent ? formatTeamName(p.expected_r16_opponent) : '—'}
+                </td>
+                <td class="px-3 py-2 text-slate-400 text-xs">
+                  {p.expected_qf_opponent ? formatTeamName(p.expected_qf_opponent) : '—'}
+                </td>
+                <td class="px-3 py-2 text-slate-400 text-xs">
+                  {p.expected_sf_opponent ? formatTeamName(p.expected_sf_opponent) : '—'}
+                </td>
+                <td class="px-3 py-2 text-right text-slate-400 text-xs">{fmtElo(p.avg_opponent_elo)}</td>
+                <td class="px-3 py-2 text-right text-slate-400 text-xs">{fmtElo(p.max_opponent_elo)}</td>
+                <td class="px-3 py-2 text-right">
+                  <div class="flex items-center justify-end gap-2">
+                    <div class="w-16 bg-slate-700 rounded-full h-1.5 overflow-hidden">
+                      <div
+                        class={`h-full rounded-full bg-current ${difficultyClass(p.difficulty_score)}`}
+                        style={`width: ${difficultyBar(p.difficulty_score)}`}
+                      />
+                    </div>
+                    <span class={`text-xs font-mono ${difficultyClass(p.difficulty_score)}`}>
+                      {fmtScore(p.difficulty_score)}
+                    </span>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <p class="text-slate-600 text-xs">
+        {data?.disclaimer}
+        Generated {data?.generated_at ? new Date(data.generated_at).toLocaleString() : '—'}.
+      </p>
+    </>
+  )}
+</Layout>
