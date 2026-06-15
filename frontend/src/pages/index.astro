@@ -4,13 +4,55 @@ import Disclaimer from '../components/Disclaimer.astro';
 import StatCard from '../components/StatCard.astro';
 import EmptyState from '../components/EmptyState.astro';
 import { loadJson } from '../utils/load';
-import { formatTeamName, formatPct, formatDate } from '../utils/format';
-import type { SimSummary, MarketBlend, CaptureStatus, RefreshReport } from '../types';
+import { formatTeamName, formatPct, formatDate, formatKickoff } from '../utils/format';
+import type { SimSummary, MarketBlend, CaptureStatus, RefreshReport, MatchBettingCard, BettingSummary } from '../types';
 
-const sim     = loadJson<SimSummary | null>('sim_summary.json', null);
-const blend   = loadJson<MarketBlend | null>('market_blend.json', null);
-const capture = loadJson<CaptureStatus | null>('capture_status.json', null);
-const refresh = loadJson<RefreshReport | null>('refresh_report.json', null);
+const sim      = loadJson<SimSummary | null>('sim_summary.json', null);
+const blend    = loadJson<MarketBlend | null>('market_blend.json', null);
+const capture  = loadJson<CaptureStatus | null>('capture_status.json', null);
+const refresh  = loadJson<RefreshReport | null>('refresh_report.json', null);
+const cards    = loadJson<MatchBettingCard[]>('match_betting_cards.json', []);
+const bSummary = loadJson<BettingSummary | null>('betting_summary.json', null);
+
+// Top signals: cards with at least one signal, sorted by signal strength then kickoff
+const SIGNAL_ORDER: Record<string, number> = {
+  strong_signal:   0,
+  moderate_signal: 1,
+  watch:           2,
+};
+const withSignals = cards
+  .filter(c => c.top_signals.length > 0)
+  .sort((a, b) => {
+    const aLevel = SIGNAL_ORDER[a.top_signals[0]?.signal_level ?? ''] ?? 9;
+    const bLevel = SIGNAL_ORDER[b.top_signals[0]?.signal_level ?? ''] ?? 9;
+    if (aLevel !== bLevel) return aLevel - bLevel;
+    return (a.kickoff_at ?? '').localeCompare(b.kickoff_at ?? '');
+  })
+  .slice(0, 6);
+
+function signalBadgeClass(level: string): string {
+  switch (level) {
+    case 'strong_signal':   return 'bg-blue-900/50 text-blue-300 border-blue-700/50';
+    case 'moderate_signal': return 'bg-indigo-900/50 text-indigo-300 border-indigo-700/50';
+    case 'watch':           return 'bg-amber-900/50 text-amber-300 border-amber-700/50';
+    default:                return 'bg-slate-800 text-slate-400 border-slate-700';
+  }
+}
+
+function signalLabel(level: string): string {
+  switch (level) {
+    case 'strong_signal':   return 'Model edge';
+    case 'moderate_signal': return 'Model edge';
+    case 'watch':           return 'Watch';
+    default:                return level;
+  }
+}
+
+const selMap: Record<string, string> = {
+  home_win: 'Home win', draw: 'Draw', away_win: 'Away win',
+  home_or_draw: 'Home/Draw', home_or_away: 'Home/Away', draw_or_away: 'Draw/Away',
+  yes: 'BTTS yes', no: 'BTTS no', over: 'Over', under: 'Under',
+};
 ---
 <Layout title="Overview">
   <div class="space-y-8">
@@ -19,12 +61,81 @@ const refresh = loadJson<RefreshReport | null>('refresh_report.json', null);
     <div>
       <h1 class="text-3xl font-bold text-slate-100">World Cup 2026 Oracle</h1>
       <p class="mt-2 text-slate-400 max-w-2xl">
-        Probabilistic tournament forecaster. Elo + Dixon-Coles models blended with
-        market odds (80/20 default). Calibrated against 2014–2022 WC group stages.
+        Multi-market betting intelligence — Elo + Dixon-Coles models blended with market odds.
+        Educational signals only. Not betting advice.
       </p>
     </div>
 
     <Disclaimer />
+
+    <!-- Upcoming betting signals -->
+    {withSignals.length > 0 ? (
+      <section>
+        <div class="flex items-baseline justify-between mb-4">
+          <h2 class="text-lg font-semibold text-slate-200">
+            Upcoming Betting Signals
+            <span class="text-sm font-normal text-slate-500 ml-2">educational only</span>
+          </h2>
+          <a href="/matches" class="text-sm text-blue-400 hover:text-blue-300">
+            All matches →
+          </a>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          {withSignals.map((card) => {
+            const sig = card.top_signals[0];
+            const home = formatTeamName(card.home_team);
+            const away = formatTeamName(card.away_team);
+            return (
+              <a
+                href={`/match/${card.match_id}`}
+                class="bg-slate-900 border border-slate-800 rounded-xl p-4 hover:border-slate-600 transition-colors block space-y-3"
+              >
+                <div class="flex items-center justify-between gap-2">
+                  <div class="text-xs text-slate-500 uppercase tracking-wide">
+                    Group {card.group}
+                  </div>
+                  <span class:list={[
+                    'text-xs px-2 py-0.5 rounded border font-medium shrink-0',
+                    signalBadgeClass(sig.signal_level),
+                  ]}>
+                    {signalLabel(sig.signal_level)}
+                  </span>
+                </div>
+                <div>
+                  <div class="text-slate-200 font-semibold text-sm">{home} vs {away}</div>
+                  {card.kickoff_at && (
+                    <div class="text-xs text-slate-500 mt-0.5">{formatKickoff(card.kickoff_at)}</div>
+                  )}
+                </div>
+                <div class="text-xs text-slate-400">
+                  <span class="text-slate-300">{selMap[sig.selection] ?? sig.selection}</span>
+                  {' · '}model {formatPct(sig.probability)}
+                  {sig.market_gap != null && (
+                    <span class:list={[
+                      'ml-1',
+                      sig.market_gap > 0 ? 'text-blue-400' : 'text-red-400',
+                    ]}>
+                      ({sig.market_gap > 0 ? '+' : ''}{formatPct(sig.market_gap, 1)} gap)
+                    </span>
+                  )}
+                </div>
+              </a>
+            );
+          })}
+        </div>
+        {bSummary && (
+          <p class="text-xs text-slate-500 mt-3">
+            {bSummary.n_signals} signal{bSummary.n_signals !== 1 ? 's' : ''} across {bSummary.n_matches} matches
+            {bSummary.n_with_dc_grid > 0 && ` · ${bSummary.n_with_dc_grid} with Dixon-Coles goal markets`}
+          </p>
+        )}
+      </section>
+    ) : (
+      <div class="rounded-xl border border-slate-800 bg-slate-900/50 px-4 py-5 text-sm text-slate-400">
+        <p class="font-medium text-slate-300 mb-1">No signals available</p>
+        <p>Run <code class="text-xs bg-slate-800 px-1 rounded">make betting</code> to generate match betting signals.</p>
+      </div>
+    )}
 
     {sim ? (
       <>
@@ -57,9 +168,6 @@ const refresh = loadJson<RefreshReport | null>('refresh_report.json', null);
               </div>
             ))}
           </div>
-          <p class="text-xs text-slate-500 mt-3">
-            Placeholder group draw — not the official WC 2026 draw.
-          </p>
         </section>
 
         <!-- Pipeline status -->
@@ -97,7 +205,7 @@ const refresh = loadJson<RefreshReport | null>('refresh_report.json', null);
           </div>
         </section>
 
-        <!-- Last refresh status -->
+        <!-- Last refresh -->
         {refresh && (
           <section>
             <h2 class="text-lg font-semibold text-slate-200 mb-3">Last Refresh</h2>
@@ -123,19 +231,6 @@ const refresh = loadJson<RefreshReport | null>('refresh_report.json', null);
             </a>
           </section>
         )}
-
-        <!-- Disclaimers -->
-        <section>
-          <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-3">Known Limitations</h2>
-          <ul class="space-y-1.5">
-            {Object.entries(sim.disclaimers).map(([k, v]) => (
-              <li class="text-xs text-slate-500 flex gap-2">
-                <span class="text-slate-600 shrink-0">·</span>
-                <span><span class="text-slate-400">{k.replace(/_/g, ' ')}:</span> {v}</span>
-              </li>
-            ))}
-          </ul>
-        </section>
       </>
     ) : (
       <EmptyState

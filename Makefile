@@ -1,4 +1,4 @@
-.PHONY: install test lint clean ingest-results ingest-fixtures holdout backtest simulate ingest-odds market-baseline blend capture-odds export-web dev-frontend build-frontend test-frontend ingest-results-2026 tournament-state recommendations methodology data-sources calibration-history reliability market-agreement transparency refresh refresh-build refresh-with-market results-feed refresh-live prediction-ledger grading closing-lines bracket
+.PHONY: install test lint clean ingest-results ingest-fixtures holdout backtest simulate ingest-odds market-baseline blend capture-odds export-web dev-frontend build-frontend test-frontend ingest-results-2026 tournament-state recommendations methodology data-sources calibration-history reliability market-agreement transparency refresh refresh-build refresh-with-market results-feed refresh-live prediction-ledger grading closing-lines bracket betting
 
 install:
 	pip install -e ".[dev]"
@@ -136,6 +136,17 @@ simulate:
 #   data/artifacts/recommendations_summary.json aggregate counts
 recommendations:
 	python3 -m oracle.pipeline.recommendations
+
+# Build match betting intelligence artifacts (Week 22).
+# Computes 1X2 / DC / BTTS / correct-score signals per match.
+# Run 'make blend' first (blended_predictions required).
+#
+# Artifacts written:
+#   data/artifacts/match_betting_cards.json   one card per match
+#   data/artifacts/betting_signals.json       flattened signal rows
+#   data/artifacts/betting_summary.json       aggregate counts
+betting:
+	python3 -m oracle.pipeline.betting
 
 # Validate and ingest WC 2026 match results from data/seed/wc2026_results.json.
 # Writes match_results.parquet and match_results_summary.json to data/artifacts/.

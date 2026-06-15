@@ -170,6 +170,10 @@ def export() -> None:
     _write("bracket_structure.json",     _read_json(ARTIFACTS / "bracket_structure.json", {}))
     _write("bracket_paths.json",         _read_json(ARTIFACTS / "bracket_paths.json", {}))
     _write("knockout_projection.json",   _read_json(ARTIFACTS / "knockout_projection.json", {}))
+    # Week 22: betting intelligence
+    _write("match_betting_cards.json",   _read_json(ARTIFACTS / "match_betting_cards.json", []))
+    _write("betting_signals.json",       _read_json(ARTIFACTS / "betting_signals.json", []))
+    _write("betting_summary.json",       _read_json(ARTIFACTS / "betting_summary.json", {}))
 
 
 if __name__ == "__main__":

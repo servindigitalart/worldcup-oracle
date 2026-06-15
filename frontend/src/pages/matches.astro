@@ -4,8 +4,8 @@ import ProbBar from '../components/ProbBar.astro';
 import Disclaimer from '../components/Disclaimer.astro';
 import EmptyState from '../components/EmptyState.astro';
 import { loadJson } from '../utils/load';
-import { formatTeamName, formatKickoff } from '../utils/format';
-import type { BlendedPrediction, FixtureScheduleEntry } from '../types';
+import { formatTeamName, formatKickoff, formatPct } from '../utils/format';
+import type { BlendedPrediction, FixtureScheduleEntry, MatchBettingCard } from '../types';
 
 interface FixtureSource {
   source: string | null;
@@ -26,6 +26,13 @@ const fixtureSource  = loadJson<FixtureSource>('fixture_source.json', {
   total_groups: 0,
 });
 const schedule = loadJson<Record<string, FixtureScheduleEntry>>('fixture_schedule.json', {});
+const bettingCards = loadJson<MatchBettingCard[]>('match_betting_cards.json', []);
+
+// Index betting cards by match_id for quick lookup
+const signalByMid: Record<string, MatchBettingCard> = {};
+for (const card of bettingCards) {
+  signalByMid[card.match_id] = card;
+}
 
 // Group matches by group letter
 const byGroup: Record<string, BlendedPrediction[]> = {};
@@ -114,22 +121,66 @@ function getSchedule(home: string, away: string): FixtureScheduleEntry | null {
             <div class="space-y-3">
               {byGroup[g].map((m) => {
                 const fix = getSchedule(m.home_team, m.away_team);
+                const card = signalByMid[m.match_id];
+                const topSig = card?.top_signals?.[0];
+                const signalLevel = topSig?.signal_level;
+                const signalBadgeClass = signalLevel === 'strong_signal'   ? 'bg-blue-900/50 text-blue-300 border-blue-700/50'
+                                       : signalLevel === 'moderate_signal' ? 'bg-indigo-900/50 text-indigo-300 border-indigo-700/50'
+                                       : signalLevel === 'watch'           ? 'bg-amber-900/50 text-amber-300 border-amber-700/50'
+                                       : '';
+                const hasSignal = signalLevel && ['strong_signal', 'moderate_signal', 'watch'].includes(signalLevel);
+                const selLabel = {
+                  home_win: 'Home win', draw: 'Draw', away_win: 'Away win',
+                  home_or_draw: 'Home/Draw', home_or_away: 'Home/Away', draw_or_away: 'Draw/Away',
+                  yes: 'BTTS yes', no: 'BTTS no', over: 'Over', under: 'Under',
+                };
                 return (
                   <div class="bg-slate-900 border border-slate-800 rounded-xl px-4 py-3">
-                    <ProbBar
-                      home={m.blend_home}
-                      draw={m.blend_draw}
-                      away={m.blend_away}
-                      homeLabel={formatTeamName(m.home_team)}
-                      awayLabel={formatTeamName(m.away_team)}
-                    />
-                    <div class="flex justify-between mt-1.5 text-xs text-slate-600">
+                    <div class="flex items-start justify-between gap-2 mb-2">
+                      <div class="flex-1 min-w-0">
+                        <ProbBar
+                          home={m.blend_home}
+                          draw={m.blend_draw}
+                          away={m.blend_away}
+                          homeLabel={formatTeamName(m.home_team)}
+                          awayLabel={formatTeamName(m.away_team)}
+                        />
+                      </div>
+                      {card && (
+                        <a
+                          href={`/match/${m.match_id}`}
+                          class="text-xs text-slate-500 hover:text-blue-400 shrink-0 transition-colors"
+                        >
+                          detail →
+                        </a>
+                      )}
+                    </div>
+                    <div class="flex justify-between text-xs text-slate-600">
                       <span>{(m.blend_home * 100).toFixed(1)}%</span>
                       <span class="text-slate-500">
                         {m.has_market_data ? 'blend' : 'model only'}
                       </span>
                       <span>{(m.blend_away * 100).toFixed(1)}%</span>
                     </div>
+                    {hasSignal && topSig && (
+                      <div class="mt-2 flex items-center gap-2">
+                        <span class:list={[
+                          'text-xs px-1.5 py-0.5 rounded border font-medium',
+                          signalBadgeClass,
+                        ]}>
+                          {signalLevel === 'watch' ? 'Watch' : 'Model edge'}
+                        </span>
+                        <span class="text-xs text-slate-500">
+                          {selLabel[topSig.selection] ?? topSig.selection}
+                          {' · '}{formatPct(topSig.probability)}
+                          {topSig.market_gap != null && (
+                            <span class={topSig.market_gap > 0 ? 'text-blue-400' : 'text-red-400'}>
+                              {' '}({topSig.market_gap > 0 ? '+' : ''}{formatPct(topSig.market_gap, 1)})
+                            </span>
+                          )}
+                        </span>
+                      </div>
+                    )}
                     {fix && (fix.kickoff_at || fix.venue) && (
                       <div class="mt-2 text-xs text-slate-600 flex flex-wrap gap-x-3">
                         {fix.kickoff_at && (

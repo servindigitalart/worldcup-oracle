@@ -1,0 +1,241 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Disclaimer from '../../components/Disclaimer.astro';
+import { loadJson } from '../../utils/load';
+import { formatTeamName, formatKickoff, formatPct } from '../../utils/format';
+import type { MatchBettingCard, BetMarketProbability } from '../../types';
+
+export function getStaticPaths() {
+  const cards = loadJson<MatchBettingCard[]>('match_betting_cards.json', []);
+  return cards.map((card) => ({
+    params: { match_id: card.match_id },
+    props:  { card },
+  }));
+}
+
+interface Props { card: MatchBettingCard }
+const { card } = Astro.props;
+
+const home = formatTeamName(card.home_team);
+const away = formatTeamName(card.away_team);
+
+// Group markets by type
+const mktMap: Record<string, BetMarketProbability[]> = {};
+for (const m of card.markets) {
+  if (!mktMap[m.market_type]) mktMap[m.market_type] = [];
+  mktMap[m.market_type].push(m);
+}
+
+const MARKET_LABELS: Record<string, string> = {
+  '1x2':             '1X2 — Match Result',
+  'double_chance':   'Double Chance',
+  'draw_no_bet':     'Draw No Bet',
+  'over_under_1_5':  'Over / Under 1.5 Goals',
+  'over_under_2_5':  'Over / Under 2.5 Goals',
+  'over_under_3_5':  'Over / Under 3.5 Goals',
+  'btts':            'Both Teams to Score',
+  'correct_score':   'Correct Score (top 5)',
+};
+
+const MARKET_ORDER = [
+  '1x2', 'double_chance', 'draw_no_bet',
+  'over_under_1_5', 'over_under_2_5', 'over_under_3_5',
+  'btts', 'correct_score',
+];
+
+function signalBadgeClass(level: string): string {
+  switch (level) {
+    case 'strong_signal':          return 'bg-blue-900/50 text-blue-300 border-blue-700/50';
+    case 'moderate_signal':        return 'bg-indigo-900/50 text-indigo-300 border-indigo-700/50';
+    case 'watch':                  return 'bg-amber-900/50 text-amber-300 border-amber-700/50';
+    case 'no_signal':              return 'bg-slate-800 text-slate-400 border-slate-700';
+    case 'model_probability_only': return 'bg-slate-900 text-slate-500 border-slate-800';
+    default:                       return 'bg-slate-800 text-slate-400 border-slate-700';
+  }
+}
+
+function signalLabel(level: string): string {
+  switch (level) {
+    case 'strong_signal':          return 'Model edge';
+    case 'moderate_signal':        return 'Model edge';
+    case 'watch':                  return 'Watch';
+    case 'no_signal':              return 'Aligned';
+    case 'model_probability_only': return 'Model only';
+    default:                       return level;
+  }
+}
+
+function selectionLabel(sel: string, marketType: string): string {
+  const base: Record<string, string> = {
+    home_win:      'Home win',
+    draw:          'Draw',
+    away_win:      'Away win',
+    home_or_draw:  'Home or Draw',
+    home_or_away:  'Home or Away',
+    draw_or_away:  'Draw or Away',
+    yes:           'Yes — BTTS',
+    no:            'No — BTTS',
+    over:          'Over',
+    under:         'Under',
+  };
+  return base[sel] ?? sel;
+}
+
+const hasSignals = card.top_signals.length > 0;
+const hasMarketData = card.markets.some(m => m.data_quality === 'complete');
+---
+<Layout title={`${home} vs ${away}`} description={`Betting signals for ${home} vs ${away}`}>
+  <div class="space-y-8">
+
+    <!-- Header -->
+    <div>
+      <div class="text-xs text-slate-500 mb-1 uppercase tracking-wide font-medium">
+        Group {card.group}
+        {card.kickoff_at && <> · {formatKickoff(card.kickoff_at)}</>}
+        {card.city && <> · {card.city}</>}
+      </div>
+      <h1 class="text-3xl font-bold text-slate-100">
+        {home} <span class="text-slate-500">vs</span> {away}
+      </h1>
+      {card.venue && (
+        <p class="text-slate-500 text-sm mt-1">{card.venue}</p>
+      )}
+    </div>
+
+    <Disclaimer />
+
+    <!-- Top signals -->
+    {hasSignals ? (
+      <section>
+        <h2 class="text-base font-semibold text-slate-300 mb-3">
+          Top Signals
+          <span class="text-xs font-normal text-slate-500 ml-2">educational only</span>
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          {card.top_signals.map((sig) => (
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-2">
+              <div class="flex items-center justify-between gap-2">
+                <span class="text-slate-200 font-medium text-sm">
+                  {MARKET_LABELS[sig.market_type] ?? sig.market_type}
+                </span>
+                <span class:list={[
+                  'text-xs px-2 py-0.5 rounded border font-medium shrink-0',
+                  signalBadgeClass(sig.signal_level),
+                ]}>
+                  {signalLabel(sig.signal_level)}
+                </span>
+              </div>
+              <div class="text-slate-400 text-sm">{selectionLabel(sig.selection, sig.market_type)}</div>
+              <div class="flex gap-4 text-sm">
+                <div>
+                  <div class="text-xs text-slate-500">Model</div>
+                  <div class="text-slate-200 font-medium">{formatPct(sig.probability)}</div>
+                </div>
+                {sig.market_probability != null && (
+                  <div>
+                    <div class="text-xs text-slate-500">Market</div>
+                    <div class="text-slate-200 font-medium">{formatPct(sig.market_probability)}</div>
+                  </div>
+                )}
+                {sig.market_gap != null && (
+                  <div>
+                    <div class="text-xs text-slate-500">Gap</div>
+                    <div class:list={[
+                      'font-medium',
+                      sig.market_gap > 0 ? 'text-blue-400' : 'text-red-400',
+                    ]}>
+                      {sig.market_gap > 0 ? '+' : ''}{formatPct(sig.market_gap, 1)}
+                    </div>
+                  </div>
+                )}
+                {sig.fair_decimal_odds != null && (
+                  <div>
+                    <div class="text-xs text-slate-500">Fair odds</div>
+                    <div class="text-slate-300 font-medium">{sig.fair_decimal_odds.toFixed(2)}</div>
+                  </div>
+                )}
+              </div>
+              <p class="text-xs text-slate-500 leading-relaxed">{sig.reason}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+    ) : (
+      <div class="rounded-xl border border-slate-800 bg-slate-900/50 px-4 py-3 text-sm text-slate-400">
+        <p class="font-medium text-slate-300">No signals</p>
+        <p class="mt-1">{card.no_signal_reason}</p>
+      </div>
+    )}
+
+    <!-- All markets -->
+    {MARKET_ORDER.filter(k => mktMap[k]?.length).map((marketType) => (
+      <section>
+        <h2 class="text-base font-semibold text-slate-300 mb-3">
+          {MARKET_LABELS[marketType] ?? marketType}
+        </h2>
+        <div class="overflow-x-auto rounded-xl border border-slate-800">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="text-slate-500 text-xs border-b border-slate-800">
+                <th class="text-left px-4 py-2 font-medium">Selection</th>
+                <th class="text-right px-4 py-2 font-medium">Model prob</th>
+                {hasMarketData && <th class="text-right px-4 py-2 font-medium">Market prob</th>}
+                {hasMarketData && <th class="text-right px-4 py-2 font-medium">Gap</th>}
+                <th class="text-right px-4 py-2 font-medium">Fair odds</th>
+                <th class="text-center px-4 py-2 font-medium">Signal</th>
+              </tr>
+            </thead>
+            <tbody>
+              {mktMap[marketType].map((row) => (
+                <tr class="border-b border-slate-800/50 hover:bg-slate-800/30 transition-colors">
+                  <td class="px-4 py-2.5 text-slate-200">
+                    {selectionLabel(row.selection, row.market_type)}
+                  </td>
+                  <td class="px-4 py-2.5 text-right text-slate-200 font-medium tabular-nums">
+                    {formatPct(row.probability)}
+                  </td>
+                  {hasMarketData && (
+                    <td class="px-4 py-2.5 text-right text-slate-400 tabular-nums">
+                      {row.market_probability != null ? formatPct(row.market_probability) : '—'}
+                    </td>
+                  )}
+                  {hasMarketData && (
+                    <td class:list={[
+                      'px-4 py-2.5 text-right tabular-nums font-medium',
+                      row.market_gap == null ? 'text-slate-600'
+                        : row.market_gap > 0 ? 'text-blue-400'
+                        : 'text-red-400',
+                    ]}>
+                      {row.market_gap != null
+                        ? (row.market_gap > 0 ? '+' : '') + formatPct(row.market_gap, 1)
+                        : '—'}
+                    </td>
+                  )}
+                  <td class="px-4 py-2.5 text-right text-slate-300 tabular-nums">
+                    {row.fair_decimal_odds != null ? row.fair_decimal_odds.toFixed(2) : '—'}
+                  </td>
+                  <td class="px-4 py-2.5 text-center">
+                    <span class:list={[
+                      'text-xs px-2 py-0.5 rounded border',
+                      signalBadgeClass(row.signal_level),
+                    ]}>
+                      {signalLabel(row.signal_level)}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    ))}
+
+    <!-- Source and warnings -->
+    <section class="text-xs text-slate-500 space-y-1 border-t border-slate-800 pt-4">
+      <p>Signal source: blended model probabilities (Elo + Dixon-Coles + market blend).</p>
+      <p>Educational signal only — not betting advice. Model probabilities carry uncertainty.</p>
+      <p>Generated: {card.generated_at}</p>
+    </section>
+
+  </div>
+</Layout>

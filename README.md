@@ -2,6 +2,8 @@
 
 **The most honest public World Cup 2026 forecaster on the internet.**
 
+> **Status: Week 22 — Match Betting Intelligence & Multi-Market Signals. `oracle/betting/` package computes 1X2, Double Chance, Draw No Bet, Over/Under (1.5/2.5/3.5), BTTS, and Correct Score (top 5) signals per match. Signal levels: `no_signal` / `watch` / `moderate_signal` / `strong_signal` (gap thresholds: <3pp / 3–6pp / 6–10pp / >10pp). Dynamic `/match/[match_id]` pages with full market breakdown. Home page pivoted to "Upcoming Betting Signals". NavBar reordered. 130 new tests, 1368 total. 18 Astro pages, `make betting`.**
+> **Status: Week 21 — Official FIFA 2026 Knockout Bracket Engine. `oracle/bracket/` package: slot IDs (A1–L2, T1–T8), FIFA2026_R32_TEMPLATE cross-bracket design, best-thirds ranking, path difficulty (0–10 normalised). `/bracket`, `/paths`, `/best-thirds` pages. 121 new tests, 1238 total.**
 > **Status: Week 20 — True Closing Line Engine & Market Lifecycle Tracking. `oracle/market/lifecycle.py` extracts opening/24h/12h/6h/1h/closing checkpoints from odds snapshots. `oracle/grading/true_clv.py` computes True CLV (model − closing market) valid only when `closing_locked`. Market movement analysis (opening→closing drift) in `oracle/market/movement_analysis.py`. `/market-history` page added. 17 Astro pages, ~1150+ Python tests.**
 > **Status: Week 18 — Prediction grading, CLV tracking & recommendation performance. `oracle/grading/` package grades predictions after match results arrive. Append-only `prediction_ledger.parquet` captures pre-match snapshots; grading fills in Brier, RPS, Log Loss, CLV, and correct-side per entry. `/performance` + `/history` pages added. 1051 Python tests, 35/35 frontend tests, 14 Astro pages.**
 > **Status: Week 17 — Live result feed ingestion. `oracle/results/` package merges manual seed + optional external JSON provider into `live_results.parquet`. Manual seed always wins on conflict. `make results-feed` / `make refresh-live` for post-match updates. 942 Python tests passing, 35/35 frontend tests passing.**
@@ -34,6 +36,69 @@ A rigorously calibrated, self-grading tournament forecaster built on three hones
 3. **Publish a live CLV/calibration scoreboard** — grade the model against the market in the open, win or lose.
 
 Read the full design rationale in [docs/FINAL_BLUEPRINT.md](docs/FINAL_BLUEPRINT.md).
+
+---
+
+## Week 22 status
+
+Match Betting Intelligence & Multi-Market Bet Signals.
+
+### oracle/betting/ package
+
+- **`schema.py`** — `BetMarketProbability` and `MatchBettingCard` dataclasses. Language policy enforced at construction (forbidden terms raise `AssertionError`).
+- **`markets.py`** — Eight market types computed per match:
+  - `1x2` — from blended Elo model probabilities; signals when market data available
+  - `double_chance` — derived from 1X2 sums (home/draw, home/away, draw/away)
+  - `draw_no_bet` — renormalized home/away ignoring draw
+  - `over_under_1_5 / 2_5 / 3_5` — from Dixon-Coles scoreline grid
+  - `btts` — both teams to score from DC grid
+  - `correct_score` — top 5 scorelines from DC grid
+- **`signals.py`** — Signal classification and `build_betting_card()`. Gap thresholds: `<3pp → no_signal`, `3–6pp → watch`, `6–10pp → moderate_signal`, `>10pp → strong_signal`.
+- **`explain.py`** — Deterministic human-readable explanations (no LLM, no forbidden language).
+
+### Signal level semantics
+
+| Level | Gap | Meaning |
+|---|---|---|
+| `strong_signal` | >10pp | Large model-market divergence |
+| `moderate_signal` | 6–10pp | Moderate divergence |
+| `watch` | 3–6pp | Within uncertainty margin |
+| `no_signal` | <3pp | Model and market aligned |
+| `model_probability_only` | n/a | No market odds available |
+
+### Pipeline
+
+`oracle/pipeline/betting.py` (`make betting`) writes:
+
+- `data/artifacts/match_betting_cards.json` — one card per match with all markets
+- `data/artifacts/betting_signals.json` — flattened, sorted signal rows
+- `data/artifacts/betting_summary.json` — aggregate counts + disclaimer
+
+Requires `blended_predictions.parquet` (run `make blend` first). Optionally uses Dixon-Coles model for goal markets (requires historical results).
+
+### Frontend
+
+- **`/match/[match_id]`** — Dynamic per-match detail page: top signals, all markets in a table, gap coloring, fair-decimal odds.
+- **`/`** (Home) — Pivoted to "Upcoming Betting Signals": top 6 cards with signal badge and gap.
+- **`/matches`** — Signal badges and detail links inline on each match row.
+- **`/recommendations`** (renamed "Betting Signals") — Existing 1X2 recommendation engine.
+- NavBar reordered: Home, Matches, Signals, Tournament, Standings, Bracket, …
+
+### Language policy
+
+**Forbidden** (raise assertion at construction): guaranteed, lock, sure bet, can't lose, free money, profit, must bet, bet this now, high certainty, risk-free.
+
+**All outputs carry**: "Educational signal only — not betting advice."
+
+### Tests
+
+130 new tests across 4 files: `test_betting_markets.py`, `test_betting_signals.py`, `test_betting_explain.py`, `test_betting_pipeline.py`. Total: **1368 Python tests**.
+
+---
+
+## Week 21 status
+
+Official FIFA 2026 Knockout Bracket Engine. See prior section for details. 121 new tests (1238 total), 18 Astro pages.
 
 ---
 

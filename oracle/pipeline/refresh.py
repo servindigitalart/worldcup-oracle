@@ -315,6 +315,17 @@ def _step_grading() -> None:
     )
 
 
+def _step_betting() -> None:
+    from oracle.pipeline.betting import run as betting_run
+    summary = betting_run()
+    log.info(
+        "  matches=%d  dc_grids=%d  signals=%d",
+        summary.get("n_matches", 0),
+        summary.get("n_with_dc_grid", 0),
+        summary.get("n_signals", 0),
+    )
+
+
 def _step_export_web() -> None:
     import importlib.util, sys as _sys
     export_script = _REPO_ROOT / "scripts" / "export_artifacts.py"
@@ -494,6 +505,17 @@ def refresh_tournament(
             "recommendations.parquet",
             "recommendations.json",
             "recommendations_summary.json",
+        ],
+    )
+
+    # ── 7b. Betting intelligence (Week 22) ───────────────────────────────────
+    _try(
+        "betting",
+        _step_betting,
+        [
+            "match_betting_cards.json",
+            "betting_signals.json",
+            "betting_summary.json",
         ],
     )
 

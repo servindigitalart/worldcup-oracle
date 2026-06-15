@@ -727,3 +727,53 @@ export interface CaptureStatus {
   n_closing_locked: number;
   note: string;
 }
+
+// ── Week 22: Betting intelligence ─────────────────────────────────────────────
+
+export interface BetMarketProbability {
+  match_id: string;
+  market_type: string;
+  selection: string;
+  probability: number;
+  fair_decimal_odds: number | null;
+  model_source: string;
+  confidence: 'low' | 'medium' | 'high' | 'unknown';
+  risk_label: 'low' | 'medium' | 'high';
+  data_quality: 'complete' | 'model_only';
+  signal_level: 'no_signal' | 'watch' | 'moderate_signal' | 'strong_signal' | 'model_probability_only';
+  market_probability: number | null;
+  market_gap: number | null;
+  reason: string;
+  warnings: string[];
+  generated_at: string;
+}
+
+export interface MatchBettingCard {
+  match_id: string;
+  group: string;
+  kickoff_at: string | null;
+  venue: string | null;
+  city: string | null;
+  home_team: string;
+  away_team: string;
+  n_markets: number;
+  n_signals: number;
+  markets: BetMarketProbability[];
+  top_signals: BetMarketProbability[];
+  no_signal_reason: string;
+  generated_at: string;
+}
+
+export interface BettingSummary {
+  generated_at: string;
+  n_matches: number;
+  n_with_dc_grid: number;
+  n_signals: number;
+  n_strong_signal: number;
+  n_moderate_signal: number;
+  n_watch: number;
+  n_no_signal: number;
+  n_model_only: number;
+  disclaimer: string;
+  language_policy: { forbidden_terms: string[] };
+}

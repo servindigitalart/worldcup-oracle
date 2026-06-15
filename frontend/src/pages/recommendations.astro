@@ -107,22 +107,22 @@ function edgeConfidenceLabel(ec: string): string {
   }
 }
 ---
-<Layout title="Recommendations" description="Responsible probability-based recommendations — educational only">
+<Layout title="Betting Signals" description="Model-market gap signals — educational only, not betting advice">
   <div class="space-y-8">
 
     <!-- Header -->
     <div>
-      <h1 class="text-3xl font-bold text-slate-100">Responsible Recommendations</h1>
+      <h1 class="text-3xl font-bold text-slate-100">Betting Signals</h1>
       <p class="mt-2 text-slate-400 max-w-2xl">
         Educational probability signals only — not betting advice.
-        This engine flags where the model and market differ and explains why.
-        Most matches produce no recommendation.
+        Flags where the model and market differ on 1X2 outcomes.
+        Most matches produce no signal. See <a href="/matches" class="text-blue-400 hover:text-blue-300">Matches</a> for multi-market signals.
       </p>
       <div class="mt-3 rounded-lg border border-amber-800/50 bg-amber-950/30 px-4 py-2.5 text-sm max-w-2xl">
         <p class="font-semibold text-amber-400">Disclaimer</p>
         <p class="mt-0.5 text-amber-300/80">
           A model-market gap is not evidence of value. Market odds may be more accurate than model
-          probabilities. This project does not provide gambling advice or guarantee returns.
+          probabilities. This project does not provide gambling advice.
         </p>
       </div>
     </div>
