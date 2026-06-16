@@ -1,0 +1,92 @@
+---
+import SignalBadge from './SignalBadge.astro';
+
+interface Props {
+  match_id: string;
+  homeLabel: string;
+  awayLabel: string;
+  group: string;
+  kickoffFormatted: string;
+  city: string | null;
+  blend_home: number;
+  blend_draw: number;
+  blend_away: number;
+  has_market_data: boolean;
+  signalLevel?: string;
+}
+
+const {
+  match_id,
+  homeLabel,
+  awayLabel,
+  group,
+  kickoffFormatted,
+  city,
+  blend_home,
+  blend_draw,
+  blend_away,
+  has_market_data,
+  signalLevel,
+} = Astro.props;
+
+const pctFmt = (v: number) => (v * 100).toFixed(1) + '%';
+const barPct = (v: number) => Math.max(v * 100, 1).toFixed(2) + '%';
+
+const activeSignal = signalLevel &&
+  ['strong_signal', 'moderate_signal', 'watch'].includes(signalLevel);
+---
+
+<a
+  href={`/match/${match_id}`}
+  class="group block rounded-xl border border-slate-800/80 bg-slate-900/60 hover:border-slate-700 hover:bg-slate-900/90 transition-all duration-150 p-4"
+>
+  <!-- Top row: group + signal badge -->
+  <div class="flex items-center justify-between mb-3">
+    <span class="text-[10px] font-semibold uppercase tracking-widest text-slate-500">
+      Group {group}
+    </span>
+    {activeSignal
+      ? <SignalBadge level={signalLevel!} />
+      : has_market_data
+        ? <span class="text-[10px] text-slate-600 border border-slate-800 rounded px-1.5 py-0.5">Aligned</span>
+        : <span class="text-[10px] text-slate-700 border border-slate-800/60 rounded px-1.5 py-0.5">Model only</span>
+    }
+  </div>
+
+  <!-- Teams -->
+  <div class="flex items-center justify-between gap-2 mb-3">
+    <span class="text-sm font-semibold text-slate-200 truncate flex-1">{homeLabel}</span>
+    <span class="text-xs text-slate-600 shrink-0">vs</span>
+    <span class="text-sm font-semibold text-slate-200 truncate flex-1 text-right">{awayLabel}</span>
+  </div>
+
+  <!-- Probability bar -->
+  <div class="flex h-6 rounded overflow-hidden text-[10px] font-semibold mb-2">
+    <div
+      class="flex items-center justify-center bg-blue-700/70 text-blue-100"
+      style={`width:${barPct(blend_home)}`}
+    >
+      {blend_home >= 0.20 ? pctFmt(blend_home) : ''}
+    </div>
+    <div
+      class="flex items-center justify-center bg-slate-600/70 text-slate-300"
+      style={`width:${barPct(blend_draw)}`}
+    >
+      {blend_draw >= 0.20 ? pctFmt(blend_draw) : ''}
+    </div>
+    <div
+      class="flex items-center justify-center bg-rose-800/60 text-rose-200"
+      style={`width:${barPct(blend_away)}`}
+    >
+      {blend_away >= 0.20 ? pctFmt(blend_away) : ''}
+    </div>
+  </div>
+
+  <!-- Kickoff meta -->
+  <div class="flex items-center justify-between text-[11px] text-slate-600 gap-2">
+    <span class="truncate">{kickoffFormatted}{city ? ` · ${city}` : ''}</span>
+    <span class="text-slate-700 group-hover:text-slate-500 transition-colors shrink-0">
+      Analysis →
+    </span>
+  </div>
+</a>

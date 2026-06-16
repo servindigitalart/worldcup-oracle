@@ -1,0 +1,30 @@
+---
+interface Props {
+  level: string;
+  size?: 'sm' | 'md' | 'lg';
+}
+
+const { level, size = 'sm' } = Astro.props;
+
+type BadgeCfg = { label: string; cls: string };
+
+const CONFIGS: Record<string, BadgeCfg> = {
+  strong_signal:          { label: 'Model edge',  cls: 'bg-cyan-950/70 text-cyan-300 border-cyan-700/60' },
+  moderate_signal:        { label: 'Model edge',  cls: 'bg-cyan-950/40 text-cyan-400 border-cyan-800/50' },
+  watch:                  { label: 'Watch',       cls: 'bg-amber-950/60 text-amber-300 border-amber-700/50' },
+  model_gap_detected:     { label: 'Model gap',   cls: 'bg-cyan-950/70 text-cyan-300 border-cyan-700/60' },
+  model_probability_only: { label: 'Model only',  cls: 'bg-slate-800/80 text-slate-400 border-slate-700/60' },
+  no_signal:              { label: 'Aligned',     cls: 'bg-slate-900 text-slate-500 border-slate-800' },
+  market_aligned:         { label: 'Aligned',     cls: 'bg-slate-900 text-slate-500 border-slate-800' },
+  avoid:                  { label: 'Avoid',       cls: 'bg-red-950/50 text-red-400 border-red-800/50' },
+  no_recommendation:      { label: 'No signal',   cls: 'bg-slate-900/60 text-slate-600 border-slate-800/60' },
+};
+
+const cfg: BadgeCfg = CONFIGS[level] ?? { label: level, cls: 'bg-slate-800 text-slate-400 border-slate-700' };
+
+const sizeCls =
+  size === 'lg' ? 'text-xs px-3 py-1 rounded-md border font-semibold tracking-wide' :
+  size === 'md' ? 'text-xs px-2.5 py-0.5 rounded border font-semibold' :
+                  'text-[11px] px-2 py-0.5 rounded border font-medium';
+---
+<span class:list={[sizeCls, cfg.cls]}>{cfg.label}</span>

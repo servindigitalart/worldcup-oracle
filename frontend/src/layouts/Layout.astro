@@ -4,25 +4,52 @@ import NavBar from '../components/NavBar.astro';
 interface Props {
   title: string;
   description?: string;
+  ogTitle?: string;
 }
 
-const { title, description = 'WC 2026 probabilistic forecaster.' } = Astro.props;
+const {
+  title,
+  description = 'World Cup Oracle — statistical match probabilities and model-market gap signals for the FIFA 2026 World Cup. Educational use only.',
+  ogTitle,
+} = Astro.props;
+
+const pageTitle = title === 'Overview' ? 'World Cup Oracle — 2026 Betting Intelligence' : `${title} — World Cup Oracle`;
+const ogT = ogTitle ?? pageTitle;
 ---
 <!doctype html>
-<html lang="en" class="bg-slate-950 text-slate-100">
+<html lang="en" class="bg-[#06091A] text-slate-100">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
-    <title>{title} — WC Oracle</title>
+    <title>{pageTitle}</title>
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={ogT} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={ogT} />
+    <meta name="twitter:description" content={description} />
   </head>
-  <body class="min-h-screen bg-slate-950 antialiased">
+  <body class="min-h-screen bg-[#06091A] antialiased">
     <NavBar />
     <main class="max-w-6xl mx-auto px-4 sm:px-6 py-8">
       <slot />
     </main>
-    <footer class="border-t border-slate-800 mt-16 py-6 text-center text-xs text-slate-600">
-      Educational calibration project. Not financial or betting advice. Probabilities from statistical models only.
+    <footer class="border-t border-slate-800/60 mt-20 py-8">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-600">
+        <div class="flex items-center gap-2">
+          <span class="text-slate-500 font-medium">World Cup Oracle</span>
+          <span>·</span>
+          <span>Statistical models only. Not betting advice.</span>
+        </div>
+        <div class="flex items-center gap-4">
+          <a href="/methodology" class="hover:text-slate-400 transition-colors">Methodology</a>
+          <a href="/calibration" class="hover:text-slate-400 transition-colors">Calibration</a>
+          <a href="/status" class="hover:text-slate-400 transition-colors">Status</a>
+        </div>
+      </div>
     </footer>
   </body>
 </html>

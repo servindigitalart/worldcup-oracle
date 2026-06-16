@@ -1,0 +1,31 @@
+---
+interface Badge {
+  label: string;
+  sub: string;
+}
+
+interface Props {
+  nSims: number;
+  goalsModel: string;
+}
+
+const { nSims, goalsModel } = Astro.props;
+
+const badges: Badge[] = [
+  { label: 'Elo ratings',          sub: 'Team strength model' },
+  { label: 'Dixon-Coles',          sub: `Scoreline model · ${goalsModel}` },
+  { label: `${nSims.toLocaleString()} simulations`, sub: 'Monte Carlo tournament runs' },
+  { label: 'Official FIFA fixtures', sub: '2026 schedule, 72 group matches' },
+  { label: 'Calibration tracked', sub: 'ECE, Brier, RPS measured' },
+  { label: 'Market comparison',   sub: 'Model vs odds, when available' },
+];
+---
+
+<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+  {badges.map((b) => (
+    <div class="rounded-lg border border-slate-800/70 bg-slate-900/40 px-3 py-3 text-center">
+      <div class="text-xs font-semibold text-slate-300">{b.label}</div>
+      <div class="text-[10px] text-slate-600 mt-1 leading-tight">{b.sub}</div>
+    </div>
+  ))}
+</div>

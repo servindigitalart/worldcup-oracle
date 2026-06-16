@@ -1,243 +1,271 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Disclaimer from '../components/Disclaimer.astro';
-import StatCard from '../components/StatCard.astro';
+import HeroSignalCard from '../components/HeroSignalCard.astro';
+import UpcomingMatchCard from '../components/UpcomingMatchCard.astro';
+import TrustStrip from '../components/TrustStrip.astro';
 import EmptyState from '../components/EmptyState.astro';
 import { loadJson } from '../utils/load';
-import { formatTeamName, formatPct, formatDate, formatKickoff } from '../utils/format';
-import type { SimSummary, MarketBlend, CaptureStatus, RefreshReport, MatchBettingCard, BettingSummary } from '../types';
+import { formatTeamName, formatPct, formatKickoff } from '../utils/format';
+import type {
+  SimSummary,
+  MarketBlend,
+  BlendedPrediction,
+  FixtureScheduleEntry,
+  Recommendation,
+  RecommendationsSummary,
+  RefreshReport,
+} from '../types';
 
-const sim      = loadJson<SimSummary | null>('sim_summary.json', null);
-const blend    = loadJson<MarketBlend | null>('market_blend.json', null);
-const capture  = loadJson<CaptureStatus | null>('capture_status.json', null);
-const refresh  = loadJson<RefreshReport | null>('refresh_report.json', null);
-const cards    = loadJson<MatchBettingCard[]>('match_betting_cards.json', []);
-const bSummary = loadJson<BettingSummary | null>('betting_summary.json', null);
+const sim       = loadJson<SimSummary | null>('sim_summary.json', null);
+const blend     = loadJson<MarketBlend | null>('market_blend.json', null);
+const refresh   = loadJson<RefreshReport | null>('refresh_report.json', null);
+const predictions = loadJson<BlendedPrediction[]>('blended_predictions.json', []);
+const schedule  = loadJson<Record<string, FixtureScheduleEntry>>('fixture_schedule.json', {});
+const recs      = loadJson<Recommendation[]>('recommendations.json', []);
+const recSummary = loadJson<RecommendationsSummary | null>('recommendations_summary.json', null);
 
-// Top signals: cards with at least one signal, sorted by signal strength then kickoff
-const SIGNAL_ORDER: Record<string, number> = {
-  strong_signal:   0,
-  moderate_signal: 1,
-  watch:           2,
-};
-const withSignals = cards
-  .filter(c => c.top_signals.length > 0)
+// ── Enrich predictions with kickoff/venue and recommendation signal level ──
+function getSchedule(home: string, away: string): FixtureScheduleEntry | null {
+  return schedule[`${home}_vs_${away}`] ?? schedule[`${away}_vs_${home}`] ?? null;
+}
+
+const recByMatch: Record<string, Recommendation> = {};
+for (const r of recs) {
+  recByMatch[r.match_id] = r;
+}
+
+interface EnrichedMatch extends BlendedPrediction {
+  kickoff_at: string | null;
+  venue: string | null;
+  city: string | null;
+  signalLevel: string | undefined;
+}
+
+const enriched: EnrichedMatch[] = predictions.map((p) => {
+  const fix = getSchedule(p.home_team, p.away_team);
+  const rec = recByMatch[p.match_id];
+  const signalLevel = rec && ['model_gap_detected', 'watch', 'avoid'].includes(rec.recommendation_type)
+    ? rec.recommendation_type
+    : undefined;
+  return {
+    ...p,
+    kickoff_at: fix?.kickoff_at ?? null,
+    venue: fix?.venue ?? null,
+    city: fix?.city ?? null,
+    signalLevel,
+  };
+});
+
+const upcoming = [...enriched]
+  .filter((m) => m.kickoff_at)
+  .sort((a, b) => (a.kickoff_at ?? '').localeCompare(b.kickoff_at ?? ''));
+
+const nextSix = upcoming.slice(0, 6);
+
+// ── Hero spotlight: strongest available signal, else most decisive model pick ──
+const hasMarketData = (blend?.n_with_market ?? 0) > 0;
+
+const withRecSignal = upcoming.filter((m) => m.signalLevel);
+const spotlight = withRecSignal[0] ?? [...upcoming]
   .sort((a, b) => {
-    const aLevel = SIGNAL_ORDER[a.top_signals[0]?.signal_level ?? ''] ?? 9;
-    const bLevel = SIGNAL_ORDER[b.top_signals[0]?.signal_level ?? ''] ?? 9;
-    if (aLevel !== bLevel) return aLevel - bLevel;
-    return (a.kickoff_at ?? '').localeCompare(b.kickoff_at ?? '');
-  })
-  .slice(0, 6);
+    const maxA = Math.max(a.blend_home, a.blend_draw, a.blend_away);
+    const maxB = Math.max(b.blend_home, b.blend_draw, b.blend_away);
+    return maxB - maxA;
+  })[0];
 
-function signalBadgeClass(level: string): string {
-  switch (level) {
-    case 'strong_signal':   return 'bg-blue-900/50 text-blue-300 border-blue-700/50';
-    case 'moderate_signal': return 'bg-indigo-900/50 text-indigo-300 border-indigo-700/50';
-    case 'watch':           return 'bg-amber-900/50 text-amber-300 border-amber-700/50';
-    default:                return 'bg-slate-800 text-slate-400 border-slate-700';
+// ── Stats for hero strip ──
+const totalUpcoming = upcoming.length;
+const nSignals = recSummary?.n_actionable ?? 0;
+const marketCoverageLabel = hasMarketData
+  ? `${blend?.n_with_market ?? 0} of ${blend?.n_matchups_total ?? totalUpcoming} matches`
+  : 'Connecting';
+
+function lastUpdatedLabel(): string {
+  if (!refresh?.generated_at) return '—';
+  try {
+    const d = new Date(refresh.generated_at);
+    const now = new Date();
+    const hours = Math.round((now.getTime() - d.getTime()) / 3600000);
+    if (hours < 1) return 'Just now';
+    if (hours < 24) return `${hours}h ago`;
+    const days = Math.round(hours / 24);
+    return `${days}d ago`;
+  } catch {
+    return '—';
   }
 }
-
-function signalLabel(level: string): string {
-  switch (level) {
-    case 'strong_signal':   return 'Model edge';
-    case 'moderate_signal': return 'Model edge';
-    case 'watch':           return 'Watch';
-    default:                return level;
-  }
-}
-
-const selMap: Record<string, string> = {
-  home_win: 'Home win', draw: 'Draw', away_win: 'Away win',
-  home_or_draw: 'Home/Draw', home_or_away: 'Home/Away', draw_or_away: 'Draw/Away',
-  yes: 'BTTS yes', no: 'BTTS no', over: 'Over', under: 'Under',
-};
 ---
 <Layout title="Overview">
-  <div class="space-y-8">
+  <div class="space-y-14">
 
-    <!-- Header -->
-    <div>
-      <h1 class="text-3xl font-bold text-slate-100">World Cup 2026 Oracle</h1>
-      <p class="mt-2 text-slate-400 max-w-2xl">
-        Multi-market betting intelligence — Elo + Dixon-Coles models blended with market odds.
-        Educational signals only. Not betting advice.
-      </p>
-    </div>
+    <!-- ════════════════════════ HERO ════════════════════════ -->
+    <section class="relative -mt-2">
+      <div class="max-w-3xl">
+        <p class="text-xs font-semibold uppercase tracking-widest text-cyan-600 mb-3">
+          World Cup 2026 · Betting Intelligence
+        </p>
+        <h1 class="text-3xl sm:text-4xl font-bold text-slate-100 tracking-tight leading-tight">
+          Find where the World Cup market
+          <span class="text-cyan-400">disagrees with the model.</span>
+        </h1>
+        <p class="mt-4 text-slate-400 text-base leading-relaxed max-w-2xl">
+          World Cup Oracle compares Elo and Dixon-Coles model probabilities against market odds
+          to surface match-level signals — where they agree, where they diverge, and by how much.
+          Educational only — not betting advice.
+        </p>
+      </div>
 
-    <Disclaimer />
+      <!-- Stat pills -->
+      <div class="mt-7 grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div class="rounded-lg border border-slate-800/70 bg-slate-900/50 px-4 py-3">
+          <div class="text-xl font-bold text-slate-100">{totalUpcoming}</div>
+          <div class="text-[11px] text-slate-500 mt-0.5">Upcoming matches</div>
+        </div>
+        <div class="rounded-lg border border-slate-800/70 bg-slate-900/50 px-4 py-3">
+          <div class:list={['text-xl font-bold', nSignals > 0 ? 'text-cyan-400' : 'text-slate-100']}>
+            {nSignals}
+          </div>
+          <div class="text-[11px] text-slate-500 mt-0.5">Signals detected</div>
+        </div>
+        <div class="rounded-lg border border-slate-800/70 bg-slate-900/50 px-4 py-3">
+          <div class="text-xl font-bold text-slate-100">{marketCoverageLabel}</div>
+          <div class="text-[11px] text-slate-500 mt-0.5">Market odds available</div>
+        </div>
+        <div class="rounded-lg border border-slate-800/70 bg-slate-900/50 px-4 py-3">
+          <div class="text-xl font-bold text-slate-100">{lastUpdatedLabel()}</div>
+          <div class="text-[11px] text-slate-500 mt-0.5">Latest update</div>
+        </div>
+      </div>
+    </section>
 
-    <!-- Upcoming betting signals -->
-    {withSignals.length > 0 ? (
+    <!-- ═══════════════════ FEATURED SIGNAL ═══════════════════ -->
+    {spotlight ? (
+      <section>
+        <HeroSignalCard
+          match={spotlight}
+          homeLabel={formatTeamName(spotlight.home_team)}
+          awayLabel={formatTeamName(spotlight.away_team)}
+          kickoffFormatted={formatKickoff(spotlight.kickoff_at)}
+        />
+      </section>
+    ) : (
+      <EmptyState
+        title="No match data yet"
+        message="Match probabilities will appear here once the next update runs."
+      />
+    )}
+
+    <!-- ═══════════════════ UPCOMING MATCHES ═══════════════════ -->
+    {nextSix.length > 0 && (
       <section>
         <div class="flex items-baseline justify-between mb-4">
-          <h2 class="text-lg font-semibold text-slate-200">
-            Upcoming Betting Signals
-            <span class="text-sm font-normal text-slate-500 ml-2">educational only</span>
-          </h2>
-          <a href="/matches" class="text-sm text-blue-400 hover:text-blue-300">
+          <h2 class="text-lg font-semibold text-slate-200">Upcoming Matches</h2>
+          <a href="/matches" class="text-sm text-blue-400 hover:text-blue-300 transition-colors">
             All matches →
           </a>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          {withSignals.map((card) => {
-            const sig = card.top_signals[0];
-            const home = formatTeamName(card.home_team);
-            const away = formatTeamName(card.away_team);
-            return (
-              <a
-                href={`/match/${card.match_id}`}
-                class="bg-slate-900 border border-slate-800 rounded-xl p-4 hover:border-slate-600 transition-colors block space-y-3"
-              >
-                <div class="flex items-center justify-between gap-2">
-                  <div class="text-xs text-slate-500 uppercase tracking-wide">
-                    Group {card.group}
-                  </div>
-                  <span class:list={[
-                    'text-xs px-2 py-0.5 rounded border font-medium shrink-0',
-                    signalBadgeClass(sig.signal_level),
-                  ]}>
-                    {signalLabel(sig.signal_level)}
-                  </span>
-                </div>
-                <div>
-                  <div class="text-slate-200 font-semibold text-sm">{home} vs {away}</div>
-                  {card.kickoff_at && (
-                    <div class="text-xs text-slate-500 mt-0.5">{formatKickoff(card.kickoff_at)}</div>
-                  )}
-                </div>
-                <div class="text-xs text-slate-400">
-                  <span class="text-slate-300">{selMap[sig.selection] ?? sig.selection}</span>
-                  {' · '}model {formatPct(sig.probability)}
-                  {sig.market_gap != null && (
-                    <span class:list={[
-                      'ml-1',
-                      sig.market_gap > 0 ? 'text-blue-400' : 'text-red-400',
-                    ]}>
-                      ({sig.market_gap > 0 ? '+' : ''}{formatPct(sig.market_gap, 1)} gap)
-                    </span>
-                  )}
-                </div>
-              </a>
-            );
-          })}
+          {nextSix.map((m) => (
+            <UpcomingMatchCard
+              match_id={m.match_id}
+              homeLabel={formatTeamName(m.home_team)}
+              awayLabel={formatTeamName(m.away_team)}
+              group={m.group}
+              kickoffFormatted={formatKickoff(m.kickoff_at)}
+              city={m.city}
+              blend_home={m.blend_home}
+              blend_draw={m.blend_draw}
+              blend_away={m.blend_away}
+              has_market_data={m.has_market_data}
+              signalLevel={m.signalLevel}
+            />
+          ))}
         </div>
-        {bSummary && (
-          <p class="text-xs text-slate-500 mt-3">
-            {bSummary.n_signals} signal{bSummary.n_signals !== 1 ? 's' : ''} across {bSummary.n_matches} matches
-            {bSummary.n_with_dc_grid > 0 && ` · ${bSummary.n_with_dc_grid} with Dixon-Coles goal markets`}
-          </p>
-        )}
       </section>
-    ) : (
-      <div class="rounded-xl border border-slate-800 bg-slate-900/50 px-4 py-5 text-sm text-slate-400">
-        <p class="font-medium text-slate-300 mb-1">No signals available</p>
-        <p>Run <code class="text-xs bg-slate-800 px-1 rounded">make betting</code> to generate match betting signals.</p>
-      </div>
     )}
 
-    {sim ? (
-      <>
-        <!-- Quick stats -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          <StatCard label="Simulations" value={sim.n_sims.toLocaleString()} />
-          <StatCard label="Teams" value="48" sub="12 groups, 4 teams each" />
-          <StatCard label="Match model" value={sim.locked_model.split('-')[0].toUpperCase()} sub={sim.locked_model} />
-          <StatCard label="Generated" value={formatDate(sim.generated_date)} />
+    <!-- ═══════════════════ MARKET INTELLIGENCE ═══════════════════ -->
+    <section class="rounded-xl border border-slate-800/70 bg-slate-900/40 px-5 py-5">
+      <div class="flex items-start justify-between gap-4 flex-wrap">
+        <div>
+          <h2 class="text-sm font-semibold text-slate-300 mb-1.5">Market Intelligence</h2>
+          {hasMarketData ? (
+            <p class="text-sm text-slate-500 max-w-xl leading-relaxed">
+              Market odds are connected for {marketCoverageLabel}. Signals above reflect real
+              gaps between model probability and market-implied probability.
+            </p>
+          ) : (
+            <p class="text-sm text-slate-500 max-w-xl leading-relaxed">
+              Real market odds are not yet connected. Every match above shows a model probability
+              only — there is no market benchmark to compare against. Once odds are captured,
+              this section will surface the matches where the model and market disagree most.
+            </p>
+          )}
         </div>
+        <a href="/market" class="shrink-0 text-sm text-blue-400 hover:text-blue-300 transition-colors">
+          Market data →
+        </a>
+      </div>
+    </section>
 
-        <!-- Top champion picks -->
-        <section>
-          <h2 class="text-lg font-semibold text-slate-200 mb-4">
-            Top Champion Probabilities
-            <span class="text-sm font-normal text-slate-500 ml-2">({sim.n_sims.toLocaleString()} simulations)</span>
+    <!-- ═══════════════════ TOURNAMENT PULSE ═══════════════════ -->
+    {sim && (
+      <section>
+        <div class="flex items-baseline justify-between mb-4">
+          <h2 class="text-lg font-semibold text-slate-200">
+            Tournament Pulse
+            <span class="text-sm font-normal text-slate-500 ml-2">
+              {sim.n_sims.toLocaleString()} simulations
+            </span>
           </h2>
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {sim.top_champion_probs.slice(0, 12).map((row, i) => (
-              <div class="bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 flex items-center gap-3">
-                <span class="text-slate-600 text-sm font-mono w-5 text-right shrink-0">{i + 1}</span>
-                <div class="flex-1 min-w-0">
-                  <div class="text-slate-200 font-medium text-sm truncate">
-                    {formatTeamName(row.team)}
-                  </div>
-                </div>
-                <div class="text-blue-400 font-semibold text-sm shrink-0">
-                  {formatPct(row.champion)}
-                </div>
+          <a href="/tournament" class="text-sm text-blue-400 hover:text-blue-300 transition-colors">
+            Full odds →
+          </a>
+        </div>
+        <div class="rounded-xl border border-slate-800/70 bg-slate-900/40 p-5 space-y-2.5">
+          {sim.top_champion_probs.slice(0, 5).map((row, i) => (
+            <div class="flex items-center gap-3">
+              <span class="text-slate-600 text-xs font-mono w-4 shrink-0">{i + 1}</span>
+              <span class="text-sm text-slate-300 w-32 sm:w-40 truncate shrink-0">
+                {formatTeamName(row.team)}
+              </span>
+              <div class="flex-1 h-4 bg-slate-800/80 rounded-full overflow-hidden">
+                <div
+                  class="h-full bg-gradient-to-r from-blue-700 to-cyan-600 rounded-full"
+                  style={`width: ${Math.max(row.champion * 100, 1.5)}%`}
+                />
               </div>
-            ))}
-          </div>
-        </section>
-
-        <!-- Pipeline status -->
-        <section>
-          <h2 class="text-lg font-semibold text-slate-200 mb-4">Pipeline Status</h2>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
-              <div class="text-xs text-slate-500 uppercase tracking-wider mb-1">Goals model</div>
-              <div class="text-sm text-slate-200 font-medium">{sim.goals_model_version}</div>
-              <div class="text-xs text-slate-500 mt-1">Group-stage scorelines</div>
+              <span class="text-cyan-400 text-sm font-semibold w-12 text-right shrink-0">
+                {formatPct(row.champion)}
+              </span>
             </div>
-            {blend && (
-              <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
-                <div class="text-xs text-slate-500 uppercase tracking-wider mb-1">Blend weights</div>
-                <div class="text-sm text-slate-200 font-medium">
-                  {(blend.market_weight * 100).toFixed(0)}% market /
-                  {(blend.model_weight * 100).toFixed(0)}% model
-                </div>
-                <div class="text-xs text-slate-500 mt-1">
-                  {blend.n_with_market} of {blend.n_matchups_total} with market data
-                </div>
-              </div>
-            )}
-            {capture && (
-              <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
-                <div class="text-xs text-slate-500 uppercase tracking-wider mb-1">Capture status</div>
-                <div class="text-sm text-slate-200 font-medium">
-                  {capture.n_total_snapshots} snapshots
-                </div>
-                <div class="text-xs text-slate-500 mt-1">
-                  {capture.has_real_api_key ? 'Live market data' : 'Dummy provider'}
-                </div>
-              </div>
-            )}
-          </div>
-        </section>
-
-        <!-- Last refresh -->
-        {refresh && (
-          <section>
-            <h2 class="text-lg font-semibold text-slate-200 mb-3">Last Refresh</h2>
-            <a href="/status" class="block bg-slate-900 border border-slate-800 rounded-xl p-4 hover:border-slate-600 transition-colors">
-              <div class="flex items-center justify-between flex-wrap gap-3">
-                <div class="flex items-center gap-3">
-                  <span class:list={[
-                    'w-2.5 h-2.5 rounded-full shrink-0',
-                    refresh.success ? 'bg-green-500' : 'bg-red-500',
-                  ]} />
-                  <div>
-                    <div class="text-sm font-medium text-slate-200">
-                      {refresh.success ? 'Refresh succeeded' : 'Refresh failed'}
-                    </div>
-                    <div class="text-xs text-slate-500 mt-0.5">{refresh.summary}</div>
-                  </div>
-                </div>
-                <div class="text-right text-xs text-slate-600 shrink-0">
-                  <div>{refresh.n_steps_success}/{refresh.n_steps_total} steps</div>
-                  <div class="mt-0.5">{refresh.total_duration_seconds.toFixed(1)}s</div>
-                </div>
-              </div>
-            </a>
-          </section>
-        )}
-      </>
-    ) : (
-      <EmptyState
-        title="No simulation data"
-        message="Run the simulation pipeline to generate tournament probabilities."
-        command="make simulate"
-      />
+          ))}
+        </div>
+      </section>
     )}
+
+    <!-- ═══════════════════ TRUST STRIP ═══════════════════ -->
+    {sim && (
+      <section>
+        <TrustStrip nSims={sim.n_sims} goalsModel={sim.goals_model_version} />
+      </section>
+    )}
+
+    <!-- ═══════════════════ FOOTER CTA ═══════════════════ -->
+    <section class="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2 pb-4">
+      <a
+        href="/matches"
+        class="w-full sm:w-auto text-center rounded-lg bg-blue-600 hover:bg-blue-500 px-6 py-2.5 text-sm font-semibold text-white transition-colors"
+      >
+        Explore all matches
+      </a>
+      <a
+        href="/methodology"
+        class="w-full sm:w-auto text-center rounded-lg border border-slate-700 hover:border-slate-600 px-6 py-2.5 text-sm font-semibold text-slate-300 hover:text-slate-100 transition-colors"
+      >
+        See methodology
+      </a>
+    </section>
+
   </div>
 </Layout>
