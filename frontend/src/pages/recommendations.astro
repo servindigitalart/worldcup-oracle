@@ -1,266 +1,518 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import TopSignalCard from '../components/TopSignalCard.astro';
+import SignalFeedCard from '../components/SignalFeedCard.astro';
+import TrustStrip from '../components/TrustStrip.astro';
 import { loadJson } from '../utils/load';
 import { formatTeamName, formatPct, formatKickoff } from '../utils/format';
-import type { Recommendation, RecommendationsSummary } from '../types';
+import type {
+  Recommendation,
+  RecommendationsSummary,
+  BlendedPrediction,
+  FixtureScheduleEntry,
+  SimSummary,
+} from '../types';
 
+// ── Data loading ──────────────────────────────────────────────────────────────
 const recs    = loadJson<Recommendation[]>('recommendations.json', []);
-const summary = loadJson<RecommendationsSummary>('recommendations_summary.json', {
-  generated_at: '',
-  total_matches: 0,
-  n_no_recommendation: 0,
-  n_watch: 0,
-  n_market_aligned: 0,
-  n_model_gap_detected: 0,
-  n_avoid: 0,
-  n_actionable: 0,
-  n_missing_market: 0,
-  has_real_market_data: false,
-  language_policy: { forbidden_terms: [], safe_terms: [] },
-  disclaimer: '',
-} as RecommendationsSummary);
+const summary = loadJson<RecommendationsSummary | null>('recommendations_summary.json', null);
+const bp      = loadJson<BlendedPrediction[]>('blended_predictions.json', []);
+const sched   = loadJson<Record<string, FixtureScheduleEntry>>('fixture_schedule.json', {});
+const sim     = loadJson<SimSummary | null>('sim_summary.json', null);
 
-const hasData = recs.length > 0;
-const hasMarket = summary.has_real_market_data;
+const hasMarket = summary?.has_real_market_data ?? false;
+const nSignals  = summary?.n_actionable ?? 0;
+const nGap      = summary?.n_model_gap_detected ?? 0;
 
-// Sort: model_gap_detected first, then watch, then market_aligned, then no_recommendation
-const TYPE_ORDER: Record<string, number> = {
-  model_gap_detected: 0,
-  avoid:              1,
-  watch:              2,
-  market_aligned:     3,
-  no_recommendation:  4,
-};
-const sorted = [...recs].sort((a, b) =>
-  (TYPE_ORDER[a.recommendation_type] ?? 9) - (TYPE_ORDER[b.recommendation_type] ?? 9)
-);
-
-function typeBadgeClass(t: string): string {
-  switch (t) {
-    case 'model_gap_detected': return 'bg-blue-900/50 text-blue-300 border-blue-700/50';
-    case 'watch':              return 'bg-amber-900/50 text-amber-300 border-amber-700/50';
-    case 'market_aligned':     return 'bg-slate-800 text-slate-400 border-slate-600';
-    case 'avoid':              return 'bg-red-900/50 text-red-300 border-red-700/50';
-    default:                   return 'bg-slate-900 text-slate-500 border-slate-800';
-  }
+// ── Build enriched match list ─────────────────────────────────────────────────
+interface EnrichedMatch {
+  match_id: string;
+  home_team: string;
+  away_team: string;
+  group: string;
+  blend_home: number;
+  blend_draw: number;
+  blend_away: number;
+  kickoff_at: string | null;
+  venue: string | null;
+  city: string | null;
+  signalType: 'model_gap_detected' | 'watch' | 'avoid' | 'model_only';
+  reason: string | null;
+  maxProb: number;
 }
 
-function typeLabel(t: string): string {
-  switch (t) {
-    case 'model_gap_detected': return 'Model gap detected';
-    case 'watch':              return 'Watch';
-    case 'market_aligned':     return 'Market-aligned';
-    case 'avoid':              return 'Avoid';
-    default:                   return 'No recommendation';
-  }
+function getSchedule(home: string, away: string): FixtureScheduleEntry | null {
+  return sched[`${home}_vs_${away}`] ?? sched[`${away}_vs_${home}`] ?? null;
 }
 
-function confidenceClass(c: string): string {
-  switch (c) {
-    case 'high':   return 'text-emerald-400';
-    case 'medium': return 'text-amber-400';
-    case 'low':    return 'text-slate-400';
-    default:       return 'text-slate-600';
-  }
+const recByMatch: Record<string, Recommendation> = {};
+for (const r of recs) recByMatch[r.match_id] = r;
+
+const enriched: EnrichedMatch[] = bp.map((m) => {
+  const fix = getSchedule(m.home_team, m.away_team);
+  const rec = recByMatch[m.match_id];
+  const rt  = rec?.recommendation_type ?? 'no_recommendation';
+  const signalType: EnrichedMatch['signalType'] =
+    rt === 'model_gap_detected' ? 'model_gap_detected' :
+    rt === 'watch'              ? 'watch'              :
+    rt === 'avoid'              ? 'avoid'              : 'model_only';
+
+  return {
+    ...m,
+    kickoff_at: fix?.kickoff_at ?? null,
+    venue:      fix?.venue      ?? null,
+    city:       fix?.city       ?? null,
+    signalType,
+    reason: rec?.reason ?? null,
+    maxProb: Math.max(m.blend_home, m.blend_draw, m.blend_away),
+  };
+});
+
+// Sort by kickoff ascending (no kickoff goes to end)
+const allSorted = [...enriched].sort((a, b) => {
+  if (!a.kickoff_at && !b.kickoff_at) return 0;
+  if (!a.kickoff_at) return 1;
+  if (!b.kickoff_at) return -1;
+  return a.kickoff_at.localeCompare(b.kickoff_at);
+});
+
+// ── Filter group assignment ────────────────────────────────────────────────────
+// "Strong" = real gap signal OR model probability ≥ 65%
+// "Moderate" = 50–65%
+// "Watch" = < 50% max probability  OR watch/avoid signal type
+function assignFilterGroups(m: EnrichedMatch): string[] {
+  const groups: string[] = ['all', 'model_only'];
+  if (m.signalType === 'model_gap_detected') { groups.push('market_gap', 'strong'); return groups; }
+  if (m.signalType === 'watch' || m.signalType === 'avoid') { groups.push('watch'); return groups; }
+  if      (m.maxProb >= 0.65) groups.push('strong');
+  else if (m.maxProb >= 0.50) groups.push('moderate');
+  else                        groups.push('watch');
+  return groups;
 }
 
-function riskClass(r: string): string {
-  switch (r) {
-    case 'high':   return 'text-red-400';
-    case 'medium': return 'text-amber-400';
-    case 'low':    return 'text-slate-400';
-    default:       return 'text-slate-600';
-  }
+// Counts for filter pills
+const counts: Record<string, number> = { all: 0, strong: 0, moderate: 0, watch: 0, market_gap: 0, model_only: 0 };
+for (const m of allSorted) {
+  for (const g of assignFilterGroups(m)) counts[g] = (counts[g] ?? 0) + 1;
 }
 
-function selectionLabel(s: string | null): string {
-  if (!s) return '—';
-  if (s === 'home_win') return 'Home win';
-  if (s === 'away_win') return 'Away win';
-  if (s === 'draw')     return 'Draw';
-  return s;
+// ── Signal level for badge ────────────────────────────────────────────────────
+function badgeLevel(signalType: EnrichedMatch['signalType']): string {
+  if (signalType === 'model_gap_detected') return 'strong_signal';
+  if (signalType === 'watch')              return 'watch';
+  if (signalType === 'avoid')              return 'avoid';
+  return 'model_probability_only';
 }
 
-function formatGap(gap: number | null): string {
-  if (gap == null) return '—';
-  const sign = gap >= 0 ? '+' : '';
-  return `${sign}${(gap * 100).toFixed(1)}pp`;
-}
+// ── Top 5 by model probability (from all matches, sorted by decisiveness) ─────
+const topFive = [...allSorted]
+  .sort((a, b) => b.maxProb - a.maxProb)
+  .slice(0, 5);
 
-function edgeConfidenceClass(ec: string): string {
-  switch (ec) {
-    case 'very_high': return 'bg-blue-900/60 text-blue-300 border-blue-700/50';
-    case 'high':      return 'bg-indigo-900/50 text-indigo-300 border-indigo-700/50';
-    case 'medium':    return 'bg-amber-900/40 text-amber-300 border-amber-700/40';
-    case 'low':       return 'bg-slate-800 text-slate-400 border-slate-600';
-    default:          return 'bg-slate-900 text-slate-600 border-slate-800';
-  }
-}
+// ── Model highlights ──────────────────────────────────────────────────────────
+const strongest    = topFive[0] ?? null;
+const mostBalanced = [...allSorted].sort((a, b) => a.maxProb - b.maxProb)[0] ?? null;
+const highestDraw  = [...allSorted].sort((a, b) => b.blend_draw - a.blend_draw)[0] ?? null;
 
-function edgeConfidenceLabel(ec: string): string {
-  switch (ec) {
-    case 'very_high': return 'Very High';
-    case 'high':      return 'High';
-    case 'medium':    return 'Medium';
-    case 'low':       return 'Low';
-    default:          return '—';
-  }
+// ── Filter pill options (defined here to avoid generic angle-brackets in JSX) ─
+interface FilterOption { key: string; label: string; count: number }
+const filterOptions: FilterOption[] = [
+  { key: 'all',        label: 'All',        count: counts.all        ?? 0 },
+  { key: 'strong',     label: 'Favorites',  count: counts.strong     ?? 0 },
+  { key: 'moderate',   label: 'Moderate',   count: counts.moderate   ?? 0 },
+  { key: 'watch',      label: 'Watch',      count: counts.watch      ?? 0 },
+  { key: 'market_gap', label: 'Market Gap', count: counts.market_gap ?? 0 },
+  { key: 'model_only', label: 'Model Only', count: counts.model_only ?? 0 },
+];
+
+// ── Helper ────────────────────────────────────────────────────────────────────
+function labelDominant(m: EnrichedMatch): string {
+  if (m.blend_home >= m.blend_draw && m.blend_home >= m.blend_away)
+    return formatTeamName(m.home_team);
+  if (m.blend_away > m.blend_home && m.blend_away >= m.blend_draw)
+    return formatTeamName(m.away_team);
+  return 'Draw';
 }
 ---
-<Layout title="Betting Signals" description="Model-market gap signals — educational only, not betting advice">
-  <div class="space-y-8">
 
-    <!-- Header -->
-    <div>
-      <h1 class="text-3xl font-bold text-slate-100">Betting Signals</h1>
-      <p class="mt-2 text-slate-400 max-w-2xl">
-        Educational probability signals only — not betting advice.
-        Flags where the model and market differ on 1X2 outcomes.
-        Most matches produce no signal. See <a href="/matches" class="text-blue-400 hover:text-blue-300">Matches</a> for multi-market signals.
+<Layout
+  title="Signals"
+  description="Model probability signals and market gap analysis for the FIFA 2026 World Cup. Educational only."
+>
+  <div class="space-y-14">
+
+    <!-- ══════════════════ SECTION 1: HERO ══════════════════════════════════ -->
+    <section>
+      <p class="text-xs font-semibold uppercase tracking-widest text-cyan-600 mb-3">
+        World Cup 2026 · Betting Intelligence
       </p>
-      <div class="mt-3 rounded-lg border border-amber-800/50 bg-amber-950/30 px-4 py-2.5 text-sm max-w-2xl">
-        <p class="font-semibold text-amber-400">Disclaimer</p>
-        <p class="mt-0.5 text-amber-300/80">
-          A model-market gap is not evidence of value. Market odds may be more accurate than model
-          probabilities. This project does not provide gambling advice.
-        </p>
-      </div>
-    </div>
+      <h1 class="text-3xl sm:text-4xl font-bold text-slate-100 tracking-tight leading-tight mb-4">
+        Today's Betting Intelligence
+      </h1>
+      <p class="text-slate-400 text-base leading-relaxed max-w-2xl mb-8">
+        We surface matches where the model sees unusually decisive probabilities, and —
+        once market odds are available — where those probabilities diverge from bookmaker prices.
+        Educational only.
+      </p>
 
-    <!-- No real market data banner -->
-    {!hasMarket && (
-      <div class="rounded-xl border border-slate-700 bg-slate-800/40 px-5 py-5">
-        <p class="font-semibold text-slate-300">No real market odds available yet</p>
-        <p class="mt-1 text-sm text-slate-500">
-          Recommendations are limited until real odds are captured.
-          Set <code class="text-slate-400">ODDS_API_KEY</code> and run{' '}
-          <code class="text-slate-400">make ingest-odds &amp;&amp; make blend &amp;&amp; make recommendations</code>.
-          All matches currently show <span class="text-slate-400">no recommendation</span> (missing market data).
-        </p>
+      <!-- Stat pills -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div class="rounded-lg border border-slate-800/70 bg-slate-900/50 px-4 py-3">
+          <div class="text-xl font-bold text-slate-100">{bp.length}</div>
+          <div class="text-[11px] text-slate-500 mt-0.5">Matches analysed</div>
+        </div>
+        <div class="rounded-lg border border-slate-800/70 bg-slate-900/50 px-4 py-3">
+          <div class:list={['text-xl font-bold', nSignals > 0 ? 'text-cyan-400' : 'text-slate-100']}>
+            {nSignals}
+          </div>
+          <div class="text-[11px] text-slate-500 mt-0.5">Actionable signals</div>
+        </div>
+        <div class="rounded-lg border border-slate-800/70 bg-slate-900/50 px-4 py-3">
+          <div class:list={['text-xl font-bold', nGap > 0 ? 'text-cyan-400' : 'text-slate-100']}>
+            {nGap}
+          </div>
+          <div class="text-[11px] text-slate-500 mt-0.5">Market gap signals</div>
+        </div>
+        <div class="rounded-lg border border-slate-800/70 bg-slate-900/50 px-4 py-3">
+          <div class="text-xl font-bold text-slate-100">
+            {hasMarket ? ((summary?.n_actionable ?? 0) + ' live') : 'Connecting'}
+          </div>
+          <div class="text-[11px] text-slate-500 mt-0.5">Market odds status</div>
+        </div>
       </div>
+    </section>
+
+    <!-- Market data status notice -->
+    {!hasMarket && (
+      <section class="rounded-xl border border-slate-800/60 bg-slate-900/30 px-5 py-4 flex items-start gap-3">
+        <div class="w-2 h-2 rounded-full bg-amber-500/60 mt-1.5 shrink-0" />
+        <div>
+          <p class="text-sm font-medium text-slate-300 mb-1">Market odds not yet connected</p>
+          <p class="text-sm text-slate-500 leading-relaxed">
+            Signals shown are based on model probabilities only. Market gap analysis — where
+            the model and bookmaker odds disagree — will appear once odds are captured for
+            these matches. All probabilities below are Elo + Dixon-Coles model outputs.
+          </p>
+        </div>
+      </section>
     )}
 
-    <!-- Summary cards -->
-    {hasData && (
-      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+    <!-- ══════════════════ SECTION 5: MODEL HIGHLIGHTS ══════════════════════ -->
+    <!-- (Placed before Top Signals when market data absent — most useful content first) -->
+    <section>
+      <h2 class="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-4">
+        Model Highlights
+      </h2>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+
+        {strongest && (
+          <a
+            href={`/match/${strongest.match_id}`}
+            class="group rounded-xl border border-slate-800/70 bg-slate-900/50 hover:border-slate-700 transition-colors px-4 py-4"
+          >
+            <div class="text-[10px] text-slate-600 uppercase tracking-wider mb-2">Strongest favorite</div>
+            <div class="text-2xl font-bold text-blue-300 tabular-nums mb-1">
+              {formatPct(strongest.maxProb)}
+            </div>
+            <div class="text-xs text-slate-400 truncate">{labelDominant(strongest)}</div>
+            <div class="text-[11px] text-slate-600 mt-0.5 truncate">
+              {formatTeamName(strongest.home_team)} vs {formatTeamName(strongest.away_team)}
+            </div>
+            <div class="text-[11px] text-blue-500 group-hover:text-blue-400 mt-2 transition-colors">
+              View →
+            </div>
+          </a>
+        )}
+
+        {mostBalanced && (
+          <a
+            href={`/match/${mostBalanced.match_id}`}
+            class="group rounded-xl border border-slate-800/70 bg-slate-900/50 hover:border-slate-700 transition-colors px-4 py-4"
+          >
+            <div class="text-[10px] text-slate-600 uppercase tracking-wider mb-2">Most balanced</div>
+            <div class="text-2xl font-bold text-slate-200 tabular-nums mb-1">
+              {formatPct(mostBalanced.blend_home, 0)} / {formatPct(mostBalanced.blend_away, 0)}
+            </div>
+            <div class="text-xs text-slate-400 truncate">
+              {formatTeamName(mostBalanced.home_team)} vs {formatTeamName(mostBalanced.away_team)}
+            </div>
+            <div class="text-[11px] text-slate-600 mt-0.5">Closest to even split</div>
+            <div class="text-[11px] text-blue-500 group-hover:text-blue-400 mt-2 transition-colors">
+              View →
+            </div>
+          </a>
+        )}
+
+        {highestDraw && (
+          <a
+            href={`/match/${highestDraw.match_id}`}
+            class="group rounded-xl border border-slate-800/70 bg-slate-900/50 hover:border-slate-700 transition-colors px-4 py-4"
+          >
+            <div class="text-[10px] text-slate-600 uppercase tracking-wider mb-2">Highest draw prob</div>
+            <div class="text-2xl font-bold text-slate-300 tabular-nums mb-1">
+              {formatPct(highestDraw.blend_draw)}
+            </div>
+            <div class="text-xs text-slate-400 truncate">
+              {formatTeamName(highestDraw.home_team)} vs {formatTeamName(highestDraw.away_team)}
+            </div>
+            <div class="text-[11px] text-slate-600 mt-0.5">Draw probability</div>
+            <div class="text-[11px] text-blue-500 group-hover:text-blue-400 mt-2 transition-colors">
+              View →
+            </div>
+          </a>
+        )}
+
+        <div class="rounded-xl border border-slate-800/70 bg-slate-900/50 px-4 py-4">
+          <div class="text-[10px] text-slate-600 uppercase tracking-wider mb-2">Matches with data</div>
+          <div class="text-2xl font-bold text-slate-100 tabular-nums mb-1">{bp.length}</div>
+          <div class="text-xs text-slate-400">Group stage</div>
+          <div class="text-[11px] text-slate-600 mt-0.5">{counts.strong ?? 0} decisive favorites</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ SECTION 2: TOP SIGNALS ════════════════════════════ -->
+    <section>
+      <div class="flex items-baseline justify-between mb-4">
+        <div>
+          <h2 class="text-lg font-semibold text-slate-200">
+            {hasMarket ? 'Top Signals' : 'Top Probability Signals'}
+          </h2>
+          <p class="text-xs text-slate-600 mt-0.5">
+            {hasMarket
+              ? 'Matches with the strongest model-market divergence'
+              : 'Matches where the model has the highest probability convictions — model only, no market benchmark yet'}
+          </p>
+        </div>
+      </div>
+
+      {topFive.length > 0 ? (
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {topFive.map((m, i) => (
+            <div class:list={[i === 0 ? 'sm:col-span-2' : '']}>
+              <TopSignalCard
+                match_id={m.match_id}
+                homeLabel={formatTeamName(m.home_team)}
+                awayLabel={formatTeamName(m.away_team)}
+                group={m.group}
+                kickoffFormatted={m.kickoff_at ? formatKickoff(m.kickoff_at) : null}
+                venue={m.venue}
+                city={m.city}
+                pHome={m.blend_home}
+                pDraw={m.blend_draw}
+                pAway={m.blend_away}
+                signalLevel={badgeLevel(m.signalType)}
+                hasMarketData={hasMarket}
+                reason={null}
+              />
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div class="rounded-xl border border-slate-800/50 bg-slate-900/30 px-5 py-8 text-center">
+          <p class="text-slate-400 font-medium mb-2">No match data yet</p>
+          <p class="text-sm text-slate-600">
+            Match probabilities will appear here once the model pipeline runs.
+          </p>
+        </div>
+      )}
+    </section>
+
+    <!-- ══════════════════ SECTION 3: SIGNAL FEED ════════════════════════════ -->
+    <section id="signal-feed">
+      <div class="flex items-baseline justify-between mb-4 gap-4 flex-wrap">
+        <h2 class="text-lg font-semibold text-slate-200">Signal Feed</h2>
+        <p class="text-xs text-slate-600">{allSorted.length} matches · sorted by kickoff</p>
+      </div>
+
+      <!-- Filter bar -->
+      <div class="flex gap-2 overflow-x-auto pb-2 mb-5 -mx-4 px-4 sm:mx-0 sm:px-0">
+        {filterOptions.map(({ key, label, count }) => (
+          <button
+            data-filter-btn={key}
+            class:list={[
+              'filter-pill text-xs px-3.5 py-1.5 rounded-full border transition-colors cursor-pointer whitespace-nowrap shrink-0 flex items-center gap-1.5',
+              key === 'all'
+                ? 'fp-active border-blue-700/50 bg-blue-900/30 text-blue-300'
+                : 'fp-inactive border-slate-700 text-slate-400 hover:text-slate-200 hover:border-slate-600',
+            ]}
+          >
+            {label}
+            <span class:list={['tabular-nums', key === 'all' ? 'text-blue-500' : 'text-slate-600']}>
+              {count}
+            </span>
+          </button>
+        ))}
+      </div>
+
+      <!-- Feed grid -->
+      {allSorted.length > 0 ? (
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3" id="feed-grid">
+          {allSorted.map((m) => (
+            <div data-card data-filter-group={assignFilterGroups(m).join(' ')}>
+              <SignalFeedCard
+                match_id={m.match_id}
+                homeLabel={formatTeamName(m.home_team)}
+                awayLabel={formatTeamName(m.away_team)}
+                group={m.group}
+                kickoffFormatted={m.kickoff_at ? formatKickoff(m.kickoff_at) : null}
+                city={m.city}
+                pHome={m.blend_home}
+                pDraw={m.blend_draw}
+                pAway={m.blend_away}
+                signalLevel={badgeLevel(m.signalType)}
+                hasMarketData={hasMarket}
+              />
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div class="rounded-xl border border-slate-800/50 bg-slate-900/30 px-5 py-8 text-center">
+          <p class="text-slate-500">No match data available.</p>
+        </div>
+      )}
+
+      <!-- Feed empty state (shown by JS when filter has no results) -->
+      <div id="feed-empty" hidden class="rounded-xl border border-slate-800/50 bg-slate-900/30 px-5 py-8 text-center mt-3">
+        <p class="text-slate-400 font-medium mb-2">No matches for this filter</p>
+        <p class="text-sm text-slate-600 max-w-sm mx-auto">
+          {nGap === 0
+            ? 'Market gap signals require real market odds. Connect odds data to populate this filter.'
+            : 'No matches match this filter — try "All" to see every match.'}
+        </p>
+      </div>
+    </section>
+
+    <!-- ══════════════════ SECTION 4: MARKET GAP SIGNALS ════════════════════ -->
+    <section>
+      <h2 class="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-3">
+        Market Gap Signals
+      </h2>
+      {nGap > 0 ? (
+        <p class="text-sm text-slate-500">
+          {nGap} market gap signal{nGap !== 1 ? 's' : ''} detected above.
+        </p>
+      ) : (
+        <div class="rounded-xl border border-slate-800/50 bg-slate-900/30 p-6 sm:p-8">
+          <div class="max-w-xl">
+            <p class="text-sm font-medium text-slate-300 mb-3">
+              No market-gap signals available yet
+            </p>
+            <p class="text-sm text-slate-500 leading-relaxed mb-4">
+              Market gap signals highlight matches where the model's probability differs
+              meaningfully from bookmaker odds — suggesting the market may be mispricing
+              a particular outcome. These signals require real market odds as a benchmark.
+            </p>
+            <p class="text-sm text-slate-500 leading-relaxed">
+              Current coverage: 0 of {bp.length} matches have market odds connected.
+              The model is generating probabilities for all matches, but there is no market
+              benchmark to compare against yet.
+            </p>
+          </div>
+        </div>
+      )}
+    </section>
+
+    <!-- ══════════════════ SECTION 6: HOW SIGNALS WORK ═════════════════════ -->
+    <section class="rounded-xl border border-slate-800/60 bg-slate-900/30 p-5 sm:p-6">
+      <h2 class="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-5">
+        How Signals Work
+      </h2>
+
+      <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-0 mb-5">
         {[
-          { label: 'Total matches',       value: summary.total_matches,          cls: 'text-slate-200' },
-          { label: 'Model gap detected',  value: summary.n_model_gap_detected,   cls: 'text-blue-400'  },
-          { label: 'Watch',               value: summary.n_watch,                cls: 'text-amber-400' },
-          { label: 'Market-aligned',      value: summary.n_market_aligned,       cls: 'text-slate-400' },
-          { label: 'No recommendation',   value: summary.n_no_recommendation,    cls: 'text-slate-500' },
-          { label: 'Actionable',          value: summary.n_actionable,           cls: summary.n_actionable > 0 ? 'text-blue-400' : 'text-slate-500' },
-        ].map(card => (
-          <div class="rounded-xl border border-slate-700 bg-slate-800/30 px-4 py-3 text-center">
-            <p class:list={['text-2xl font-bold', card.cls]}>{card.value}</p>
-            <p class="mt-1 text-xs text-slate-500">{card.label}</p>
+          { step: '1', label: 'Model runs',      desc: 'Elo + Dixon-Coles generates match probabilities' },
+          { step: '2', label: 'Market captured', desc: 'Bookmaker odds are converted to implied probabilities' },
+          { step: '3', label: 'Gap computed',    desc: 'Model vs market difference is measured per selection' },
+          { step: '4', label: 'Signal rated',    desc: 'Confidence + risk labels applied based on gap size' },
+          { step: '5', label: 'Analysis',        desc: 'View the full breakdown on the match page' },
+        ].map((s, i, arr) => (
+          <div class="flex sm:flex-col items-center gap-3 flex-1">
+            <div class="flex sm:flex-col items-center gap-2 flex-1 sm:text-center">
+              <div class="w-7 h-7 rounded-full border border-slate-700 bg-slate-800 flex items-center justify-center text-xs font-bold text-slate-300 shrink-0">
+                {s.step}
+              </div>
+              <div>
+                <div class="text-xs font-semibold text-slate-300">{s.label}</div>
+                <div class="text-[11px] text-slate-600 mt-0.5 leading-tight">{s.desc}</div>
+              </div>
+            </div>
+            {i < arr.length - 1 && (
+              <div class="hidden sm:block text-slate-700 text-xs mx-1 self-center">→</div>
+            )}
           </div>
         ))}
       </div>
-    )}
 
-    <!-- No data state -->
-    {!hasData && (
-      <div class="rounded-xl border border-slate-700 bg-slate-800/40 px-5 py-6 text-center">
-        <p class="text-lg font-semibold text-slate-300">No recommendation data found</p>
-        <p class="mt-1 text-sm text-slate-500">
-          Run <code class="text-slate-400">make recommendations &amp;&amp; make export-web</code> to generate.
-        </p>
+      <div class="flex items-center gap-3 border-t border-slate-800/50 pt-4">
+        <a
+          href="/methodology"
+          class="text-sm text-blue-400 hover:text-blue-300 transition-colors"
+        >
+          Full methodology →
+        </a>
+        <span class="text-slate-700">·</span>
+        <a
+          href="/calibration"
+          class="text-sm text-slate-500 hover:text-slate-300 transition-colors"
+        >
+          Model calibration →
+        </a>
       </div>
-    )}
+    </section>
 
-    <!-- Recommendation table -->
-    {sorted.length > 0 && (
-      <div class="overflow-x-auto rounded-xl border border-slate-700">
-        <table class="w-full text-xs min-w-[900px]">
-          <thead>
-            <tr class="bg-slate-800/70 text-slate-400 border-b border-slate-700">
-              <th class="px-3 py-2.5 text-left font-medium">Match</th>
-              <th class="px-3 py-2.5 text-left font-medium">Grp</th>
-              <th class="px-3 py-2.5 text-left font-medium">Type</th>
-              <th class="px-3 py-2.5 text-left font-medium">Selection</th>
-              <th class="px-3 py-2.5 text-right font-medium">Model</th>
-              <th class="px-3 py-2.5 text-right font-medium">Market</th>
-              <th class="px-3 py-2.5 text-right font-medium">Gap</th>
-              <th class="px-3 py-2.5 text-center font-medium">Edge</th>
-              <th class="px-3 py-2.5 text-center font-medium">Confidence</th>
-              <th class="px-3 py-2.5 text-center font-medium">Risk</th>
-              <th class="px-3 py-2.5 text-left font-medium">Reason</th>
-            </tr>
-          </thead>
-          <tbody>
-            {sorted.map((rec) => (
-              <tr class="border-b border-slate-700/40 last:border-0 hover:bg-slate-800/30 transition-colors">
-                <td class="px-3 py-2.5">
-                  <div class="font-medium text-slate-200">
-                    {formatTeamName(rec.home_team)} <span class="text-slate-500">vs</span> {formatTeamName(rec.away_team)}
-                  </div>
-                  {rec.kickoff_at && (
-                    <div class="text-slate-600 text-[11px] mt-0.5">{formatKickoff(rec.kickoff_at)}</div>
-                  )}
-                </td>
-                <td class="px-3 py-2.5 text-slate-500 font-mono text-center">{rec.group}</td>
-                <td class="px-3 py-2.5">
-                  <span class:list={[
-                    'inline-block px-2 py-0.5 rounded text-[11px] border whitespace-nowrap',
-                    typeBadgeClass(rec.recommendation_type),
-                  ]}>
-                    {typeLabel(rec.recommendation_type)}
-                  </span>
-                </td>
-                <td class="px-3 py-2.5 text-slate-400 whitespace-nowrap">
-                  {selectionLabel(rec.selection)}
-                </td>
-                <td class="px-3 py-2.5 text-right text-slate-300 font-mono">
-                  {rec.model_probability != null ? formatPct(rec.model_probability) : '—'}
-                </td>
-                <td class="px-3 py-2.5 text-right text-slate-300 font-mono">
-                  {rec.market_probability != null ? formatPct(rec.market_probability) : '—'}
-                </td>
-                <td class:list={[
-                  'px-3 py-2.5 text-right font-mono',
-                  rec.model_market_gap != null && Math.abs(rec.model_market_gap) >= 0.08
-                    ? 'text-blue-400'
-                    : rec.model_market_gap != null && Math.abs(rec.model_market_gap) >= 0.04
-                    ? 'text-amber-400'
-                    : 'text-slate-500',
-                ]}>
-                  {formatGap(rec.model_market_gap)}
-                </td>
-                <td class="px-3 py-2.5 text-center">
-                  {rec.edge_confidence && rec.edge_confidence !== 'none' ? (
-                    <span class:list={[
-                      'inline-block px-2 py-0.5 rounded text-[11px] border whitespace-nowrap',
-                      edgeConfidenceClass(rec.edge_confidence),
-                    ]}>
-                      {edgeConfidenceLabel(rec.edge_confidence)}
-                    </span>
-                  ) : (
-                    <span class="text-slate-700">—</span>
-                  )}
-                </td>
-                <td class:list={['px-3 py-2.5 text-center capitalize', confidenceClass(rec.confidence)]}>
-                  {rec.confidence}
-                </td>
-                <td class:list={['px-3 py-2.5 text-center capitalize', riskClass(rec.risk_label)]}>
-                  {rec.risk_label}
-                </td>
-                <td class="px-3 py-2.5 text-slate-500 max-w-xs">
-                  <p class="line-clamp-2">{rec.reason}</p>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+    <!-- Trust strip -->
+    {sim && (
+      <section class="pb-4">
+        <TrustStrip nSims={sim.n_sims} goalsModel={sim.goals_model_version} />
+      </section>
     )}
-
-    <!-- Language policy / footer -->
-    <div class="text-xs text-slate-700 space-y-1 border-t border-slate-800 pt-4">
-      <p class="font-semibold text-slate-600">Language policy</p>
-      <p>This page never uses: guaranteed · lock · sure bet · free money · profit · must bet · high certainty.</p>
-      <p>Probability signals are for educational use only. Not financial advice.</p>
-    </div>
 
   </div>
 </Layout>
+
+<style is:global>
+  .fp-active {
+    background-color: rgba(23, 37, 84, 0.4);
+    color: rgb(147, 197, 253);
+    border-color: rgba(59, 130, 246, 0.4);
+  }
+  .fp-inactive {
+    color: rgb(100, 116, 139);
+    border-color: rgb(51, 65, 85);
+  }
+  .fp-inactive:hover {
+    color: rgb(203, 213, 225);
+    border-color: rgb(71, 85, 105);
+  }
+</style>
+
+<script>
+  const buttons   = document.querySelectorAll('[data-filter-btn]');
+  const cards     = document.querySelectorAll('[data-card]');
+  const feedEmpty = document.getElementById('feed-empty');
+
+  function applyFilter(filter) {
+    let visible = 0;
+    cards.forEach((card) => {
+      const groups = (card.getAttribute('data-filter-group') || '').split(' ');
+      const show = filter === 'all' || groups.includes(filter);
+      card.hidden = !show;
+      if (show) visible++;
+    });
+    if (feedEmpty) feedEmpty.hidden = visible > 0;
+  }
+
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const filter = btn.getAttribute('data-filter-btn') || 'all';
+      buttons.forEach((b) => {
+        b.classList.remove('fp-active');
+        b.classList.add('fp-inactive');
+      });
+      btn.classList.remove('fp-inactive');
+      btn.classList.add('fp-active');
+      applyFilter(filter);
+    });
+  });
+</script>

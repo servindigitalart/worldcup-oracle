@@ -1,0 +1,87 @@
+---
+import SignalBadge from './SignalBadge.astro';
+import { formatOdds, formatPct } from '../utils/format';
+
+interface Props {
+  match_id: string;
+  homeLabel: string;
+  awayLabel: string;
+  group: string;
+  kickoffFormatted: string | null;
+  city: string | null;
+  pHome: number;
+  pDraw: number;
+  pAway: number;
+  signalLevel: string;
+  hasMarketData: boolean;
+}
+
+const {
+  match_id,
+  homeLabel,
+  awayLabel,
+  group,
+  kickoffFormatted,
+  city,
+  pHome,
+  pDraw,
+  pAway,
+  signalLevel,
+  hasMarketData,
+} = Astro.props;
+
+const barW = (v: number) => Math.max(v * 100, 0.5).toFixed(2) + '%';
+const show  = (v: number) => v >= 0.21;
+---
+
+<a
+  href={`/match/${match_id}`}
+  class="group block rounded-xl border border-slate-800/80 bg-slate-900/60 hover:border-slate-700/80 hover:bg-slate-900/90 transition-all duration-150 p-4"
+>
+  <!-- Top row: group + signal badge -->
+  <div class="flex items-center justify-between mb-3 gap-2">
+    <span class="text-[10px] font-semibold uppercase tracking-widest text-slate-500">
+      Group {group}
+    </span>
+    <SignalBadge level={signalLevel} size="sm" />
+  </div>
+
+  <!-- Teams -->
+  <div class="flex items-center justify-between gap-2 mb-3.5">
+    <span class="text-sm font-semibold text-slate-200 flex-1 truncate">{homeLabel}</span>
+    <span class="text-[11px] text-slate-600 shrink-0">vs</span>
+    <span class="text-sm font-semibold text-slate-200 flex-1 text-right truncate">{awayLabel}</span>
+  </div>
+
+  <!-- Probability bar -->
+  <div class="flex h-5 rounded overflow-hidden text-[10px] font-semibold mb-2.5">
+    <div
+      class="flex items-center justify-center bg-blue-700/70 text-blue-100 transition-all"
+      style={`width:${barW(pHome)}`}
+    >
+      {show(pHome) ? formatPct(pHome, 0) : ''}
+    </div>
+    <div
+      class="flex items-center justify-center bg-slate-600/70 text-slate-300 transition-all"
+      style={`width:${barW(pDraw)}`}
+    >
+      {show(pDraw) ? formatPct(pDraw, 0) : ''}
+    </div>
+    <div
+      class="flex items-center justify-center bg-rose-800/60 text-rose-200 transition-all"
+      style={`width:${barW(pAway)}`}
+    >
+      {show(pAway) ? formatPct(pAway, 0) : ''}
+    </div>
+  </div>
+
+  <!-- Bottom: kickoff + CTA -->
+  <div class="flex items-center justify-between text-[11px] text-slate-600 gap-2">
+    <span class="truncate">
+      {kickoffFormatted ?? '—'}{city ? ` · ${city}` : ''}
+    </span>
+    <span class="text-slate-700 group-hover:text-slate-400 transition-colors shrink-0">
+      Analysis →
+    </span>
+  </div>
+</a>

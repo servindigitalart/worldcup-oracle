@@ -1,0 +1,139 @@
+---
+import SignalBadge from './SignalBadge.astro';
+import { formatOdds, formatPct } from '../utils/format';
+
+interface Props {
+  match_id: string;
+  homeLabel: string;
+  awayLabel: string;
+  group: string;
+  kickoffFormatted: string | null;
+  venue: string | null;
+  city: string | null;
+  pHome: number;
+  pDraw: number;
+  pAway: number;
+  signalLevel: string;
+  hasMarketData: boolean;
+  reason?: string | null;
+}
+
+const {
+  match_id,
+  homeLabel,
+  awayLabel,
+  group,
+  kickoffFormatted,
+  venue,
+  city,
+  pHome,
+  pDraw,
+  pAway,
+  signalLevel,
+  hasMarketData,
+  reason,
+} = Astro.props;
+
+let dominantLabel: string;
+let dominantProb: number;
+let dominantType: 'home' | 'draw' | 'away';
+
+if (pHome >= pDraw && pHome >= pAway) {
+  dominantLabel = homeLabel;
+  dominantProb  = pHome;
+  dominantType  = 'home';
+} else if (pAway >= pHome && pAway >= pDraw) {
+  dominantLabel = awayLabel;
+  dominantProb  = pAway;
+  dominantType  = 'away';
+} else {
+  dominantLabel = 'Draw';
+  dominantProb  = pDraw;
+  dominantType  = 'draw';
+}
+
+const probColorClass =
+  dominantType === 'home' ? 'text-blue-300'
+  : dominantType === 'away' ? 'text-rose-300'
+  : 'text-slate-200';
+
+const barW = (v: number) => Math.max(v * 100, 0.5).toFixed(2) + '%';
+---
+
+<a
+  href={`/match/${match_id}`}
+  class="group block rounded-2xl border border-slate-800/70 bg-gradient-to-br from-slate-900/80 via-slate-900/60 to-slate-900/40 hover:border-slate-700 transition-all duration-200 p-6"
+>
+  <!-- Header row -->
+  <div class="flex items-center justify-between gap-3 mb-5">
+    <span class="text-[10px] font-semibold uppercase tracking-widest text-slate-500">
+      Group {group}
+    </span>
+    <SignalBadge level={signalLevel} size="md" />
+  </div>
+
+  <!-- Teams -->
+  <h3 class="text-xl font-bold text-slate-100 tracking-tight mb-1 flex items-center gap-2.5 flex-wrap">
+    <span class="truncate">{homeLabel}</span>
+    <span class="text-slate-600 font-normal text-sm shrink-0">vs</span>
+    <span class="truncate">{awayLabel}</span>
+  </h3>
+
+  {kickoffFormatted && (
+    <p class="text-xs text-slate-500 mb-5">
+      {kickoffFormatted}{venue ? ` · ${venue}` : ''}{city ? `, ${city}` : ''}
+    </p>
+  )}
+
+  <!-- Dominant probability -->
+  <div class="mb-5">
+    <div class="text-[10px] uppercase tracking-widest text-slate-600 mb-1.5">
+      Model probability
+    </div>
+    <div class:list={['text-4xl font-bold tabular-nums tracking-tight', probColorClass]}>
+      {formatPct(dominantProb)}
+    </div>
+    <div class="text-xs text-slate-500 mt-1">
+      {dominantLabel} · Fair odds {formatOdds(dominantProb)}
+    </div>
+  </div>
+
+  <!-- Probability bar -->
+  <div class="flex h-2 rounded-full overflow-hidden mb-3">
+    <div class="bg-blue-700/70" style={`width:${barW(pHome)}`} />
+    <div class="bg-slate-600/70" style={`width:${barW(pDraw)}`} />
+    <div class="bg-rose-800/60" style={`width:${barW(pAway)}`} />
+  </div>
+
+  <!-- Three-way breakdown -->
+  <div class="grid grid-cols-3 gap-2 mb-5 text-xs">
+    <div>
+      <div class="text-slate-600 mb-0.5 truncate">{homeLabel}</div>
+      <div class="text-slate-300 font-semibold tabular-nums">{formatPct(pHome)}</div>
+    </div>
+    <div class="text-center">
+      <div class="text-slate-600 mb-0.5">Draw</div>
+      <div class="text-slate-300 font-semibold tabular-nums">{formatPct(pDraw)}</div>
+    </div>
+    <div class="text-right">
+      <div class="text-slate-600 mb-0.5 truncate">{awayLabel}</div>
+      <div class="text-slate-300 font-semibold tabular-nums">{formatPct(pAway)}</div>
+    </div>
+  </div>
+
+  {reason && (
+    <p class="text-xs text-slate-500 leading-relaxed mb-4 border-t border-slate-800/50 pt-3">
+      {reason}
+    </p>
+  )}
+
+  <!-- CTA -->
+  <div class="flex items-center justify-between pt-1">
+    <span class="text-[11px] text-slate-700">
+      {hasMarketData ? 'Market odds available' : 'Model only — no market benchmark yet'}
+    </span>
+    <span class="text-sm text-blue-400 group-hover:text-blue-300 transition-colors font-medium shrink-0">
+      View analysis →
+    </span>
+  </div>
+</a>
