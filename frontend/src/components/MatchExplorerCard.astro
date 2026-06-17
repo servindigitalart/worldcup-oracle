@@ -1,0 +1,111 @@
+---
+import SignalBadge from './SignalBadge.astro';
+import { formatPct, formatOdds } from '../utils/format';
+
+interface Props {
+  match_id: string;
+  homeLabel: string;
+  awayLabel: string;
+  kickoffFormatted: string | null;
+  venue: string | null;
+  city: string | null;
+  pHome: number;
+  pDraw: number;
+  pAway: number;
+  signalLevel: string;
+  isToday: boolean;
+}
+
+const {
+  match_id,
+  homeLabel,
+  awayLabel,
+  kickoffFormatted,
+  venue,
+  city,
+  pHome,
+  pDraw,
+  pAway,
+  signalLevel,
+  isToday,
+} = Astro.props;
+
+const barW  = (v: number) => Math.max(v * 100, 0.5).toFixed(2) + '%';
+const showN = (v: number) => v >= 0.22;
+---
+
+<a
+  href={`/match/${match_id}`}
+  data-teams={`${homeLabel} ${awayLabel}`.toLowerCase()}
+  class="group block rounded-xl border border-slate-800/80 bg-slate-900/60 hover:border-slate-700/80 hover:bg-slate-900/90 transition-all duration-150 p-4"
+>
+  <!-- Row 1: kickoff info + signal badge -->
+  <div class="flex items-start justify-between gap-2 mb-3.5">
+    <div class="flex items-center gap-2 flex-wrap min-w-0">
+      {isToday && (
+        <span class="text-[10px] font-semibold uppercase tracking-wider bg-cyan-950/60 text-cyan-400 border border-cyan-800/50 px-1.5 py-0.5 rounded shrink-0">
+          Today
+        </span>
+      )}
+      <span class="text-[11px] text-slate-500 truncate">
+        {kickoffFormatted ?? '—'}
+      </span>
+    </div>
+    <SignalBadge level={signalLevel} size="sm" />
+  </div>
+
+  <!-- Row 2: teams -->
+  <div class="flex items-center justify-between gap-2 mb-4">
+    <span class="text-sm font-semibold text-slate-100 flex-1 truncate leading-tight">{homeLabel}</span>
+    <span class="text-[11px] text-slate-700 shrink-0 font-medium">vs</span>
+    <span class="text-sm font-semibold text-slate-100 flex-1 text-right truncate leading-tight">{awayLabel}</span>
+  </div>
+
+  <!-- Probability bar -->
+  <div class="flex h-4 rounded overflow-hidden mb-2">
+    <div
+      class="bg-blue-700/70 flex items-center justify-center text-[9px] font-bold text-blue-100"
+      style={`width:${barW(pHome)}`}
+    >
+      {showN(pHome) ? formatPct(pHome, 0) : ''}
+    </div>
+    <div
+      class="bg-slate-600/70 flex items-center justify-center text-[9px] font-bold text-slate-300"
+      style={`width:${barW(pDraw)}`}
+    >
+      {showN(pDraw) ? formatPct(pDraw, 0) : ''}
+    </div>
+    <div
+      class="bg-rose-800/60 flex items-center justify-center text-[9px] font-bold text-rose-200"
+      style={`width:${barW(pAway)}`}
+    >
+      {showN(pAway) ? formatPct(pAway, 0) : ''}
+    </div>
+  </div>
+
+  <!-- Three-way probs + fair odds -->
+  <div class="grid grid-cols-3 text-[10px] mb-3.5 tabular-nums">
+    <div class="text-slate-500">
+      {formatPct(pHome)}
+      <span class="text-slate-700 ml-0.5">{formatOdds(pHome)}</span>
+    </div>
+    <div class="text-center text-slate-500">
+      {formatPct(pDraw)}
+      <span class="text-slate-700 ml-0.5">{formatOdds(pDraw)}</span>
+    </div>
+    <div class="text-right text-slate-500">
+      {formatPct(pAway)}
+      <span class="text-slate-700 ml-0.5">{formatOdds(pAway)}</span>
+    </div>
+  </div>
+
+  <!-- Row 3: venue + CTA -->
+  <div class="flex items-center justify-between text-[11px] gap-2">
+    <span class="text-slate-700 truncate">
+      {venue ?? ''}{city ? `, ${city}` : ''}
+    </span>
+    <span class="text-slate-700 group-hover:text-slate-400 transition-colors shrink-0">
+      Analysis →
+    </span>
+  </div>
+</a>

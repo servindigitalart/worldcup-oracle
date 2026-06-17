@@ -1,203 +1,346 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import ProbBar from '../components/ProbBar.astro';
-import Disclaimer from '../components/Disclaimer.astro';
-import EmptyState from '../components/EmptyState.astro';
+import MatchExplorerCard from '../components/MatchExplorerCard.astro';
+import SignalFeedCard from '../components/SignalFeedCard.astro';
+import TrustStrip from '../components/TrustStrip.astro';
 import { loadJson } from '../utils/load';
-import { formatTeamName, formatKickoff, formatPct } from '../utils/format';
-import type { BlendedPrediction, FixtureScheduleEntry, MatchBettingCard } from '../types';
+import { formatTeamName, formatKickoff } from '../utils/format';
+import type {
+  BlendedPrediction,
+  FixtureScheduleEntry,
+  MarketComparison,
+  Recommendation,
+  SimSummary,
+} from '../types';
 
 interface FixtureSource {
   source: string | null;
   is_official: boolean;
   is_placeholder: boolean;
-  description: string;
   total_fixtures: number;
   total_groups: number;
 }
 
-const predictions    = loadJson<BlendedPrediction[]>('blended_predictions.json', []);
-const fixtureSource  = loadJson<FixtureSource>('fixture_source.json', {
+interface EnrichedMatch {
+  match_id: string;
+  homeLabel: string;
+  awayLabel: string;
+  group: string;
+  pHome: number;
+  pDraw: number;
+  pAway: number;
+  hasMarketData: boolean;
+  signalLevel: string;
+  kickoffAt: string | null;
+  kickoffFormatted: string | null;
+  venue: string | null;
+  city: string | null;
+  isToday: boolean;
+  isUpcoming: boolean;
+}
+
+const NOW  = new Date();
+const TODAY = NOW.toISOString().slice(0, 10);
+
+const predictions   = loadJson<BlendedPrediction[]>('blended_predictions.json', []);
+const comparisons   = loadJson<MarketComparison[]>('market_comparison.json', []);
+const schedule      = loadJson<Record<string, FixtureScheduleEntry>>('fixture_schedule.json', {});
+const recs          = loadJson<Recommendation[]>('recommendations.json', []);
+const sim           = loadJson<SimSummary | null>('sim_summary.json', null);
+const fixtureSource = loadJson<FixtureSource>('fixture_source.json', {
   source: null,
   is_official: false,
   is_placeholder: true,
-  description: '',
   total_fixtures: 0,
   total_groups: 0,
 });
-const schedule = loadJson<Record<string, FixtureScheduleEntry>>('fixture_schedule.json', {});
-const bettingCards = loadJson<MatchBettingCard[]>('match_betting_cards.json', []);
 
-// Index betting cards by match_id for quick lookup
-const signalByMid: Record<string, MatchBettingCard> = {};
-for (const card of bettingCards) {
-  signalByMid[card.match_id] = card;
+const recByMid: Record<string, Recommendation> = {};
+for (const r of recs) { recByMid[r.match_id] = r; }
+
+const compByMid: Record<string, MarketComparison> = {};
+for (const c of comparisons) { compByMid[c.match_id] = c; }
+
+function getSignalLevel(
+  rec: Recommendation | undefined,
+  pHome: number,
+  pDraw: number,
+  pAway: number,
+): string {
+  if (rec?.recommendation_type === 'model_gap_detected') return 'model_gap_detected';
+  if (rec?.recommendation_type === 'watch')              return 'watch';
+  if (rec?.recommendation_type === 'avoid')              return 'avoid';
+  if (Math.max(pHome, pDraw, pAway) >= 0.45)            return 'model_probability_only';
+  return 'no_signal';
 }
 
-// Group matches by group letter
-const byGroup: Record<string, BlendedPrediction[]> = {};
-for (const m of predictions) {
+const enriched: EnrichedMatch[] = predictions.map((pred) => {
+  const fix        = schedule[`${pred.home_team}_vs_${pred.away_team}`] ?? null;
+  const rec        = recByMid[pred.match_id];
+  const comp       = compByMid[pred.match_id];
+  const kickoffAt  = fix?.kickoff_at ?? null;
+  const kickoffDate = kickoffAt ? kickoffAt.slice(0, 10) : null;
+  const pHome = pred.blend_home;
+  const pDraw = pred.blend_draw;
+  const pAway = pred.blend_away;
+  return {
+    match_id:        pred.match_id,
+    homeLabel:       formatTeamName(pred.home_team),
+    awayLabel:       formatTeamName(pred.away_team),
+    group:           pred.group,
+    pHome,
+    pDraw,
+    pAway,
+    hasMarketData:   comp?.has_market_data ?? false,
+    signalLevel:     getSignalLevel(rec, pHome, pDraw, pAway),
+    kickoffAt,
+    kickoffFormatted: kickoffAt ? formatKickoff(kickoffAt) : null,
+    venue:           fix?.venue ?? null,
+    city:            fix?.city ?? null,
+    isToday:         kickoffDate === TODAY,
+    isUpcoming:      kickoffAt != null && new Date(kickoffAt) > NOW,
+  };
+});
+
+const byGroup: Record<string, EnrichedMatch[]> = {};
+for (const m of enriched) {
   if (!byGroup[m.group]) byGroup[m.group] = [];
   byGroup[m.group].push(m);
 }
-const groups = Object.keys(byGroup).sort();
+const groupKeys = Object.keys(byGroup).sort();
 
-const isPlaceholder = fixtureSource.is_placeholder !== false;
-const sourceLabel   = fixtureSource.source ?? 'unknown';
+const sortByKickoff = (a: EnrichedMatch, b: EnrichedMatch) =>
+  (a.kickoffAt ?? '').localeCompare(b.kickoffAt ?? '');
 
-function getSchedule(home: string, away: string): FixtureScheduleEntry | null {
-  return schedule[`${home}_vs_${away}`] ?? schedule[`${away}_vs_${home}`] ?? null;
-}
+const todayMatches    = enriched.filter(m => m.isToday).sort(sortByKickoff);
+const upcomingMatches = enriched.filter(m => m.isUpcoming && !m.isToday).sort(sortByKickoff);
+const featuredMatches = [...todayMatches, ...upcomingMatches].slice(0, 6);
+
+const totalTeams = new Set(enriched.flatMap(m => [m.homeLabel, m.awayLabel])).size;
+const isOfficial = fixtureSource.is_official === true;
 ---
-<Layout title="Matches" description="Group-stage match probabilities">
-  <div class="space-y-8">
 
-    <div>
-      <h1 class="text-3xl font-bold text-slate-100">Group Stage Matches</h1>
-      <p class="mt-2 text-slate-400">
-        Blended probabilities (80% market / 20% model by default).
-        Matches without market data use model-only predictions.
-      </p>
+<Layout title="Matches · Group Stage" description="Explore all 72 group-stage fixtures with model probabilities and betting signals for the 2026 World Cup.">
+
+  <!-- Hero -->
+  <div class="mb-10">
+    <div class="flex items-center gap-2 mb-3">
+      {isOfficial && (
+        <span class="text-[10px] font-semibold uppercase tracking-widest bg-emerald-950/60 text-emerald-400 border border-emerald-800/50 px-2 py-0.5 rounded">
+          Official FIFA 2026
+        </span>
+      )}
+      <span class="text-[10px] font-semibold uppercase tracking-widest text-slate-600">
+        Group Stage
+      </span>
     </div>
+    <h1 class="text-3xl sm:text-4xl font-bold text-slate-100 tracking-tight mb-2">
+      World Cup 2026 Fixtures
+    </h1>
+    <p class="text-slate-500 text-sm mb-6 max-w-lg">
+      Model probabilities for every group-stage match. No market benchmark yet — all signals are model-only.
+    </p>
 
-    <!-- Fixture data status banner -->
-    {isPlaceholder ? (
-      <div class="rounded-xl border border-amber-800/50 bg-amber-950/40 px-4 py-3 text-sm">
-        <p class="font-semibold text-amber-400">Placeholder fixture data</p>
-        <p class="mt-1 text-amber-300/80">
-          Groups and matchups are derived from a placeholder draw, not the official
-          FIFA 2026 schedule. Source: <code class="text-amber-200">{sourceLabel}</code>.
-          Probabilities will update automatically once <code class="text-amber-200">data/seed/wc2026_fixtures.json</code> is
-          replaced with official data and the pipeline is rerun.
-        </p>
-      </div>
-    ) : (
-      <div class="rounded-xl border border-emerald-800/50 bg-emerald-950/40 px-4 py-3 text-sm">
-        <p class="font-semibold text-emerald-400">Official FIFA 2026 fixture data</p>
-        <p class="mt-1 text-emerald-300/80">
-          Groups and kickoff times reflect the official FIFA 2026 World Cup schedule.
-          Source: <code class="text-emerald-200">{sourceLabel}</code>.
-          {fixtureSource.total_fixtures > 0 && (
-            <> {fixtureSource.total_fixtures} group-stage fixtures across {fixtureSource.total_groups} groups.</>
-          )}
-        </p>
-      </div>
-    )}
-
-    <Disclaimer compact />
-
-    <!-- Legend -->
-    <div class="flex flex-wrap gap-4 text-xs text-slate-500">
-      <span class="flex items-center gap-1.5">
-        <span class="w-3 h-3 rounded-sm bg-blue-700 inline-block"></span> Home win
+    <!-- Stat pills -->
+    <div class="flex flex-wrap gap-2.5">
+      <span class="inline-flex items-center gap-1.5 text-xs text-slate-400 bg-slate-800/60 border border-slate-700/50 px-3 py-1.5 rounded-full">
+        <span class="font-semibold text-slate-200">{enriched.length}</span> Matches
       </span>
-      <span class="flex items-center gap-1.5">
-        <span class="w-3 h-3 rounded-sm bg-slate-600 inline-block"></span> Draw
+      <span class="inline-flex items-center gap-1.5 text-xs text-slate-400 bg-slate-800/60 border border-slate-700/50 px-3 py-1.5 rounded-full">
+        <span class="font-semibold text-slate-200">{groupKeys.length}</span> Groups
       </span>
-      <span class="flex items-center gap-1.5">
-        <span class="w-3 h-3 rounded-sm bg-rose-800 inline-block"></span> Away win
+      <span class="inline-flex items-center gap-1.5 text-xs text-slate-400 bg-slate-800/60 border border-slate-700/50 px-3 py-1.5 rounded-full">
+        <span class="font-semibold text-slate-200">{totalTeams}</span> Teams
       </span>
-      <span class="text-slate-600">· Probabilities are neutral-venue estimates.</span>
+      <span class="inline-flex items-center gap-1.5 text-xs text-slate-500 bg-slate-800/40 border border-slate-800/50 px-3 py-1.5 rounded-full">
+        Model-only signals
+      </span>
     </div>
+  </div>
 
-    {predictions.length === 0 ? (
-      <EmptyState
-        title="No predictions available"
-        message="Run the blend pipeline to generate match probabilities."
-        command="make blend"
+  <!-- Group Navigator -->
+  <nav aria-label="Jump to group" class="mb-8">
+    <div class="flex flex-wrap gap-2 items-center">
+      <span class="text-[10px] uppercase tracking-widest text-slate-600 mr-1">Jump to</span>
+      {groupKeys.map((g) => (
+        <a
+          href={`#group-${g.toLowerCase()}`}
+          class="group-nav-pill text-xs font-semibold px-3 py-1.5 rounded-full border border-slate-700/60 text-slate-400 bg-slate-800/50 hover:border-slate-600 hover:text-slate-200 hover:bg-slate-800 transition-all duration-150"
+        >
+          {g}
+        </a>
+      ))}
+    </div>
+  </nav>
+
+  <!-- Search -->
+  <div class="mb-8">
+    <div class="relative max-w-sm">
+      <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-600 text-xs pointer-events-none">
+        &#x2315;
+      </span>
+      <input
+        id="team-search"
+        type="search"
+        placeholder="Search teams…"
+        autocomplete="off"
+        class="w-full bg-slate-900/60 border border-slate-700/60 text-slate-300 placeholder:text-slate-600 text-sm rounded-lg pl-8 pr-3 py-2 focus:outline-none focus:border-slate-500 focus:ring-1 focus:ring-slate-600/50 transition-colors"
       />
-    ) : (
-      <div class="space-y-10">
-        {groups.map((g) => (
-          <section>
-            <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4">
-              Group {g}
-              {isPlaceholder && (
-                <span class="ml-2 text-xs font-normal text-amber-600 normal-case tracking-normal">
-                  placeholder
-                </span>
-              )}
-            </h2>
-            <div class="space-y-3">
-              {byGroup[g].map((m) => {
-                const fix = getSchedule(m.home_team, m.away_team);
-                const card = signalByMid[m.match_id];
-                const topSig = card?.top_signals?.[0];
-                const signalLevel = topSig?.signal_level;
-                const signalBadgeClass = signalLevel === 'strong_signal'   ? 'bg-blue-900/50 text-blue-300 border-blue-700/50'
-                                       : signalLevel === 'moderate_signal' ? 'bg-indigo-900/50 text-indigo-300 border-indigo-700/50'
-                                       : signalLevel === 'watch'           ? 'bg-amber-900/50 text-amber-300 border-amber-700/50'
-                                       : '';
-                const hasSignal = signalLevel && ['strong_signal', 'moderate_signal', 'watch'].includes(signalLevel);
-                const selLabel = {
-                  home_win: 'Home win', draw: 'Draw', away_win: 'Away win',
-                  home_or_draw: 'Home/Draw', home_or_away: 'Home/Away', draw_or_away: 'Draw/Away',
-                  yes: 'BTTS yes', no: 'BTTS no', over: 'Over', under: 'Under',
-                };
-                return (
-                  <div class="bg-slate-900 border border-slate-800 rounded-xl px-4 py-3">
-                    <div class="flex items-start justify-between gap-2 mb-2">
-                      <div class="flex-1 min-w-0">
-                        <ProbBar
-                          home={m.blend_home}
-                          draw={m.blend_draw}
-                          away={m.blend_away}
-                          homeLabel={formatTeamName(m.home_team)}
-                          awayLabel={formatTeamName(m.away_team)}
-                        />
-                      </div>
-                      {card && (
-                        <a
-                          href={`/match/${m.match_id}`}
-                          class="text-xs text-slate-500 hover:text-blue-400 shrink-0 transition-colors"
-                        >
-                          detail →
-                        </a>
-                      )}
-                    </div>
-                    <div class="flex justify-between text-xs text-slate-600">
-                      <span>{(m.blend_home * 100).toFixed(1)}%</span>
-                      <span class="text-slate-500">
-                        {m.has_market_data ? 'blend' : 'model only'}
-                      </span>
-                      <span>{(m.blend_away * 100).toFixed(1)}%</span>
-                    </div>
-                    {hasSignal && topSig && (
-                      <div class="mt-2 flex items-center gap-2">
-                        <span class:list={[
-                          'text-xs px-1.5 py-0.5 rounded border font-medium',
-                          signalBadgeClass,
-                        ]}>
-                          {signalLevel === 'watch' ? 'Watch' : 'Model edge'}
-                        </span>
-                        <span class="text-xs text-slate-500">
-                          {selLabel[topSig.selection] ?? topSig.selection}
-                          {' · '}{formatPct(topSig.probability)}
-                          {topSig.market_gap != null && (
-                            <span class={topSig.market_gap > 0 ? 'text-blue-400' : 'text-red-400'}>
-                              {' '}({topSig.market_gap > 0 ? '+' : ''}{formatPct(topSig.market_gap, 1)})
-                            </span>
-                          )}
-                        </span>
-                      </div>
-                    )}
-                    {fix && (fix.kickoff_at || fix.venue) && (
-                      <div class="mt-2 text-xs text-slate-600 flex flex-wrap gap-x-3">
-                        {fix.kickoff_at && (
-                          <span>{formatKickoff(fix.kickoff_at)}</span>
-                        )}
-                        {fix.venue && fix.city && (
-                          <span class="text-slate-700">{fix.venue}, {fix.city}</span>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </section>
+    </div>
+    <p id="search-empty" class="hidden mt-3 text-sm text-slate-600">No matches found for that team name.</p>
+  </div>
+
+  <!-- Featured Matches -->
+  {featuredMatches.length > 0 && (
+    <section class="mb-10" id="featured">
+      <h2 class="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-4">
+        {todayMatches.length > 0 ? 'Today & Upcoming' : 'Next Fixtures'}
+      </h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        {featuredMatches.map((m) => (
+          <SignalFeedCard
+            match_id={m.match_id}
+            homeLabel={m.homeLabel}
+            awayLabel={m.awayLabel}
+            group={m.group}
+            kickoffFormatted={m.kickoffFormatted}
+            city={m.city}
+            pHome={m.pHome}
+            pDraw={m.pDraw}
+            pAway={m.pAway}
+            signalLevel={m.signalLevel}
+            hasMarketData={m.hasMarketData}
+          />
         ))}
       </div>
-    )}
+    </section>
+  )}
+
+  <!-- Group Sections A-L -->
+  <div class="space-y-4" id="group-sections">
+    {groupKeys.map((g) => (
+      <details id={`group-${g.toLowerCase()}`} open class="group-section rounded-xl border border-slate-800/70 overflow-hidden">
+        <summary class="flex items-center justify-between px-4 py-3.5 bg-slate-900/80 cursor-pointer select-none hover:bg-slate-900 transition-colors list-none">
+          <div class="flex items-center gap-3">
+            <span class="text-[10px] font-bold uppercase tracking-widest text-slate-500 bg-slate-800/60 border border-slate-700/50 px-2 py-0.5 rounded">
+              Group {g}
+            </span>
+            <span class="text-xs text-slate-600">
+              {byGroup[g].length} matches
+            </span>
+          </div>
+          <span class="group-chevron text-slate-600 text-xs transition-transform duration-200">▾</span>
+        </summary>
+
+        <div class="p-4 pt-3">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {byGroup[g].map((m) => (
+              <div data-match-wrap data-teams={`${m.homeLabel} ${m.awayLabel}`.toLowerCase()}>
+                <MatchExplorerCard
+                  match_id={m.match_id}
+                  homeLabel={m.homeLabel}
+                  awayLabel={m.awayLabel}
+                  kickoffFormatted={m.kickoffFormatted}
+                  venue={m.venue}
+                  city={m.city}
+                  pHome={m.pHome}
+                  pDraw={m.pDraw}
+                  pAway={m.pAway}
+                  signalLevel={m.signalLevel}
+                  isToday={m.isToday}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </details>
+    ))}
   </div>
+
+  <div class="mt-16">
+    <TrustStrip nSims={sim?.n_sims ?? 10000} goalsModel={sim?.goals_model_version ?? 'dixon-coles'} />
+  </div>
+
 </Layout>
+
+<style is:global>
+  details.group-section[open] .group-chevron {
+    transform: rotate(0deg);
+  }
+  details.group-section:not([open]) .group-chevron {
+    transform: rotate(-90deg);
+  }
+  details.group-section > summary::-webkit-details-marker,
+  details.group-section > summary::marker {
+    display: none;
+    content: '';
+  }
+</style>
+
+<script>
+  // @ts-nocheck
+  // Mobile: collapse groups after the first two on small screens
+  if (typeof window !== 'undefined' && window.innerWidth < 640) {
+    const groups = document.querySelectorAll('.group-section');
+    groups.forEach(function(el, i) {
+      if (i >= 2) el.removeAttribute('open');
+    });
+  }
+
+  // Team search
+  var searchInput = document.getElementById('team-search');
+  var searchEmpty = document.getElementById('search-empty');
+  var groupSections = document.querySelectorAll('.group-section');
+
+  function applySearch(query) {
+    var q = query.toLowerCase().trim();
+    var totalVisible = 0;
+
+    groupSections.forEach(function(section) {
+      var wraps = section.querySelectorAll('[data-match-wrap]');
+      var sectionVisible = 0;
+
+      wraps.forEach(function(wrap) {
+        var teams = wrap.getAttribute('data-teams') || '';
+        var show = !q || teams.includes(q);
+        wrap.hidden = !show;
+        if (show) sectionVisible++;
+      });
+
+      totalVisible += sectionVisible;
+
+      if (q) {
+        if (sectionVisible > 0) {
+          section.setAttribute('open', '');
+        }
+        section.hidden = sectionVisible === 0;
+      } else {
+        section.hidden = false;
+      }
+    });
+
+    if (searchEmpty) {
+      searchEmpty.hidden = !q || totalVisible > 0;
+    }
+  }
+
+  if (searchInput) {
+    searchInput.addEventListener('input', function(e) {
+      applySearch(e.target.value);
+    });
+  }
+
+  // Smooth scroll for group nav pills
+  document.querySelectorAll('.group-nav-pill').forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      var href = link.getAttribute('href');
+      if (!href) return;
+      var target = document.querySelector(href);
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        target.setAttribute('open', '');
+      }
+    });
+  });
+</script>
