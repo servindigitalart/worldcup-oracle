@@ -1,0 +1,60 @@
+---
+import { formatTeamName } from '../utils/format';
+
+interface Props {
+  rank: number;
+  team: string;
+  group: string;
+  points: number;
+  gd: number;
+  gf: number;
+  qualifies: boolean;
+}
+
+const { rank, team, group, points, gd, gf, qualifies } = Astro.props;
+const gdStr = gd > 0 ? '+' + String(gd) : String(gd);
+const gdColor = gd > 0 ? 'text-emerald-400' : gd < 0 ? 'text-red-400' : 'text-slate-500';
+---
+
+<div class={`rounded-xl border p-4 ${
+  qualifies
+    ? 'border-emerald-800/50 bg-emerald-950/15'
+    : 'border-slate-800/50 bg-slate-900/40'
+}`}>
+  <div class="flex items-center justify-between mb-2.5">
+    <div class="flex items-center gap-2">
+      <span class={`text-sm font-bold tabular-nums ${qualifies ? 'text-emerald-400' : 'text-slate-600'}`}>
+        #{rank}
+      </span>
+      <span class="text-[10px] font-semibold uppercase tracking-wider text-slate-600 bg-slate-800/60 border border-slate-700/40 px-1.5 py-0.5 rounded">
+        Grp {group}
+      </span>
+    </div>
+    <span class={`text-[10px] font-semibold px-2 py-0.5 rounded-full border uppercase tracking-wider ${
+      qualifies
+        ? 'bg-emerald-950/50 text-emerald-400 border-emerald-800/60'
+        : 'bg-slate-800/50 text-slate-500 border-slate-700/50'
+    }`}>
+      {qualifies ? 'Advances' : 'Out'}
+    </span>
+  </div>
+
+  <div class={`text-sm font-bold mb-3 truncate ${qualifies ? 'text-slate-100' : 'text-slate-500'}`}>
+    {formatTeamName(team)}
+  </div>
+
+  <div class="grid grid-cols-3 text-center">
+    <div>
+      <div class="text-[9px] text-slate-700 uppercase tracking-wider mb-0.5">Pts</div>
+      <div class={`text-sm font-bold tabular-nums ${qualifies ? 'text-slate-200' : 'text-slate-600'}`}>{points}</div>
+    </div>
+    <div>
+      <div class="text-[9px] text-slate-700 uppercase tracking-wider mb-0.5">GD</div>
+      <div class={`text-sm font-semibold tabular-nums ${gdColor}`}>{gdStr}</div>
+    </div>
+    <div>
+      <div class="text-[9px] text-slate-700 uppercase tracking-wider mb-0.5">GF</div>
+      <div class={`text-sm tabular-nums ${qualifies ? 'text-slate-400' : 'text-slate-600'}`}>{gf}</div>
+    </div>
+  </div>
+</div>

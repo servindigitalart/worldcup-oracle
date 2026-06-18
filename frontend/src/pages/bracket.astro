@@ -1,102 +1,110 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import TrustStrip from '../components/TrustStrip.astro';
+import RelatedLinks from '../components/RelatedLinks.astro';
 import { loadJson } from '../utils/load';
-import { formatTeamName } from '../utils/format';
-import type { BracketStructure, BracketMatch, KnockoutProjection } from '../types';
+import { formatTeamName, formatPct } from '../utils/format';
+import type { KnockoutProjection, TeamProb, SimSummary } from '../types';
 
-const structure  = loadJson<BracketStructure | null>('bracket_structure.json', null);
 const projection = loadJson<KnockoutProjection | null>('knockout_projection.json', null);
+const teams      = loadJson<TeamProb[]>('team_probs.json', []);
+const sim        = loadJson<SimSummary | null>('sim_summary.json', null);
 
-const hasData = structure !== null && structure.rounds?.length > 0;
-const r32Round = structure?.rounds?.find(r => r.round_name === 'R32');
-const r32Matches: BracketMatch[] = r32Round?.matches ?? [];
+const hasData = projection !== null && (projection.r32_matches?.length ?? 0) > 0;
 
-const projMap: Record<string, number> = {};
-if (projection?.r32_matches) {
-  for (const m of projection.r32_matches) {
-    if (m.match_id && m.p_a_wins != null) {
-      projMap[m.match_id + '_a'] = m.p_a_wins;
-      projMap[m.match_id + '_b'] = m.p_b_wins ?? (1 - m.p_a_wins);
-    }
-  }
+const champProb: Record<string, number> = {};
+for (const t of teams) { champProb[t.team] = t.champion; }
+
+const matches = projection?.r32_matches ?? [];
+const upperHalf = matches.slice(0, 8);
+const lowerHalf = matches.slice(8, 16);
+
+// Top 8 championship contenders for the bottom panel
+const sorted = [...teams].sort((a, b) => b.champion - a.champion);
+const top5 = sorted.slice(0, 5);
+const champMax = sorted.length > 0 ? sorted[0].champion : 1;
+
+const nSims = sim?.n_sims ?? 10000;
+const goalsModel = sim?.goals_model_version ?? 'dixon-coles';
+
+function champW(p: number): string {
+  return 'width:' + ((p / champMax) * 100).toFixed(1) + '%';
 }
-
-function fmtPct(v: number | null | undefined): string {
-  if (v == null || !isFinite(v)) return '—';
-  return (v * 100).toFixed(1) + '%';
-}
-
-function matchClass(pWin: number | null | undefined): string {
-  if (pWin == null) return 'text-slate-400';
-  if (pWin >= 0.65) return 'text-emerald-400 font-medium';
-  if (pWin >= 0.50) return 'text-slate-300';
-  return 'text-slate-500';
-}
-
-const upperHalf = r32Matches.slice(0, 8);
-const lowerHalf = r32Matches.slice(8, 16);
 ---
 
-<Layout title="Bracket" description="Official FIFA 2026 knockout bracket — R32 pairings and Elo-based win projections.">
-  <h1 class="text-2xl font-bold text-white mb-1">Knockout Bracket</h1>
-  <p class="text-slate-400 text-sm mb-6">
-    Official FIFA 2026 cross-bracket R32 pairings.
-    Win probabilities are Elo-based estimates at neutral venue.
-  </p>
+<Layout title="Knockout Bracket" description="Official FIFA 2026 knockout bracket — projected Round of 32 matchups with championship context.">
+
+  <!-- Hero -->
+  <div class="mb-10">
+    <span class="text-[10px] font-semibold uppercase tracking-widest text-slate-600 mb-3 block">Knockout Stage</span>
+    <h1 class="text-3xl sm:text-4xl font-bold text-slate-100 tracking-tight mb-2">Projected Bracket</h1>
+    <p class="text-slate-500 text-sm max-w-lg">
+      Official FIFA 2026 Round of 32 pairings. Each team's championship probability gives context for strength going in.
+    </p>
+  </div>
 
   {!hasData && (
-    <div class="rounded-lg border border-slate-700 bg-slate-900 px-6 py-10 text-center">
-      <p class="text-slate-400 text-sm">No bracket data yet.</p>
-      <p class="text-slate-500 text-xs mt-2">
-        Run <code class="font-mono">make bracket</code> or
-        <code class="font-mono">make refresh</code> to generate bracket artifacts.
-      </p>
+    <div class="rounded-xl border border-slate-700/60 bg-slate-900/60 px-6 py-10 text-center">
+      <p class="text-slate-400">Bracket data not yet available.</p>
+      <p class="text-slate-600 text-sm mt-1">Simulation results will appear here once the pipeline runs.</p>
     </div>
   )}
 
   {hasData && (
     <>
-      {structure?.bracket_note && (
-        <div class="rounded-lg border border-slate-700 bg-slate-800/50 px-4 py-3 mb-6">
-          <p class="text-slate-400 text-xs">{structure.bracket_note}</p>
+      {projection?.bracket_note && (
+        <div class="rounded-xl border border-slate-700/50 bg-slate-900/50 px-4 py-3 mb-8">
+          <p class="text-slate-500 text-xs leading-relaxed">{projection.bracket_note}</p>
         </div>
       )}
 
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        <!-- Upper bracket half -->
+      <!-- R32 Bracket -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
+
+        <!-- Upper Half -->
         <div>
-          <h2 class="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-3">
+          <h2 class="text-xs font-bold uppercase tracking-widest text-slate-500 mb-4">
             Upper Half — Groups A–F
           </h2>
           <div class="space-y-2">
-            {upperHalf.map((m) => {
-              const pA = projMap[m.match_id + '_a'];
-              const pB = projMap[m.match_id + '_b'];
+            {upperHalf.map((m, idx) => {
+              const pA = champProb[m.team_a ?? ''] ?? 0;
+              const pB = champProb[m.team_b ?? ''] ?? 0;
+              const aFavored = pA >= pB;
+              const nameA = m.team_a ? formatTeamName(m.team_a) : m.slot_a;
+              const nameB = m.team_b ? formatTeamName(m.team_b) : m.slot_b;
               return (
-                <div class="rounded-lg border border-slate-700 bg-slate-900 p-3">
-                  <div class="flex items-center justify-between gap-2">
-                    <span class="text-xs text-slate-500 font-mono w-12 shrink-0">{m.match_id}</span>
-                    <div class="flex-1 flex items-center gap-3">
-                      <div class="flex-1">
-                        <div class="flex items-center justify-between">
-                          <span class={`text-sm ${matchClass(pA)}`}>
-                            {m.team_a ? formatTeamName(m.team_a.team) : m.slot_a}
-                          </span>
-                          <span class="text-xs text-slate-500">{fmtPct(pA)}</span>
-                        </div>
-                        <div class="text-xs text-slate-600">{m.slot_a}</div>
+                <div class="rounded-xl border border-slate-800/70 bg-slate-900/60 p-4">
+                  <div class="flex items-center gap-1.5 mb-3">
+                    <span class="text-[9px] uppercase tracking-widest text-slate-700">Match {idx + 1}</span>
+                    <span class="text-slate-800">·</span>
+                    <span class="text-[9px] uppercase tracking-widest text-slate-700">{m.slot_a} vs {m.slot_b}</span>
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <!-- Team A -->
+                    <div class="flex-1 min-w-0">
+                      <div class={`text-sm font-semibold truncate ${aFavored ? 'text-slate-100' : 'text-slate-400'}`}>
+                        {nameA}
                       </div>
-                      <span class="text-slate-600 text-xs">vs</span>
-                      <div class="flex-1 text-right">
-                        <div class="flex items-center justify-between">
-                          <span class="text-xs text-slate-500">{fmtPct(pB)}</span>
-                          <span class={`text-sm ${matchClass(pB)}`}>
-                            {m.team_b ? formatTeamName(m.team_b.team) : m.slot_b}
-                          </span>
-                        </div>
-                        <div class="text-xs text-slate-600 text-right">{m.slot_b}</div>
+                      <div class="text-[11px] tabular-nums text-slate-600 mt-0.5">
+                        {pA > 0 ? formatPct(pA) + ' to win it' : '—'}
                       </div>
                     </div>
+                    <span class="text-slate-700 text-xs shrink-0 font-medium">vs</span>
+                    <!-- Team B -->
+                    <div class="flex-1 min-w-0 text-right">
+                      <div class={`text-sm font-semibold truncate ${!aFavored ? 'text-slate-100' : 'text-slate-400'}`}>
+                        {nameB}
+                      </div>
+                      <div class="text-[11px] tabular-nums text-slate-600 mt-0.5">
+                        {pB > 0 ? formatPct(pB) + ' to win it' : '—'}
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Mini bar showing relative champion strength -->
+                  <div class="flex h-1 rounded overflow-hidden mt-3 bg-slate-800/60">
+                    <div class="bg-blue-700/60 h-full" style={`width:${((pA / (pA + pB + 0.0001)) * 100).toFixed(1)}%`} />
+                    <div class="bg-rose-800/50 h-full flex-1" />
                   </div>
                 </div>
               );
@@ -104,40 +112,47 @@ const lowerHalf = r32Matches.slice(8, 16);
           </div>
         </div>
 
-        <!-- Lower bracket half -->
+        <!-- Lower Half -->
         <div>
-          <h2 class="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-3">
+          <h2 class="text-xs font-bold uppercase tracking-widest text-slate-500 mb-4">
             Lower Half — Groups G–L
           </h2>
           <div class="space-y-2">
-            {lowerHalf.map((m) => {
-              const pA = projMap[m.match_id + '_a'];
-              const pB = projMap[m.match_id + '_b'];
+            {lowerHalf.map((m, idx) => {
+              const pA = champProb[m.team_a ?? ''] ?? 0;
+              const pB = champProb[m.team_b ?? ''] ?? 0;
+              const aFavored = pA >= pB;
+              const nameA = m.team_a ? formatTeamName(m.team_a) : m.slot_a;
+              const nameB = m.team_b ? formatTeamName(m.team_b) : m.slot_b;
               return (
-                <div class="rounded-lg border border-slate-700 bg-slate-900 p-3">
-                  <div class="flex items-center justify-between gap-2">
-                    <span class="text-xs text-slate-500 font-mono w-12 shrink-0">{m.match_id}</span>
-                    <div class="flex-1 flex items-center gap-3">
-                      <div class="flex-1">
-                        <div class="flex items-center justify-between">
-                          <span class={`text-sm ${matchClass(pA)}`}>
-                            {m.team_a ? formatTeamName(m.team_a.team) : m.slot_a}
-                          </span>
-                          <span class="text-xs text-slate-500">{fmtPct(pA)}</span>
-                        </div>
-                        <div class="text-xs text-slate-600">{m.slot_a}</div>
+                <div class="rounded-xl border border-slate-800/70 bg-slate-900/60 p-4">
+                  <div class="flex items-center gap-1.5 mb-3">
+                    <span class="text-[9px] uppercase tracking-widest text-slate-700">Match {idx + 9}</span>
+                    <span class="text-slate-800">·</span>
+                    <span class="text-[9px] uppercase tracking-widest text-slate-700">{m.slot_a} vs {m.slot_b}</span>
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <div class="flex-1 min-w-0">
+                      <div class={`text-sm font-semibold truncate ${aFavored ? 'text-slate-100' : 'text-slate-400'}`}>
+                        {nameA}
                       </div>
-                      <span class="text-slate-600 text-xs">vs</span>
-                      <div class="flex-1 text-right">
-                        <div class="flex items-center justify-between">
-                          <span class="text-xs text-slate-500">{fmtPct(pB)}</span>
-                          <span class={`text-sm ${matchClass(pB)}`}>
-                            {m.team_b ? formatTeamName(m.team_b.team) : m.slot_b}
-                          </span>
-                        </div>
-                        <div class="text-xs text-slate-600 text-right">{m.slot_b}</div>
+                      <div class="text-[11px] tabular-nums text-slate-600 mt-0.5">
+                        {pA > 0 ? formatPct(pA) + ' to win it' : '—'}
                       </div>
                     </div>
+                    <span class="text-slate-700 text-xs shrink-0 font-medium">vs</span>
+                    <div class="flex-1 min-w-0 text-right">
+                      <div class={`text-sm font-semibold truncate ${!aFavored ? 'text-slate-100' : 'text-slate-400'}`}>
+                        {nameB}
+                      </div>
+                      <div class="text-[11px] tabular-nums text-slate-600 mt-0.5">
+                        {pB > 0 ? formatPct(pB) + ' to win it' : '—'}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex h-1 rounded overflow-hidden mt-3 bg-slate-800/60">
+                    <div class="bg-blue-700/60 h-full" style={`width:${((pA / (pA + pB + 0.0001)) * 100).toFixed(1)}%`} />
+                    <div class="bg-rose-800/50 h-full flex-1" />
                   </div>
                 </div>
               );
@@ -146,11 +161,46 @@ const lowerHalf = r32Matches.slice(8, 16);
         </div>
       </div>
 
-      <p class="text-slate-600 text-xs mt-4">
-        Disclaimer: Win probabilities are Elo-based estimates for neutral venue.
-        These are structural projections, not predictions of actual results.
-        Generated {structure?.generated_at ? new Date(structure.generated_at).toLocaleString() : '—'}.
-      </p>
+      <!-- Championship contenders panel -->
+      {top5.length > 0 && (
+        <section class="mb-12">
+          <h2 class="text-lg font-bold text-slate-100 mb-2">Championship Contenders</h2>
+          <p class="text-slate-600 text-sm mb-5">Teams with the highest probability of lifting the trophy.</p>
+          <div class="space-y-2.5">
+            {top5.map((t, i) => (
+              <div class="flex items-center gap-3">
+                <span class="text-slate-600 text-xs font-mono tabular-nums w-5 text-right shrink-0">{i + 1}</span>
+                <span class="text-slate-200 text-sm font-semibold w-36 truncate shrink-0">{formatTeamName(t.team)}</span>
+                <div class="flex-1 h-5 bg-slate-800/60 rounded overflow-hidden">
+                  <div class={i === 0 ? 'h-full bg-amber-600/60 rounded' : 'h-full bg-blue-700/60 rounded'}
+                       style={champW(t.champion)} />
+                </div>
+                <span class="text-sm font-semibold tabular-nums w-12 text-right shrink-0 text-blue-300">
+                  {formatPct(t.champion)}
+                </span>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      <div class="rounded-xl border border-slate-800/50 bg-slate-900/30 px-4 py-3 mb-10">
+        <p class="text-slate-600 text-xs leading-relaxed">
+          Championship probabilities are from Monte Carlo simulation, not match-specific win probabilities.
+          R32 matchups reflect the official FIFA 2026 bracket structure.
+          {projection?.disclaimer}
+        </p>
+      </div>
+
+      <RelatedLinks links={[
+        { href: '/tournament',  label: 'World Cup Forecast' },
+        { href: '/paths',       label: 'Road to the Final' },
+        { href: '/best-thirds', label: 'Bubble Watch' },
+        { href: '/recommendations', label: 'Betting Signals' },
+      ]} />
+
+      <TrustStrip nSims={nSims} goalsModel={goalsModel} />
     </>
   )}
+
 </Layout>

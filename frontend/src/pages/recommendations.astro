@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import TopSignalCard from '../components/TopSignalCard.astro';
 import SignalFeedCard from '../components/SignalFeedCard.astro';
 import TrustStrip from '../components/TrustStrip.astro';
+import RelatedLinks from '../components/RelatedLinks.astro';
 import { loadJson } from '../utils/load';
 import { formatTeamName, formatPct, formatKickoff } from '../utils/format';
 import type {
@@ -136,8 +137,8 @@ function labelDominant(m: EnrichedMatch): string {
 ---
 
 <Layout
-  title="Signals"
-  description="Model probability signals and market gap analysis for the FIFA 2026 World Cup. Educational only."
+  title="Betting Signals"
+  description="Model probability signals and market gap analysis for every 2026 World Cup fixture. Educational only — not betting advice."
 >
   <div class="space-y-14">
 
@@ -460,6 +461,13 @@ function labelDominant(m: EnrichedMatch): string {
         </a>
       </div>
     </section>
+
+    <!-- Cross-links -->
+    <RelatedLinks links={[
+      { href: '/matches',    label: 'Explore All Matches' },
+      { href: '/tournament', label: 'World Cup Forecast' },
+      { href: '/bracket',    label: 'Knockout Bracket' },
+    ]} />
 
     <!-- Trust strip -->
     {sim && (

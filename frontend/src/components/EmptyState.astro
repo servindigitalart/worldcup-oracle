@@ -4,15 +4,11 @@ interface Props {
   message: string;
   command?: string;
 }
-const { title, message, command } = Astro.props;
+const { title, message } = Astro.props;
 ---
 <div class="flex flex-col items-center justify-center py-20 text-center">
   <div class="text-slate-700 text-6xl mb-4 select-none">[ ]</div>
   <div class="text-base font-medium text-slate-400">{title}</div>
   <div class="text-sm text-slate-500 mt-2 max-w-sm">{message}</div>
-  {command && (
-    <code class="mt-4 px-4 py-2 bg-slate-900 border border-slate-800 rounded text-xs text-blue-300 font-mono">
-      {command}
-    </code>
-  )}
+  <p class="mt-3 text-xs text-slate-700">Data will appear here once the next update runs.</p>
 </div>

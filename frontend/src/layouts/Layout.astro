@@ -15,6 +15,7 @@ const {
 
 const pageTitle = title === 'Overview' ? 'World Cup Oracle — 2026 Betting Intelligence' : `${title} — World Cup Oracle`;
 const ogT = ogTitle ?? pageTitle;
+const canonicalUrl = Astro.url.href;
 ---
 <!doctype html>
 <html lang="en" class="bg-[#06091A] text-slate-100">
@@ -25,9 +26,11 @@ const ogT = ogTitle ?? pageTitle;
     <title>{pageTitle}</title>
 
     <!-- Open Graph -->
+    <link rel="canonical" href={canonicalUrl} />
     <meta property="og:title" content={ogT} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={ogT} />
     <meta name="twitter:description" content={description} />
@@ -45,11 +48,33 @@ const ogT = ogTitle ?? pageTitle;
           <span>Statistical models only. Not betting advice.</span>
         </div>
         <div class="flex items-center gap-4">
-          <a href="/methodology" class="hover:text-slate-400 transition-colors">Methodology</a>
-          <a href="/calibration" class="hover:text-slate-400 transition-colors">Calibration</a>
-          <a href="/status" class="hover:text-slate-400 transition-colors">Status</a>
+          <a href="/tournament" class="hover:text-slate-400 transition-colors">Tournament</a>
+          <a href="/bracket" class="hover:text-slate-400 transition-colors">Bracket</a>
+          <a href="/lab" class="hover:text-slate-400 transition-colors">Lab</a>
         </div>
       </div>
     </footer>
   </body>
 </html>
+
+<style is:global>
+  /* ── Reduced motion ───────────────────────────────────────────────────────── */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /* ── Global focus ring (keyboard-only, !important to override utility classes) */
+  *:focus-visible {
+    outline: 2px solid #94a3b8 !important; /* slate-400 */
+    outline-offset: 3px !important;
+    border-radius: 4px !important;
+  }
+  *:focus:not(:focus-visible) {
+    outline: none;
+  }
+</style>

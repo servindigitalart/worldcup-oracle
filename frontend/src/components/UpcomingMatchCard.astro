@@ -38,7 +38,7 @@ const activeSignal = signalLevel &&
 
 <a
   href={`/match/${match_id}`}
-  class="group block rounded-xl border border-slate-800/80 bg-slate-900/60 hover:border-slate-700 hover:bg-slate-900/90 transition-all duration-150 p-4"
+  class="group block rounded-xl border border-slate-800/80 bg-slate-900/60 hover:border-slate-700 hover:bg-slate-900/90 transition-[border-color,background-color] duration-150 ease-out active:scale-[0.98] active:transition-none p-4"
 >
   <!-- Top row: group + signal badge -->
   <div class="flex items-center justify-between mb-3">
@@ -49,14 +49,14 @@ const activeSignal = signalLevel &&
       ? <SignalBadge level={signalLevel!} />
       : has_market_data
         ? <span class="text-[10px] text-slate-600 border border-slate-800 rounded px-1.5 py-0.5">Aligned</span>
-        : <span class="text-[10px] text-slate-700 border border-slate-800/60 rounded px-1.5 py-0.5">Model only</span>
+        : <span class="text-[10px] text-slate-500 border border-slate-800/60 rounded px-1.5 py-0.5">Model only</span>
     }
   </div>
 
   <!-- Teams -->
   <div class="flex items-center justify-between gap-2 mb-3">
     <span class="text-sm font-semibold text-slate-200 truncate flex-1">{homeLabel}</span>
-    <span class="text-xs text-slate-600 shrink-0">vs</span>
+    <span class="text-xs text-slate-500 shrink-0">vs</span>
     <span class="text-sm font-semibold text-slate-200 truncate flex-1 text-right">{awayLabel}</span>
   </div>
 
@@ -83,9 +83,9 @@ const activeSignal = signalLevel &&
   </div>
 
   <!-- Kickoff meta -->
-  <div class="flex items-center justify-between text-[11px] text-slate-600 gap-2">
+  <div class="flex items-center justify-between text-[11px] text-slate-500 gap-2">
     <span class="truncate">{kickoffFormatted}{city ? ` · ${city}` : ''}</span>
-    <span class="text-slate-700 group-hover:text-slate-500 transition-colors shrink-0">
+    <span class="text-slate-500 group-hover:text-slate-200 transition-colors shrink-0">
       Analysis →
     </span>
   </div>

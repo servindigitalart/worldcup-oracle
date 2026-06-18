@@ -1,116 +1,234 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import TrustStrip from '../components/TrustStrip.astro';
+import RelatedLinks from '../components/RelatedLinks.astro';
 import { loadJson } from '../utils/load';
-import { formatTeamName } from '../utils/format';
-import type { BracketPaths, PathDifficultyEntry } from '../types';
+import { formatTeamName, formatPct } from '../utils/format';
+import type { BracketPaths, PathDifficultyEntry, TeamProb, SimSummary } from '../types';
 
-const data = loadJson<BracketPaths | null>('bracket_paths.json', null);
+const data  = loadJson<BracketPaths | null>('bracket_paths.json', null);
+const teams = loadJson<TeamProb[]>('team_probs.json', []);
+const sim   = loadJson<SimSummary | null>('sim_summary.json', null);
 
 const hasData = data !== null && (data.paths?.length ?? 0) > 0;
 const paths: PathDifficultyEntry[] = data?.paths ?? [];
 
-function fmtElo(v: number | null | undefined): string {
-  if (v == null || !isFinite(v)) return '—';
-  return v.toFixed(0);
+const champProb: Record<string, number> = {};
+for (const t of teams) { champProb[t.team] = t.champion; }
+
+// Compute path strength from projected opponents' champion probabilities
+// This gives meaningful differentiation when difficulty_score is uniform
+interface EnrichedPath extends PathDifficultyEntry {
+  pathStrength: number;
+  teamChampion: number;
 }
 
-function fmtScore(v: number | null | undefined): string {
-  if (v == null || !isFinite(v)) return '—';
-  return v.toFixed(1);
-}
+const enriched: EnrichedPath[] = paths.map(p => {
+  const opps = [p.r32_opponent, p.expected_r16_opponent, p.expected_qf_opponent, p.expected_sf_opponent]
+    .filter((o): o is string => !!o);
+  const pathStrength = opps.reduce((sum, opp) => sum + (champProb[opp] ?? 0), 0);
+  return { ...p, pathStrength, teamChampion: champProb[p.team] ?? 0 };
+});
 
-function difficultyClass(score: number | null | undefined): string {
-  if (score == null) return 'text-slate-500';
-  if (score >= 7.5) return 'text-red-400';
-  if (score >= 5.0) return 'text-amber-400';
-  if (score >= 2.5) return 'text-slate-300';
-  return 'text-emerald-400';
-}
+// Sort by path strength: highest = hardest road
+const byDifficulty = [...enriched].sort((a, b) => b.pathStrength - a.pathStrength);
+const toughestRoads = byDifficulty.slice(0, 8);
+const clearestPaths = [...byDifficulty].reverse().slice(0, 8);
 
-function difficultyBar(score: number | null | undefined): string {
-  if (score == null) return '0%';
-  return `${Math.min(100, Math.max(0, score * 10))}%`;
-}
+// All paths sorted by team champion probability (best teams at top)
+const byChampion = [...enriched].sort((a, b) => b.teamChampion - a.teamChampion);
+
+const nSims = sim?.n_sims ?? 10000;
+const goalsModel = sim?.goals_model_version ?? 'dixon-coles';
+
+type StringPathKey = 'r32_opponent' | 'expected_r16_opponent' | 'expected_qf_opponent' | 'expected_sf_opponent';
+const rounds: Array<{ key: StringPathKey; label: string; short: string }> = [
+  { key: 'r32_opponent',             label: 'Round of 32',  short: 'R32' },
+  { key: 'expected_r16_opponent',    label: 'Round of 16',  short: 'R16' },
+  { key: 'expected_qf_opponent',     label: 'Quarterfinal', short: 'QF' },
+  { key: 'expected_sf_opponent',     label: 'Semifinal',    short: 'SF' },
+];
 ---
 
-<Layout title="Path Difficulty" description="Expected bracket path and difficulty score for each qualified team.">
-  <h1 class="text-2xl font-bold text-white mb-1">Path Difficulty</h1>
-  <p class="text-slate-400 text-sm mb-6">
-    Expected opponents at each knockout round, ranked by path difficulty (0–10).
-    Expected opponents are the highest-Elo team in each opposing bracket arm.
-  </p>
+<Layout title="Road to the Final" description="Projected knockout paths and road difficulty for every 2026 World Cup team.">
+
+  <!-- Hero -->
+  <div class="mb-10">
+    <span class="text-[10px] font-semibold uppercase tracking-widest text-slate-600 mb-3 block">Bracket Paths</span>
+    <h1 class="text-3xl sm:text-4xl font-bold text-slate-100 tracking-tight mb-2">Road to the Final</h1>
+    <p class="text-slate-500 text-sm max-w-lg">
+      Projected opponents at every knockout round, ranked by the strength of their expected path.
+    </p>
+  </div>
 
   {!hasData && (
-    <div class="rounded-lg border border-slate-700 bg-slate-900 px-6 py-10 text-center">
-      <p class="text-slate-400 text-sm">No path difficulty data yet.</p>
-      <p class="text-slate-500 text-xs mt-2">
-        Run <code class="font-mono">make bracket</code> or
-        <code class="font-mono">make refresh</code> to generate bracket artifacts.
-      </p>
+    <div class="rounded-xl border border-slate-700/60 bg-slate-900/60 px-6 py-10 text-center">
+      <p class="text-slate-400">Path data not yet available.</p>
+      <p class="text-slate-600 text-sm mt-1">Bracket path projections will appear here once the simulation runs.</p>
     </div>
   )}
 
   {hasData && (
     <>
-      <div class="overflow-x-auto rounded-lg border border-slate-700 mb-6">
-        <table class="w-full text-sm">
-          <thead class="bg-slate-800 text-slate-400 text-xs uppercase tracking-wider">
-            <tr>
-              <th class="text-left px-3 py-2">Team</th>
-              <th class="text-left px-3 py-2">Slot</th>
-              <th class="text-left px-3 py-2">R32</th>
-              <th class="text-left px-3 py-2">Exp. R16</th>
-              <th class="text-left px-3 py-2">Exp. QF</th>
-              <th class="text-left px-3 py-2">Exp. SF</th>
-              <th class="text-right px-3 py-2">Avg Elo</th>
-              <th class="text-right px-3 py-2">Max Elo</th>
-              <th class="text-right px-3 py-2">Difficulty</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-slate-800">
-            {paths.map((p) => (
-              <tr class="hover:bg-slate-800/50 transition-colors">
-                <td class="px-3 py-2 text-slate-200 font-medium">
-                  {formatTeamName(p.team)}
-                </td>
-                <td class="px-3 py-2 text-slate-500 font-mono text-xs">{p.slot}</td>
-                <td class="px-3 py-2 text-slate-400 text-xs">
-                  {p.r32_opponent ? formatTeamName(p.r32_opponent) : '—'}
-                </td>
-                <td class="px-3 py-2 text-slate-400 text-xs">
-                  {p.expected_r16_opponent ? formatTeamName(p.expected_r16_opponent) : '—'}
-                </td>
-                <td class="px-3 py-2 text-slate-400 text-xs">
-                  {p.expected_qf_opponent ? formatTeamName(p.expected_qf_opponent) : '—'}
-                </td>
-                <td class="px-3 py-2 text-slate-400 text-xs">
-                  {p.expected_sf_opponent ? formatTeamName(p.expected_sf_opponent) : '—'}
-                </td>
-                <td class="px-3 py-2 text-right text-slate-400 text-xs">{fmtElo(p.avg_opponent_elo)}</td>
-                <td class="px-3 py-2 text-right text-slate-400 text-xs">{fmtElo(p.max_opponent_elo)}</td>
-                <td class="px-3 py-2 text-right">
-                  <div class="flex items-center justify-end gap-2">
-                    <div class="w-16 bg-slate-700 rounded-full h-1.5 overflow-hidden">
-                      <div
-                        class={`h-full rounded-full bg-current ${difficultyClass(p.difficulty_score)}`}
-                        style={`width: ${difficultyBar(p.difficulty_score)}`}
-                      />
+      <!-- Toughest Roads -->
+      <section class="mb-12">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="w-2 h-2 rounded-full bg-red-500/60 shrink-0"></span>
+          <h2 class="text-lg font-bold text-slate-100">Toughest Roads</h2>
+        </div>
+        <p class="text-slate-600 text-sm mb-5">Teams facing the strongest projected opponents through the draw.</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {toughestRoads.map((p, i) => (
+            <div class="rounded-xl border border-slate-800/60 bg-slate-900/50 p-4">
+              <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center gap-2">
+                  <span class="text-xs font-bold text-slate-600 tabular-nums">#{i + 1}</span>
+                  <span class="text-[10px] font-semibold uppercase tracking-wider text-slate-600 bg-slate-800/60 border border-slate-700/40 px-1.5 py-0.5 rounded">
+                    {p.slot}
+                  </span>
+                </div>
+                <span class="text-xs text-slate-600 tabular-nums">
+                  {p.teamChampion > 0 ? formatPct(p.teamChampion) + ' to win' : '—'}
+                </span>
+              </div>
+              <div class="text-sm font-bold text-slate-100 mb-3">{formatTeamName(p.team)}</div>
+              <div class="space-y-1.5">
+                {rounds.map(r => {
+                  const opp = p[r.key];
+                  return opp ? (
+                    <div class="flex items-center gap-2 text-xs">
+                      <span class="text-slate-700 w-7 shrink-0 font-mono">{r.short}</span>
+                      <span class="text-slate-700">→</span>
+                      <span class="text-slate-400 truncate">{formatTeamName(opp)}</span>
+                      {champProb[opp] > 0 && (
+                        <span class="text-slate-600 tabular-nums shrink-0 ml-auto">{formatPct(champProb[opp])}</span>
+                      )}
                     </div>
-                    <span class={`text-xs font-mono ${difficultyClass(p.difficulty_score)}`}>
-                      {fmtScore(p.difficulty_score)}
+                  ) : (
+                    <div class="flex items-center gap-2 text-xs">
+                      <span class="text-slate-700 w-7 shrink-0 font-mono">{r.short}</span>
+                      <span class="text-slate-700">→</span>
+                      <span class="text-slate-800">TBD</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Clearest Paths -->
+      <section class="mb-12">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="w-2 h-2 rounded-full bg-emerald-500/60 shrink-0"></span>
+          <h2 class="text-lg font-bold text-slate-100">Clearest Paths</h2>
+        </div>
+        <p class="text-slate-600 text-sm mb-5">Teams with the most favourable projected draw.</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {clearestPaths.map((p, i) => (
+            <div class="rounded-xl border border-slate-800/60 bg-slate-900/50 p-4">
+              <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center gap-2">
+                  <span class="text-xs font-bold text-slate-600 tabular-nums">#{i + 1}</span>
+                  <span class="text-[10px] font-semibold uppercase tracking-wider text-slate-600 bg-slate-800/60 border border-slate-700/40 px-1.5 py-0.5 rounded">
+                    {p.slot}
+                  </span>
+                </div>
+                <span class="text-xs text-slate-600 tabular-nums">
+                  {p.teamChampion > 0 ? formatPct(p.teamChampion) + ' to win' : '—'}
+                </span>
+              </div>
+              <div class="text-sm font-bold text-slate-100 mb-3">{formatTeamName(p.team)}</div>
+              <div class="space-y-1.5">
+                {rounds.map(r => {
+                  const opp = p[r.key];
+                  return opp ? (
+                    <div class="flex items-center gap-2 text-xs">
+                      <span class="text-slate-700 w-7 shrink-0 font-mono">{r.short}</span>
+                      <span class="text-slate-700">→</span>
+                      <span class="text-slate-400 truncate">{formatTeamName(opp)}</span>
+                      {champProb[opp] > 0 && (
+                        <span class="text-slate-600 tabular-nums shrink-0 ml-auto">{formatPct(champProb[opp])}</span>
+                      )}
+                    </div>
+                  ) : (
+                    <div class="flex items-center gap-2 text-xs">
+                      <span class="text-slate-700 w-7 shrink-0 font-mono">{r.short}</span>
+                      <span class="text-slate-700">→</span>
+                      <span class="text-slate-800">TBD</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- All Paths — collapsible explorer -->
+      <section class="mb-12">
+        <details class="rounded-xl border border-slate-800/70 overflow-hidden" open>
+          <summary class="flex items-center justify-between px-5 py-4 bg-slate-900/80 cursor-pointer select-none hover:bg-slate-900 transition-colors list-none">
+            <h2 class="text-base font-bold text-slate-100">All Team Paths</h2>
+            <span class="text-slate-600 text-xs">▾</span>
+          </summary>
+          <div class="p-5">
+            <div class="space-y-2">
+              {byChampion.map((p) => (
+                <div class="rounded-lg border border-slate-800/50 bg-slate-900/40 px-4 py-3">
+                  <div class="flex items-start justify-between gap-3 mb-2">
+                    <div>
+                      <span class="text-sm font-semibold text-slate-200">{formatTeamName(p.team)}</span>
+                      <span class="text-[10px] font-mono text-slate-700 ml-2">{p.slot}</span>
+                    </div>
+                    <span class="text-xs text-slate-600 tabular-nums shrink-0">
+                      {p.teamChampion > 0 ? formatPct(p.teamChampion) + ' to win' : '—'}
                     </span>
                   </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                  <div class="flex flex-wrap gap-x-4 gap-y-1">
+                    {rounds.map(r => {
+                      const opp = p[r.key];
+                      return opp ? (
+                        <span class="text-[11px] text-slate-600">
+                          <span class="text-slate-700 font-mono">{r.short}</span>
+                          <span class="text-slate-800 mx-1">→</span>
+                          <span class="text-slate-500">{formatTeamName(opp)}</span>
+                        </span>
+                      ) : null;
+                    })}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </details>
+      </section>
+
+      <div class="rounded-xl border border-slate-800/50 bg-slate-900/30 px-4 py-3 mb-10">
+        <p class="text-slate-600 text-xs leading-relaxed">
+          Path strength is computed from projected opponents' championship probabilities.
+          Expected opponents are the most likely team from each bracket arm, not predictions of actual results.
+          {data?.disclaimer}
+        </p>
       </div>
 
-      <p class="text-slate-600 text-xs">
-        {data?.disclaimer}
-        Generated {data?.generated_at ? new Date(data.generated_at).toLocaleString() : '—'}.
-      </p>
+      <RelatedLinks links={[
+        { href: '/tournament',  label: 'World Cup Forecast' },
+        { href: '/bracket',     label: 'Knockout Bracket' },
+        { href: '/best-thirds', label: 'Bubble Watch' },
+      ]} />
+
+      <TrustStrip nSims={nSims} goalsModel={goalsModel} />
     </>
   )}
+
 </Layout>
+
+<style is:global>
+  details > summary::-webkit-details-marker,
+  details > summary::marker {
+    display: none;
+    content: '';
+  }
+</style>

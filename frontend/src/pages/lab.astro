@@ -1,0 +1,99 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+interface LabLink {
+  href: string;
+  title: string;
+  desc: string;
+}
+
+interface LabSection {
+  title: string;
+  items: LabLink[];
+}
+
+const sections: LabSection[] = [
+  {
+    title: 'Forecast Tools',
+    items: [
+      { href: '/paths',        title: 'Road to the Final',  desc: 'Projected knockout paths and road difficulty for every qualified team.' },
+      { href: '/best-thirds',  title: 'Bubble Watch',       desc: 'Third-place team rankings — which 8 of 12 advance to the knockout stage.' },
+      { href: '/standings',    title: 'Group Standings',    desc: 'Live group-stage standings with qualification status and goal difference.' },
+      { href: '/probabilities', title: 'All Probabilities', desc: 'Full match probability breakdown for all 72 group-stage fixtures.' },
+    ],
+  },
+  {
+    title: 'Model Intelligence',
+    items: [
+      { href: '/model',        title: 'Model Details',       desc: 'Elo ratings, Dixon-Coles parameters, calibration history, and blend weights.' },
+      { href: '/market',       title: 'Market Analysis',     desc: 'Model vs market comparison — where they agree, where they diverge.' },
+      { href: '/calibration',  title: 'Calibration',         desc: 'Probability calibration curves, Brier scores, and reliability diagrams.' },
+      { href: '/methodology',  title: 'Methodology',         desc: 'How the model works: Elo, Dixon-Coles, Monte Carlo simulation, blending.' },
+    ],
+  },
+  {
+    title: 'Data & History',
+    items: [
+      { href: '/data',           title: 'Data Sources',     desc: 'Where odds data and match data come from, and update cadence.' },
+      { href: '/performance',    title: 'Performance',      desc: 'Signal performance tracking and historical prediction accuracy.' },
+      { href: '/history',        title: 'Prediction History', desc: 'Full prediction ledger with grades and closing line value analysis.' },
+      { href: '/market-history', title: 'Market History',   desc: 'Closing line movement, CLV tracking, and market drift over time.' },
+      { href: '/status',         title: 'System Status',    desc: 'Data pipeline health, last refresh timestamp, and capture status.' },
+    ],
+  },
+];
+---
+
+<Layout
+  title="Lab"
+  description="Technical analysis tools, model details, calibration data, and prediction history for World Cup Oracle."
+>
+
+  <div class="mb-10">
+    <span class="text-[10px] font-semibold uppercase tracking-widest text-slate-600 mb-3 block">Technical Hub</span>
+    <h1 class="text-3xl sm:text-4xl font-bold text-slate-100 tracking-tight mb-2">Lab</h1>
+    <p class="text-slate-500 text-sm max-w-lg">
+      Deep-dive tools for model transparency, calibration analysis, and prediction history.
+      The main experience lives in <a href="/" class="text-slate-400 hover:text-slate-200 underline underline-offset-2 transition-colors">Signals</a>,
+      <a href="/matches" class="text-slate-400 hover:text-slate-200 underline underline-offset-2 transition-colors">Matches</a>, and
+      <a href="/tournament" class="text-slate-400 hover:text-slate-200 underline underline-offset-2 transition-colors">Tournament</a>.
+    </p>
+  </div>
+
+  <div class="space-y-10">
+    {sections.map(section => (
+      <div>
+        <h2 class="text-[10px] font-bold uppercase tracking-widest text-slate-600 mb-4">{section.title}</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          {section.items.map(item => (
+            <a
+              href={item.href}
+              class="group flex items-start justify-between gap-3 rounded-xl border border-slate-800/70 bg-slate-900/50 hover:border-slate-700 hover:bg-slate-900/80 transition-[border-color,background-color] active:scale-[0.98] active:transition-none p-4"
+            >
+              <div class="min-w-0">
+                <div class="text-sm font-semibold text-slate-200 group-hover:text-white transition-colors mb-1">
+                  {item.title}
+                </div>
+                <div class="text-xs text-slate-500 leading-relaxed">{item.desc}</div>
+              </div>
+              <span class="text-slate-500 group-hover:text-slate-200 transition-colors shrink-0 mt-0.5 text-sm">→</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+
+  <!-- Back to main experience -->
+  <div class="mt-12 pt-8 border-t border-slate-800/50">
+    <p class="text-slate-600 text-xs mb-4">Back to the main experience</p>
+    <div class="flex flex-wrap gap-2">
+      <a href="/" class="text-xs text-slate-400 hover:text-slate-200 border border-slate-800 hover:border-slate-700 px-3 py-1.5 rounded-lg transition-colors">Home</a>
+      <a href="/recommendations" class="text-xs text-slate-400 hover:text-slate-200 border border-slate-800 hover:border-slate-700 px-3 py-1.5 rounded-lg transition-colors">Signals</a>
+      <a href="/matches" class="text-xs text-slate-400 hover:text-slate-200 border border-slate-800 hover:border-slate-700 px-3 py-1.5 rounded-lg transition-colors">Matches</a>
+      <a href="/tournament" class="text-xs text-slate-400 hover:text-slate-200 border border-slate-800 hover:border-slate-700 px-3 py-1.5 rounded-lg transition-colors">Tournament</a>
+      <a href="/bracket" class="text-xs text-slate-400 hover:text-slate-200 border border-slate-800 hover:border-slate-700 px-3 py-1.5 rounded-lg transition-colors">Bracket</a>
+    </div>
+  </div>
+
+</Layout>

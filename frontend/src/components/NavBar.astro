@@ -1,45 +1,184 @@
 ---
-const links = [
-  { href: '/',                 label: 'Home'             },
-  { href: '/matches',          label: 'Matches'          },
-  { href: '/recommendations',  label: 'Signals'          },
-  { href: '/tournament',       label: 'Tournament'       },
-  { href: '/standings',        label: 'Standings'        },
-  { href: '/bracket',          label: 'Bracket'          },
-  { href: '/probabilities',    label: 'Probabilities'    },
-  { href: '/paths',            label: 'Paths'            },
-  { href: '/best-thirds',      label: 'Best Thirds'      },
-  { href: '/model',            label: 'Model'            },
-  { href: '/market',           label: 'Market'           },
-  { href: '/calibration',      label: 'Calibration'      },
-  { href: '/methodology',      label: 'Methodology'      },
-  { href: '/data',             label: 'Data'             },
-  { href: '/performance',      label: 'Performance'      },
-  { href: '/history',          label: 'History'          },
-  { href: '/market-history',   label: 'Mkt History'      },
-  { href: '/status',           label: 'Status'           },
+const primary = [
+  { href: '/',                label: 'Home'        },
+  { href: '/matches',         label: 'Matches'     },
+  { href: '/recommendations', label: 'Signals'     },
+  { href: '/tournament',      label: 'Tournament'  },
+  { href: '/bracket',         label: 'Bracket'     },
+  { href: '/lab',             label: 'Lab'         },
 ];
+
+const mobileExtra = [
+  { label: 'Forecast', items: [
+    { href: '/paths',       label: 'Road to the Final' },
+    { href: '/best-thirds', label: 'Bubble Watch'      },
+    { href: '/standings',   label: 'Group Standings'   },
+  ]},
+  { label: 'Lab', items: [
+    { href: '/methodology', label: 'Methodology'    },
+    { href: '/calibration', label: 'Calibration'    },
+    { href: '/performance', label: 'Performance'    },
+    { href: '/status',      label: 'System Status'  },
+  ]},
+];
+
 const { pathname } = Astro.url;
+
+function isActive(href: string): boolean {
+  if (href === '/') return pathname === '/';
+  return pathname === href || pathname.startsWith(href + '/');
+}
 ---
-<nav class="sticky top-0 z-10 bg-slate-900/95 backdrop-blur border-b border-slate-800">
-  <div class="max-w-6xl mx-auto px-4 sm:px-6 flex items-center h-13 gap-6">
-    <a href="/" class="font-semibold text-white text-sm tracking-tight shrink-0">
-      WC 2026 Oracle
+
+<nav class="sticky top-0 z-40 bg-[#06091A]/95 backdrop-blur border-b border-slate-800/60">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 flex items-center h-14 gap-6">
+
+    <!-- Logo -->
+    <a href="/" class="font-bold text-white text-sm tracking-tight shrink-0">
+      World Cup Oracle
     </a>
-    <div class="flex gap-0.5 overflow-x-auto">
-      {links.map(({ href, label }) => (
+
+    <!-- Desktop primary links -->
+    <div class="hidden md:flex items-center gap-0.5 flex-1">
+      {primary.map(({ href, label }) => (
         <a
           href={href}
           class:list={[
-            'px-3 py-1.5 rounded text-sm whitespace-nowrap transition-colors',
-            pathname === href
-              ? 'bg-slate-700 text-white font-medium'
-              : 'text-slate-400 hover:text-white hover:bg-slate-800',
+            'px-3 py-1.5 rounded-lg text-sm whitespace-nowrap transition-colors',
+            isActive(href)
+              ? 'bg-slate-800 text-white font-medium'
+              : 'text-slate-400 hover:text-white hover:bg-slate-800/60',
           ]}
         >
           {label}
         </a>
       ))}
     </div>
+
+    <!-- Hamburger (mobile only) -->
+    <button
+      id="nav-toggle"
+      class="md:hidden ml-auto text-slate-400 hover:text-white p-2 -mr-2 transition-colors"
+      aria-label="Toggle navigation"
+      aria-expanded="false"
+    >
+      <svg id="icon-menu" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+      <svg id="icon-close" class="w-5 h-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+
   </div>
 </nav>
+
+<!-- Mobile overlay -->
+<div
+  id="mobile-nav"
+  class="fixed inset-0 z-30 bg-[#06091A] pt-14 overflow-y-auto"
+  aria-hidden="true"
+>
+  <div class="px-4 py-6">
+
+    <!-- Primary links -->
+    <div class="mb-6">
+      {primary.map(({ href, label }) => (
+        <a
+          href={href}
+          class:list={[
+            'flex items-center justify-between py-3.5 border-b border-slate-800/60 text-base font-semibold transition-colors',
+            isActive(href) ? 'text-white' : 'text-slate-300 hover:text-white',
+          ]}
+        >
+          {label}
+          <span class="text-slate-700 text-sm">→</span>
+        </a>
+      ))}
+    </div>
+
+    <!-- Secondary groups -->
+    {mobileExtra.map(group => (
+      <div class="mb-6">
+        <div class="text-[10px] font-bold uppercase tracking-widest text-slate-600 mb-3">{group.label}</div>
+        {group.items.map(({ href, label }) => (
+          <a
+            href={href}
+            class:list={[
+              'flex items-center justify-between py-2.5 border-b border-slate-800/40 text-sm transition-colors',
+              isActive(href) ? 'text-slate-200' : 'text-slate-500 hover:text-slate-300',
+            ]}
+          >
+            {label}
+            <span class="text-slate-800 text-xs">→</span>
+          </a>
+        ))}
+      </div>
+    ))}
+
+  </div>
+</div>
+
+<script>
+  // @ts-nocheck
+  var toggle    = document.getElementById('nav-toggle');
+  var overlay   = document.getElementById('mobile-nav');
+  var iconMenu  = document.getElementById('icon-menu');
+  var iconClose = document.getElementById('icon-close');
+  var isOpen    = false;
+
+  function openMenu() {
+    isOpen = true;
+    overlay.classList.add('is-open');
+    overlay.setAttribute('aria-hidden', 'false');
+    toggle.setAttribute('aria-expanded', 'true');
+    iconMenu.classList.add('hidden');
+    iconClose.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeMenu() {
+    isOpen = false;
+    overlay.classList.remove('is-open');
+    overlay.setAttribute('aria-hidden', 'true');
+    toggle.setAttribute('aria-expanded', 'false');
+    iconMenu.classList.remove('hidden');
+    iconClose.classList.add('hidden');
+    document.body.style.overflow = '';
+  }
+
+  if (toggle) {
+    toggle.addEventListener('click', function() {
+      isOpen ? closeMenu() : openMenu();
+    });
+  }
+
+  overlay.querySelectorAll('a').forEach(function(a) {
+    a.addEventListener('click', closeMenu);
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && isOpen) closeMenu();
+  });
+</script>
+
+<style is:global>
+  /* Mobile nav — opacity/translate transition (no layout jank) */
+  #mobile-nav {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(6px);
+    transition: opacity 180ms ease-out, transform 180ms ease-out, visibility 0s 180ms;
+  }
+  #mobile-nav.is-open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    transition: opacity 180ms ease-out, transform 180ms ease-out;
+  }
+  /* Reduced motion: skip animation, keep visibility toggle */
+  @media (prefers-reduced-motion: reduce) {
+    #mobile-nav { transition: visibility 0s 180ms; }
+    #mobile-nav.is-open { transition: none; }
+  }
+</style>

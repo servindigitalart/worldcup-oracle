@@ -165,7 +165,7 @@ const isOfficial = fixtureSource.is_official === true;
       {groupKeys.map((g) => (
         <a
           href={`#group-${g.toLowerCase()}`}
-          class="group-nav-pill text-xs font-semibold px-3 py-1.5 rounded-full border border-slate-700/60 text-slate-400 bg-slate-800/50 hover:border-slate-600 hover:text-slate-200 hover:bg-slate-800 transition-all duration-150"
+          class="group-nav-pill text-xs font-semibold px-3 py-1.5 rounded-full border border-slate-700/60 text-slate-400 bg-slate-800/50 hover:border-slate-600 hover:text-slate-200 hover:bg-slate-800 transition-[border-color,background-color,color] duration-150 ease-out"
         >
           {g}
         </a>
@@ -184,7 +184,7 @@ const isOfficial = fixtureSource.is_official === true;
         type="search"
         placeholder="Search teams…"
         autocomplete="off"
-        class="w-full bg-slate-900/60 border border-slate-700/60 text-slate-300 placeholder:text-slate-600 text-sm rounded-lg pl-8 pr-3 py-2 focus:outline-none focus:border-slate-500 focus:ring-1 focus:ring-slate-600/50 transition-colors"
+        class="w-full bg-slate-900/60 border border-slate-700/60 text-slate-300 placeholder:text-slate-600 text-sm rounded-lg pl-8 pr-3 py-2 focus:outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#06091A] focus-visible:border-slate-500 transition-colors"
       />
     </div>
     <p id="search-empty" class="hidden mt-3 text-sm text-slate-600">No matches found for that team name.</p>

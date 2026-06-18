@@ -89,7 +89,7 @@ const barPct = (v: number) => Math.max(v * 100, 1).toFixed(2) + '%';
       <div class="mt-3 text-xs text-slate-500 flex items-center gap-2 flex-wrap">
         <span>{kickoffFormatted}</span>
         {match.city && <><span class="text-slate-700">·</span><span>{match.city}</span></>}
-        {match.venue && <><span class="text-slate-700">·</span><span class="text-slate-600">{match.venue}</span></>}
+        {match.venue && <><span class="text-slate-700">·</span><span class="text-slate-500">{match.venue}</span></>}
       </div>
     </div>
 
@@ -97,19 +97,19 @@ const barPct = (v: number) => Math.max(v * 100, 1).toFixed(2) + '%';
     <div class="mb-5">
       <div class="flex h-9 rounded-lg overflow-hidden text-xs font-semibold">
         <div
-          class="flex items-center justify-center bg-blue-700/80 text-blue-100 transition-all"
+          class="flex items-center justify-center bg-blue-700/80 text-blue-100"
           style={`width:${barPct(home)}`}
         >
           {home >= 0.15 ? pctFmt(home) : ''}
         </div>
         <div
-          class="flex items-center justify-center bg-slate-600/80 text-slate-300 transition-all"
+          class="flex items-center justify-center bg-slate-600/80 text-slate-300"
           style={`width:${barPct(draw)}`}
         >
           {draw >= 0.15 ? pctFmt(draw) : ''}
         </div>
         <div
-          class="flex items-center justify-center bg-rose-800/70 text-rose-200 transition-all"
+          class="flex items-center justify-center bg-rose-800/70 text-rose-200"
           style={`width:${barPct(away)}`}
         >
           {away >= 0.15 ? pctFmt(away) : ''}

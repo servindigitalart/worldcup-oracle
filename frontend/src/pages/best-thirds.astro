@@ -1,146 +1,128 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import BubbleTeamCard from '../components/BubbleTeamCard.astro';
+import TrustStrip from '../components/TrustStrip.astro';
 import { loadJson } from '../utils/load';
-import { formatTeamName } from '../utils/format';
-import type { BestThirdsArtifact, BestThird } from '../types';
+import type { BestThirdsArtifact, BestThird, SimSummary } from '../types';
 
 const data = loadJson<BestThirdsArtifact | null>('best_thirds.json', null);
+const sim  = loadJson<SimSummary | null>('sim_summary.json', null);
 
 const hasData = data !== null && (data.n_thirds_ranked ?? 0) > 0;
 const allThirds: BestThird[] = data?.all_thirds ?? [];
-const qualifying = allThirds.filter(t => t.qualifies);
+const advancing = allThirds.filter(t => t.qualifies);
 const eliminated = allThirds.filter(t => !t.qualifies);
+
+// Pre-tournament: all stats likely zero — detect this
+const allZero = allThirds.every(t => t.points === 0 && t.gd === 0 && t.gf === 0);
+
+const nSims = sim?.n_sims ?? 10000;
+const goalsModel = sim?.goals_model_version ?? 'dixon-coles';
 ---
 
-<Layout title="Best Thirds" description="Best third-place team rankings and knockout qualification status.">
-  <h1 class="text-2xl font-bold text-white mb-1">Best Third-Place Teams</h1>
-  <p class="text-slate-400 text-sm mb-6">
-    All 12 third-place finishers ranked to determine the 8 that advance to the knockout stage.
-    Tiebreak: points → goal difference → goals for → fair play → alphabetical.
-  </p>
+<Layout title="Bubble Watch" description="Which third-place teams are projected to advance to the knockout stage at the 2026 World Cup.">
+
+  <!-- Hero -->
+  <div class="mb-10">
+    <span class="text-[10px] font-semibold uppercase tracking-widest text-slate-600 mb-3 block">Third-Place Race</span>
+    <h1 class="text-3xl sm:text-4xl font-bold text-slate-100 tracking-tight mb-2">Bubble Watch</h1>
+    <p class="text-slate-500 text-sm max-w-lg">
+      With 12 groups, all 12 third-place teams enter the rankings. The best 8 advance to the knockout stage — the bottom 4 are eliminated.
+    </p>
+  </div>
 
   {!hasData && (
-    <div class="rounded-lg border border-slate-700 bg-slate-900 px-6 py-10 text-center">
-      <p class="text-slate-400 text-sm">No third-place data yet.</p>
-      <p class="text-slate-500 text-xs mt-2">
-        Run <code class="font-mono">make bracket</code> or
-        <code class="font-mono">make refresh</code> to generate bracket artifacts.
-      </p>
+    <div class="rounded-xl border border-slate-700/60 bg-slate-900/60 px-6 py-10 text-center">
+      <p class="text-slate-400">Bubble data not yet available.</p>
+      <p class="text-slate-600 text-sm mt-1">Third-place rankings will update as group-stage results come in.</p>
     </div>
   )}
 
   {hasData && (
     <>
-      <!-- Summary stats -->
-      <div class="grid grid-cols-3 sm:grid-cols-3 gap-3 mb-6">
-        <div class="rounded-lg border border-slate-700 bg-slate-900 p-4">
-          <div class="text-xl font-bold text-white">{data?.n_groups ?? 0}</div>
-          <div class="text-xs text-slate-500 mt-1">Groups</div>
-        </div>
-        <div class="rounded-lg border border-emerald-800 bg-emerald-950/30 p-4">
-          <div class="text-xl font-bold text-emerald-400">{data?.n_qualifying ?? 0}</div>
-          <div class="text-xs text-slate-500 mt-1">Qualifying</div>
-        </div>
-        <div class="rounded-lg border border-slate-700 bg-slate-900 p-4">
-          <div class="text-xl font-bold text-slate-400">
-            {(data?.n_thirds_ranked ?? 0) - (data?.n_qualifying ?? 0)}
-          </div>
-          <div class="text-xs text-slate-500 mt-1">Eliminated</div>
-        </div>
+      <!-- Summary pills -->
+      <div class="flex flex-wrap gap-2.5 mb-10">
+        <span class="inline-flex items-center gap-1.5 text-xs text-slate-400 bg-slate-800/60 border border-slate-700/50 px-3 py-1.5 rounded-full">
+          <span class="font-semibold text-slate-200">{data?.n_groups ?? 12}</span> Groups
+        </span>
+        <span class="inline-flex items-center gap-1.5 text-xs text-emerald-400 bg-emerald-950/30 border border-emerald-800/40 px-3 py-1.5 rounded-full">
+          <span class="font-semibold">{data?.n_qualifying ?? 8}</span> Advance
+        </span>
+        <span class="inline-flex items-center gap-1.5 text-xs text-slate-500 bg-slate-800/40 border border-slate-800/50 px-3 py-1.5 rounded-full">
+          <span class="font-semibold">{(data?.n_thirds_ranked ?? 0) - (data?.n_qualifying ?? 0)}</span> Eliminated
+        </span>
       </div>
 
-      <!-- Qualifying thirds -->
-      {qualifying.length > 0 && (
-        <div class="mb-6">
-          <h2 class="text-sm font-semibold text-emerald-400 uppercase tracking-wider mb-3">
-            Qualifying — Top 8
-          </h2>
-          <div class="overflow-x-auto rounded-lg border border-slate-700">
-            <table class="w-full text-sm">
-              <thead class="bg-slate-800 text-slate-400 text-xs uppercase tracking-wider">
-                <tr>
-                  <th class="text-left px-3 py-2">Rank</th>
-                  <th class="text-left px-3 py-2">Team</th>
-                  <th class="text-left px-3 py-2">Group</th>
-                  <th class="text-right px-3 py-2">Pts</th>
-                  <th class="text-right px-3 py-2">GD</th>
-                  <th class="text-right px-3 py-2">GF</th>
-                  <th class="text-center px-3 py-2">Status</th>
-                </tr>
-              </thead>
-              <tbody class="divide-y divide-slate-800">
-                {qualifying.map((t) => (
-                  <tr class="hover:bg-slate-800/50 transition-colors">
-                    <td class="px-3 py-2 text-slate-500 text-xs font-mono">{t.rank}</td>
-                    <td class="px-3 py-2 text-slate-200 font-medium">{formatTeamName(t.team)}</td>
-                    <td class="px-3 py-2 text-slate-400">Group {t.group}</td>
-                    <td class="px-3 py-2 text-right text-white font-semibold">{t.points}</td>
-                    <td class="px-3 py-2 text-right text-slate-400">
-                      {t.gd > 0 ? `+${t.gd}` : t.gd}
-                    </td>
-                    <td class="px-3 py-2 text-right text-slate-400">{t.gf}</td>
-                    <td class="px-3 py-2 text-center">
-                      <span class="inline-block rounded-full bg-emerald-900/50 border border-emerald-700 text-emerald-400 text-xs px-2 py-0.5">
-                        Qualifies
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+      {allZero && (
+        <div class="rounded-xl border border-slate-700/40 bg-slate-800/30 px-4 py-3 mb-8">
+          <p class="text-slate-500 text-sm">
+            Pre-tournament baseline — all stats show 0 because group stage has not yet been played.
+            Rankings will update automatically as matches complete.
+          </p>
         </div>
       )}
 
-      <!-- Eliminated thirds -->
+      <!-- Advancing 8 -->
+      {advancing.length > 0 && (
+        <section class="mb-10">
+          <div class="flex items-center gap-2 mb-4">
+            <span class="w-2 h-2 rounded-full bg-emerald-500/70 shrink-0"></span>
+            <h2 class="text-base font-bold text-slate-100">Advancing — Top 8</h2>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            {advancing.map(t => (
+              <BubbleTeamCard
+                rank={t.rank}
+                team={t.team}
+                group={t.group}
+                points={t.points}
+                gd={t.gd}
+                gf={t.gf}
+                qualifies={t.qualifies}
+              />
+            ))}
+          </div>
+        </section>
+      )}
+
+      <!-- Eliminated 4 -->
       {eliminated.length > 0 && (
-        <div>
-          <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-3">
-            Eliminated — Bottom 4
-          </h2>
-          <div class="overflow-x-auto rounded-lg border border-slate-700">
-            <table class="w-full text-sm opacity-60">
-              <thead class="bg-slate-800 text-slate-500 text-xs uppercase tracking-wider">
-                <tr>
-                  <th class="text-left px-3 py-2">Rank</th>
-                  <th class="text-left px-3 py-2">Team</th>
-                  <th class="text-left px-3 py-2">Group</th>
-                  <th class="text-right px-3 py-2">Pts</th>
-                  <th class="text-right px-3 py-2">GD</th>
-                  <th class="text-right px-3 py-2">GF</th>
-                  <th class="text-center px-3 py-2">Status</th>
-                </tr>
-              </thead>
-              <tbody class="divide-y divide-slate-800">
-                {eliminated.map((t) => (
-                  <tr>
-                    <td class="px-3 py-2 text-slate-600 text-xs font-mono">{t.rank}</td>
-                    <td class="px-3 py-2 text-slate-500">{formatTeamName(t.team)}</td>
-                    <td class="px-3 py-2 text-slate-600">Group {t.group}</td>
-                    <td class="px-3 py-2 text-right text-slate-500">{t.points}</td>
-                    <td class="px-3 py-2 text-right text-slate-600">
-                      {t.gd > 0 ? `+${t.gd}` : t.gd}
-                    </td>
-                    <td class="px-3 py-2 text-right text-slate-600">{t.gf}</td>
-                    <td class="px-3 py-2 text-center">
-                      <span class="inline-block rounded-full bg-slate-800 border border-slate-700 text-slate-500 text-xs px-2 py-0.5">
-                        Eliminated
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+        <section class="mb-10">
+          <div class="flex items-center gap-2 mb-4">
+            <span class="w-2 h-2 rounded-full bg-slate-700 shrink-0"></span>
+            <h2 class="text-base font-bold text-slate-500">Eliminated — Bottom 4</h2>
           </div>
-        </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            {eliminated.map(t => (
+              <BubbleTeamCard
+                rank={t.rank}
+                team={t.team}
+                group={t.group}
+                points={t.points}
+                gd={t.gd}
+                gf={t.gf}
+                qualifies={t.qualifies}
+              />
+            ))}
+          </div>
+        </section>
       )}
 
-      {data?.note && (
-        <p class="text-slate-600 text-xs mt-4">{data.note}</p>
-      )}
-      <p class="text-slate-700 text-xs mt-1">
-        Generated {data?.generated_at ? new Date(data.generated_at).toLocaleString() : '—'}.
-      </p>
+      <!-- How it works card -->
+      <div class="rounded-xl border border-slate-800/60 bg-slate-900/50 p-5 mb-10">
+        <h3 class="text-sm font-bold text-slate-200 mb-3">How the Bubble Works</h3>
+        <div class="space-y-2 text-sm text-slate-500">
+          <p>With 12 groups of 4 teams, only the top 2 from each group qualify automatically (24 spots). The knockout bracket has 32 teams — so 8 third-place teams also advance.</p>
+          <p>All 12 third-place finishers are ranked together. Tiebreakers: <span class="text-slate-400">points → goal difference → goals for</span>. The top 8 advance; the bottom 4 go home.</p>
+          <p>Being on the bubble means a single result swing in any group can change your ranking.</p>
+        </div>
+        {data?.note && (
+          <p class="text-slate-600 text-xs mt-3 pt-3 border-t border-slate-800/50">{data.note}</p>
+        )}
+      </div>
+
+      <TrustStrip nSims={nSims} goalsModel={goalsModel} />
     </>
   )}
+
 </Layout>

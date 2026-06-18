@@ -7,5 +7,5 @@
   "recommendations": [],
   "note": "True CLV only computed when closing_status == 'closing_locked'. Positive CLV means model was more confident than market at kickoff.",
   "disclaimer": "CLV is a diagnostic tool \u2014 not a performance guarantee.",
-  "generated_at": "2026-06-15T04:44:45.670428+00:00"
+  "generated_at": "2026-06-17T06:00:50.872251+00:00"
 }
