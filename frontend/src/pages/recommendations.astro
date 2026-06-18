@@ -144,42 +144,27 @@ function labelDominant(m: EnrichedMatch): string {
 
     <!-- ══════════════════ SECTION 1: HERO ══════════════════════════════════ -->
     <section>
-      <p class="text-xs font-semibold uppercase tracking-widest text-cyan-600 mb-3">
-        World Cup 2026 · Betting Intelligence
-      </p>
-      <h1 class="text-3xl sm:text-4xl font-bold text-slate-100 tracking-tight leading-tight mb-4">
-        Today's Betting Intelligence
+      <h1 class="text-3xl sm:text-4xl font-bold text-slate-100 tracking-tight leading-tight mb-3">
+        Betting Signals
       </h1>
-      <p class="text-slate-400 text-base leading-relaxed max-w-2xl mb-8">
-        We surface matches where the model sees unusually decisive probabilities, and —
-        once market odds are available — where those probabilities diverge from bookmaker prices.
-        Educational only.
+      <p class="text-slate-400 text-sm leading-relaxed max-w-2xl mb-5">
+        Model probabilities for every fixture, plus market-gap signals where the model and
+        bookmaker odds diverge significantly. Educational only.
       </p>
-
-      <!-- Stat pills -->
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div class="rounded-lg border border-slate-800/70 bg-slate-900/50 px-4 py-3">
-          <div class="text-xl font-bold text-slate-100">{bp.length}</div>
-          <div class="text-[11px] text-slate-500 mt-0.5">Matches analysed</div>
-        </div>
-        <div class="rounded-lg border border-slate-800/70 bg-slate-900/50 px-4 py-3">
-          <div class:list={['text-xl font-bold', nSignals > 0 ? 'text-cyan-400' : 'text-slate-100']}>
-            {nSignals}
-          </div>
-          <div class="text-[11px] text-slate-500 mt-0.5">Actionable signals</div>
-        </div>
-        <div class="rounded-lg border border-slate-800/70 bg-slate-900/50 px-4 py-3">
-          <div class:list={['text-xl font-bold', nGap > 0 ? 'text-cyan-400' : 'text-slate-100']}>
-            {nGap}
-          </div>
-          <div class="text-[11px] text-slate-500 mt-0.5">Market gap signals</div>
-        </div>
-        <div class="rounded-lg border border-slate-800/70 bg-slate-900/50 px-4 py-3">
-          <div class="text-xl font-bold text-slate-100">
-            {hasMarket ? ((summary?.n_actionable ?? 0) + ' live') : 'Connecting'}
-          </div>
-          <div class="text-[11px] text-slate-500 mt-0.5">Market odds status</div>
-        </div>
+      <div class="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-slate-500">
+        <span>
+          <span class="text-slate-200 font-semibold tabular-nums">{bp.length}</span> matches scanned
+        </span>
+        <span class="text-slate-800">·</span>
+        <span>
+          <span class:list={['font-semibold tabular-nums', nSignals > 0 ? 'text-cyan-400' : 'text-slate-200']}>{nSignals}</span>{nSignals === 1 ? ' signal' : ' signals'} detected
+        </span>
+        <span class="text-slate-800">·</span>
+        {hasMarket ? (
+          <span class="text-emerald-400 text-xs font-medium">Market odds connected</span>
+        ) : (
+          <span class="text-slate-600 text-xs">Model only — no market odds yet</span>
+        )}
       </div>
     </section>
 
@@ -201,7 +186,7 @@ function labelDominant(m: EnrichedMatch): string {
     <!-- ══════════════════ SECTION 5: MODEL HIGHLIGHTS ══════════════════════ -->
     <!-- (Placed before Top Signals when market data absent — most useful content first) -->
     <section>
-      <h2 class="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-4">
+      <h2 class="text-lg font-semibold text-slate-200 mb-4">
         Model Highlights
       </h2>
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -386,7 +371,7 @@ function labelDominant(m: EnrichedMatch): string {
 
     <!-- ══════════════════ SECTION 4: MARKET GAP SIGNALS ════════════════════ -->
     <section>
-      <h2 class="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-3">
+      <h2 class="text-lg font-semibold text-slate-200 mb-3">
         Market Gap Signals
       </h2>
       {nGap > 0 ? (
@@ -416,7 +401,7 @@ function labelDominant(m: EnrichedMatch): string {
 
     <!-- ══════════════════ SECTION 6: HOW SIGNALS WORK ═════════════════════ -->
     <section class="rounded-xl border border-slate-800/60 bg-slate-900/30 p-5 sm:p-6">
-      <h2 class="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-5">
+      <h2 class="text-sm font-semibold text-slate-300 mb-5">
         How Signals Work
       </h2>
 

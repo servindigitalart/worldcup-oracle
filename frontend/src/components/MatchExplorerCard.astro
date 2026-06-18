@@ -30,8 +30,7 @@ const {
   isToday,
 } = Astro.props;
 
-const barW  = (v: number) => Math.max(v * 100, 0.5).toFixed(2) + '%';
-const showN = (v: number) => v >= 0.22;
+const barW = (v: number) => Math.max(v * 100, 0.5).toFixed(2) + '%';
 ---
 
 <a
@@ -63,24 +62,9 @@ const showN = (v: number) => v >= 0.22;
 
   <!-- Probability bar -->
   <div class="flex h-4 rounded overflow-hidden mb-2">
-    <div
-      class="bg-blue-700/70 flex items-center justify-center text-[9px] font-bold text-blue-100"
-      style={`width:${barW(pHome)}`}
-    >
-      {showN(pHome) ? formatPct(pHome, 0) : ''}
-    </div>
-    <div
-      class="bg-slate-600/70 flex items-center justify-center text-[9px] font-bold text-slate-300"
-      style={`width:${barW(pDraw)}`}
-    >
-      {showN(pDraw) ? formatPct(pDraw, 0) : ''}
-    </div>
-    <div
-      class="bg-rose-800/60 flex items-center justify-center text-[9px] font-bold text-rose-200"
-      style={`width:${barW(pAway)}`}
-    >
-      {showN(pAway) ? formatPct(pAway, 0) : ''}
-    </div>
+    <div class="bg-blue-700/70" style={`width:${barW(pHome)}`} />
+    <div class="bg-slate-600/70" style={`width:${barW(pDraw)}`} />
+    <div class="bg-rose-800/60" style={`width:${barW(pAway)}`} />
   </div>
 
   <!-- Three-way probs + fair odds -->

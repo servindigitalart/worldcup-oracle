@@ -1,10 +1,13 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ForecastTeamCard from '../components/ForecastTeamCard.astro';
+import ShareableTournamentCard from '../components/ShareableTournamentCard.astro';
+import SharePanel from '../components/SharePanel.astro';
 import TrustStrip from '../components/TrustStrip.astro';
 import RelatedLinks from '../components/RelatedLinks.astro';
 import { loadJson } from '../utils/load';
 import { formatTeamName, formatPct } from '../utils/format';
+import { generateTournamentSummary } from '../utils/social';
 import type { TeamProb, SimSummary } from '../types';
 
 const teams = loadJson<TeamProb[]>('team_probs.json', []);
@@ -26,58 +29,131 @@ const nSims     = sim?.n_sims ?? 10000;
 const goalsModel = sim?.goals_model_version ?? 'dixon-coles';
 
 const champBarW = (p: number) => 'width:' + Math.max(p * 100, 0.5).toFixed(2) + '%';
+
+const tournamentSummary = generateTournamentSummary({
+  topTeams: sorted.slice(0, 5).map(t => ({ name: formatTeamName(t.team), champion: t.champion })),
+  nSims,
+});
 ---
 
-<Layout title="World Cup Forecast" description="Championship probabilities, qualification odds, and round-by-round projections for the 2026 World Cup.">
+<Layout
+  title="World Cup Forecast"
+  description={sorted.length > 0 ? `${topName} leads the 2026 World Cup championship forecast at ${topChamp}. Probabilities and projections for all 48 teams.` : 'Championship probabilities, qualification odds, and round-by-round projections for the 2026 World Cup.'}
+>
 
   <!-- SECTION 1: Hero -->
   <div class="mb-12">
-    <div class="flex items-center gap-2 mb-3">
-      <span class="text-[10px] font-semibold uppercase tracking-widest text-slate-600">Monte Carlo</span>
-      <span class="text-slate-800">·</span>
-      <span class="text-[10px] font-semibold uppercase tracking-widest text-slate-600">{nSims.toLocaleString()} Simulations</span>
-    </div>
     <h1 class="text-3xl sm:text-4xl font-bold text-slate-100 tracking-tight mb-2">World Cup Forecast</h1>
     <p class="text-slate-500 text-sm mb-6 max-w-lg">
-      Championship odds, qualification projections, and round-by-round probabilities for all 48 teams.
+      Championship odds, qualification projections, and round-by-round probabilities for all 48 teams — {nSims.toLocaleString()} simulations.
     </p>
-    <div class="flex flex-wrap gap-2.5">
-      <span class="inline-flex items-center gap-1.5 text-xs text-slate-400 bg-slate-800/60 border border-slate-700/50 px-3 py-1.5 rounded-full">
-        <span class="font-semibold text-slate-200">{teams.length}</span> Teams
-      </span>
-      <span class="inline-flex items-center gap-1.5 text-xs text-slate-400 bg-slate-800/60 border border-slate-700/50 px-3 py-1.5 rounded-full">
-        <span class="font-semibold text-slate-200">{nSims.toLocaleString()}</span> Simulations
-      </span>
-      {topName && (
-        <span class="inline-flex items-center gap-1.5 text-xs text-amber-400 bg-amber-950/30 border border-amber-800/40 px-3 py-1.5 rounded-full">
-          {topName} favored · {topChamp}
-        </span>
-      )}
-    </div>
+    {topName && (
+      <div class="inline-flex items-center gap-4 bg-amber-950/30 border border-amber-800/40 rounded-xl px-5 py-3.5">
+        <div class="text-3xl font-bold text-amber-200 tabular-nums leading-none">{topChamp}</div>
+        <div>
+          <div class="text-sm font-semibold text-amber-300 leading-tight">{topName}</div>
+          <div class="text-xs text-amber-700 mt-0.5">leads the championship forecast</div>
+        </div>
+      </div>
+    )}
   </div>
 
-  <!-- SECTION 2: Power Rankings — Top 8 -->
+  <!-- SECTION 2: Power Rankings — Hierarchical -->
   {teams.length > 0 && (
     <section class="mb-14">
-      <div class="flex items-center justify-between mb-5">
-        <h2 class="text-lg font-bold text-slate-100">Power Rankings</h2>
-        <span class="text-[10px] uppercase tracking-widest text-slate-600">Championship odds</span>
+      <h2 class="text-lg font-bold text-slate-100 mb-5">Power Rankings</h2>
+
+      <!-- #1 Featured -->
+      <div class="rounded-2xl border border-amber-600/50 bg-amber-950/25 p-5 sm:p-6 mb-4">
+        <div class="flex items-start justify-between gap-4 flex-wrap">
+          <div class="min-w-0">
+            <div class="text-[10px] font-bold uppercase tracking-widest text-amber-500 mb-1">#1 Favorite</div>
+            <div class="text-2xl font-bold text-slate-100 truncate">{formatTeamName(top8[0].team)}</div>
+          </div>
+          <div class="text-right shrink-0">
+            <div class="text-5xl sm:text-6xl font-bold text-amber-200 tabular-nums leading-none">{formatPct(top8[0].champion)}</div>
+            <div class="text-xs text-amber-700 mt-1">championship probability</div>
+          </div>
+        </div>
+        <div class="h-px bg-amber-800/30 mt-4 mb-3" />
+        <div class="grid grid-cols-5 gap-2 text-center">
+          <div>
+            <div class="text-[10px] uppercase tracking-widest text-amber-700/80 mb-1">Qual</div>
+            <div class="text-sm tabular-nums text-amber-200/70">{formatPct(top8[0].qualify, 0)}</div>
+          </div>
+          <div>
+            <div class="text-[10px] uppercase tracking-widest text-amber-700/80 mb-1">R16</div>
+            <div class="text-sm tabular-nums text-amber-200/70">{formatPct(top8[0].r16, 0)}</div>
+          </div>
+          <div>
+            <div class="text-[10px] uppercase tracking-widest text-amber-700/80 mb-1">QF</div>
+            <div class="text-sm tabular-nums text-amber-200/70">{formatPct(top8[0].qf, 0)}</div>
+          </div>
+          <div>
+            <div class="text-[10px] uppercase tracking-widest text-amber-700/80 mb-1">SF</div>
+            <div class="text-sm tabular-nums text-amber-200/70">{formatPct(top8[0].sf, 0)}</div>
+          </div>
+          <div>
+            <div class="text-[10px] uppercase tracking-widest text-amber-700/80 mb-1">Final</div>
+            <div class="text-sm tabular-nums text-amber-200/70">{formatPct(top8[0].final, 0)}</div>
+          </div>
+        </div>
       </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-        {top8.map((t, i) => (
+
+      <!-- #2 and #3 — medium cards -->
+      {top8.length >= 3 && (
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
           <ForecastTeamCard
-            rank={i + 1}
-            team={t.team}
-            qualify={t.qualify}
-            r16={t.r16}
-            qf={t.qf}
-            sf={t.sf}
-            final={t.final}
-            champion={t.champion}
+            rank={2}
+            team={top8[1].team}
+            qualify={top8[1].qualify}
+            r16={top8[1].r16}
+            qf={top8[1].qf}
+            sf={top8[1].sf}
+            final={top8[1].final}
+            champion={top8[1].champion}
             champMax={champMax}
           />
-        ))}
+          <ForecastTeamCard
+            rank={3}
+            team={top8[2].team}
+            qualify={top8[2].qualify}
+            r16={top8[2].r16}
+            qf={top8[2].qf}
+            sf={top8[2].sf}
+            final={top8[2].final}
+            champion={top8[2].champion}
+            champMax={champMax}
+          />
+        </div>
+      )}
+
+      <!-- #4–#8 — compact ranked list -->
+      {top8.length > 3 && (
+        <div class="space-y-1.5">
+          {top8.slice(3).map((t, i) => (
+            <div class="flex items-center gap-3 bg-slate-900/50 border border-slate-800/60 rounded-lg px-3 py-2.5">
+              <span class="text-slate-600 text-xs font-mono tabular-nums w-5 text-right shrink-0">#{i + 4}</span>
+              <span class="text-sm text-slate-300 truncate flex-1">{formatTeamName(t.team)}</span>
+              <div class="hidden sm:block h-1.5 w-24 bg-slate-800/60 rounded-full overflow-hidden mx-2 shrink-0">
+                <div class="h-full bg-blue-600/60 rounded-full" style={`width:${((t.champion / champMax) * 100).toFixed(1)}%`} />
+              </div>
+              <span class="text-sm font-semibold tabular-nums text-blue-300 w-12 text-right shrink-0">{formatPct(t.champion)}</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </section>
+  )}
+
+  <!-- SECTION 2.5: Share Forecast -->
+  {teams.length > 0 && (
+    <section class="mb-14">
+      <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+        <h2 class="text-lg font-bold text-slate-100">Share Forecast</h2>
+        <SharePanel summaryText={tournamentSummary} />
       </div>
+      <ShareableTournamentCard teams={sorted.slice(0, 5)} nSims={nSims} champMax={champMax} />
     </section>
   )}
 

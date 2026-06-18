@@ -1,0 +1,61 @@
+---
+import { formatTeamName, formatPct } from '../utils/format';
+
+interface TeamRow {
+  team: string;
+  champion: number;
+}
+
+interface Props {
+  topTeams: TeamRow[];
+  nSims: number;
+}
+
+const { topTeams, nSims } = Astro.props;
+const champion = topTeams[0];
+const contenders = topTeams.slice(1, 4);
+---
+
+{champion && (
+  <div class="rounded-2xl border border-amber-700/40 bg-[#0A0F23] overflow-hidden max-w-sm">
+    <!-- Header -->
+    <div class="flex items-center justify-between px-5 py-3 border-b border-slate-800/50">
+      <span class="text-[11px] font-semibold text-amber-500 tracking-wide">Projected Champion</span>
+      <span class="text-[11px] text-slate-600">World Cup Oracle</span>
+    </div>
+
+    <!-- Body -->
+    <div class="px-5 py-6">
+      <div class="text-[11px] text-slate-500 mb-4">
+        2026 World Cup · {nSims.toLocaleString()} simulations
+      </div>
+
+      <!-- Champion -->
+      <div class="mb-6">
+        <div class="text-3xl font-bold text-slate-100 mb-1">{formatTeamName(champion.team)}</div>
+        <div class="text-4xl font-bold text-amber-200 tabular-nums">{formatPct(champion.champion)}</div>
+        <div class="text-xs text-amber-700 mt-1">championship probability</div>
+      </div>
+
+      <!-- Contenders -->
+      {contenders.length > 0 && (
+        <div>
+          <div class="text-[11px] text-slate-500 mb-2">Also in contention</div>
+          <div class="flex flex-wrap gap-x-4 gap-y-1.5">
+            {contenders.map(t => (
+              <span class="text-sm text-slate-400">
+                {formatTeamName(t.team)}
+                <span class="text-slate-600 ml-1 tabular-nums">{formatPct(t.champion)}</span>
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+
+    <!-- Footer -->
+    <div class="px-5 py-3 border-t border-slate-800/50">
+      <p class="text-[11px] text-slate-600">Monte Carlo simulation · Not betting advice</p>
+    </div>
+  </div>
+)}

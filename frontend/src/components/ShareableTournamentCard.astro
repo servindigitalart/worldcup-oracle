@@ -1,0 +1,62 @@
+---
+import { formatTeamName, formatPct } from '../utils/format';
+
+interface TeamRow {
+  team: string;
+  champion: number;
+}
+
+interface Props {
+  teams: TeamRow[];
+  nSims: number;
+  champMax: number;
+}
+
+const { teams, nSims, champMax } = Astro.props;
+const top5 = teams.slice(0, 5);
+---
+
+<div class="rounded-2xl border border-slate-700/50 bg-[#0A0F23] overflow-hidden max-w-sm">
+  <!-- Header -->
+  <div class="flex items-center justify-between px-5 py-3 border-b border-slate-800/50">
+    <span class="text-[11px] font-semibold text-slate-400 tracking-wide">Championship Forecast</span>
+    <span class="text-[11px] text-slate-600">World Cup Oracle</span>
+  </div>
+
+  <!-- Body -->
+  <div class="px-5 py-5">
+    <div class="text-[11px] text-slate-500 mb-5">
+      2026 World Cup · {nSims.toLocaleString()} simulations
+    </div>
+
+    <div class="space-y-3">
+      {top5.map((t, i) => (
+        <div class="flex items-center gap-3">
+          <span class:list={[
+            'text-xs font-mono tabular-nums w-4 shrink-0 text-right font-bold',
+            i === 0 ? 'text-amber-400' : 'text-slate-600',
+          ]}>{i + 1}</span>
+          <span class:list={[
+            'text-sm truncate flex-1',
+            i === 0 ? 'text-slate-100 font-bold' : 'text-slate-300 font-medium',
+          ]}>{formatTeamName(t.team)}</span>
+          <div class="w-24 h-2 bg-slate-800/60 rounded-full overflow-hidden shrink-0">
+            <div
+              class:list={['h-full rounded-full', i === 0 ? 'bg-amber-500/70' : 'bg-blue-600/60']}
+              style={`width:${((t.champion / champMax) * 100).toFixed(1)}%`}
+            />
+          </div>
+          <span class:list={[
+            'text-sm font-bold tabular-nums w-12 text-right shrink-0',
+            i === 0 ? 'text-amber-300' : 'text-blue-300',
+          ]}>{formatPct(t.champion)}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="px-5 py-3 border-t border-slate-800/50">
+    <p class="text-[11px] text-slate-600">Monte Carlo simulation · Not betting advice</p>
+  </div>
+</div>

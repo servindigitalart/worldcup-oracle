@@ -1,0 +1,89 @@
+---
+import SignalBadge from './SignalBadge.astro';
+import { formatPct } from '../utils/format';
+
+interface Props {
+  homeLabel: string;
+  awayLabel: string;
+  group: string;
+  kickoffFormatted: string | null;
+  pHome: number;
+  pDraw: number;
+  pAway: number;
+  signalLevel: string;
+  marketHome?: number | null;
+  marketDraw?: number | null;
+  marketAway?: number | null;
+  reason?: string | null;
+}
+
+const {
+  homeLabel, awayLabel, group, kickoffFormatted,
+  pHome, pDraw, pAway, signalLevel,
+  marketHome = null, marketDraw = null, marketAway = null,
+  reason = null,
+} = Astro.props;
+
+const dominant =
+  pHome >= pDraw && pHome >= pAway
+    ? { label: homeLabel, model: pHome, market: marketHome }
+    : pAway > pHome && pAway >= pDraw
+    ? { label: awayLabel, model: pAway, market: marketAway }
+    : { label: 'Draw', model: pDraw, market: marketDraw };
+
+const gap = dominant.market != null ? dominant.model - dominant.market : null;
+
+const badgeLevel =
+  signalLevel === 'model_gap_detected' ? 'model_gap_detected'
+  : signalLevel === 'strong_signal'    ? 'strong_signal'
+  : signalLevel === 'watch'            ? 'watch'
+  : 'model_probability_only';
+---
+
+<div class="rounded-2xl border border-slate-700/50 bg-[#0A0F23] overflow-hidden">
+  <!-- Header -->
+  <div class="flex items-center justify-between px-5 py-3 border-b border-slate-800/50">
+    <SignalBadge level={badgeLevel} size="md" />
+    <span class="text-[11px] text-slate-600">World Cup Oracle</span>
+  </div>
+
+  <!-- Body -->
+  <div class="px-5 py-5">
+    <div class="text-[11px] text-slate-500 mb-3">
+      {homeLabel} vs {awayLabel} · Group {group}{kickoffFormatted ? ` · ${kickoffFormatted}` : ''}
+    </div>
+
+    <!-- Dominant outcome highlight -->
+    <div class="mb-5">
+      <div class="text-3xl font-bold text-slate-100 mb-2">{dominant.label}</div>
+      <div class="flex items-baseline gap-4 flex-wrap">
+        <div>
+          <span class="text-xl font-bold text-blue-300 tabular-nums">{formatPct(dominant.model)}</span>
+          <span class="text-xs text-slate-500 ml-1">model</span>
+        </div>
+        {dominant.market != null && (
+          <div>
+            <span class="text-xl font-bold text-slate-400 tabular-nums">{formatPct(dominant.market)}</span>
+            <span class="text-xs text-slate-500 ml-1">market</span>
+          </div>
+        )}
+        {gap != null && Math.abs(gap) >= 0.03 && (
+          <div class:list={['text-base font-bold tabular-nums', gap > 0 ? 'text-cyan-400' : 'text-red-400']}>
+            {gap > 0 ? '+' : ''}{formatPct(gap)} gap
+          </div>
+        )}
+      </div>
+    </div>
+
+    {reason && (
+      <p class="text-xs text-slate-400 leading-relaxed border-t border-slate-800/50 pt-4">
+        {reason}
+      </p>
+    )}
+  </div>
+
+  <!-- Footer -->
+  <div class="px-5 py-3 border-t border-slate-800/50">
+    <p class="text-[11px] text-slate-600">Forecast based on model-market analysis · Not betting advice</p>
+  </div>
+</div>

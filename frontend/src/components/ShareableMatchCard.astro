@@ -1,0 +1,110 @@
+---
+import SignalBadge from './SignalBadge.astro';
+import { formatPct } from '../utils/format';
+
+interface Props {
+  homeLabel: string;
+  awayLabel: string;
+  group: string;
+  kickoffFormatted: string | null;
+  city: string | null;
+  pHome: number;
+  pDraw: number;
+  pAway: number;
+  signalLevel: string;
+  hasMarketData: boolean;
+}
+
+const {
+  homeLabel, awayLabel, group, kickoffFormatted, city,
+  pHome, pDraw, pAway, signalLevel, hasMarketData,
+} = Astro.props;
+
+const barW = (v: number) => Math.max(v * 100, 1).toFixed(1) + '%';
+
+const dominant =
+  pHome >= pDraw && pHome >= pAway ? homeLabel
+  : pAway > pHome && pAway >= pDraw ? awayLabel
+  : 'Draw';
+const domProb = Math.max(pHome, pDraw, pAway);
+
+const badgeLevel =
+  signalLevel === 'model_gap_detected' ? 'model_gap_detected'
+  : signalLevel === 'watch'            ? 'watch'
+  : signalLevel === 'avoid'            ? 'avoid'
+  : signalLevel === 'model_only'       ? 'model_probability_only'
+  : 'no_signal';
+---
+
+<div class="rounded-2xl border border-slate-700/50 bg-[#0A0F23] overflow-hidden">
+  <!-- Header strip -->
+  <div class="flex items-center justify-between px-5 py-3 border-b border-slate-800/50">
+    <span class="text-[11px] font-semibold text-slate-500 tracking-wide">World Cup 2026</span>
+    <span class="text-[11px] text-slate-600">World Cup Oracle</span>
+  </div>
+
+  <!-- Body -->
+  <div class="px-5 pt-5 pb-4">
+    <!-- Meta line -->
+    <div class="text-[11px] text-slate-500 mb-4">
+      Group {group}{kickoffFormatted ? ` · ${kickoffFormatted}` : ''}{city ? ` · ${city}` : ''}
+    </div>
+
+    <!-- Teams header -->
+    <div class="flex items-end justify-between gap-3 mb-5">
+      <div class="flex-1 min-w-0">
+        <div class="text-xl sm:text-2xl font-bold text-slate-100 leading-tight truncate">{homeLabel}</div>
+        <div class="text-xs text-blue-400 font-medium mt-0.5">{formatPct(pHome, 0)}</div>
+      </div>
+      <div class="text-slate-600 text-sm shrink-0 pb-4">vs</div>
+      <div class="flex-1 min-w-0 text-right">
+        <div class="text-xl sm:text-2xl font-bold text-slate-100 leading-tight truncate">{awayLabel}</div>
+        <div class="text-xs text-rose-400 font-medium mt-0.5">{formatPct(pAway, 0)}</div>
+      </div>
+    </div>
+
+    <!-- Probability bar (tall, editorial) -->
+    <div class="flex h-10 rounded-xl overflow-hidden text-sm font-bold mb-2">
+      <div
+        class="flex items-center justify-center bg-blue-700 text-blue-100"
+        style={`width:${barW(pHome)}`}
+      >
+        {pHome >= 0.22 ? formatPct(pHome, 0) : ''}
+      </div>
+      <div
+        class="flex items-center justify-center bg-slate-600 text-slate-200"
+        style={`width:${barW(pDraw)}`}
+      >
+        {pDraw >= 0.22 ? formatPct(pDraw, 0) : ''}
+      </div>
+      <div
+        class="flex items-center justify-center bg-rose-800 text-rose-100"
+        style={`width:${barW(pAway)}`}
+      >
+        {pAway >= 0.22 ? formatPct(pAway, 0) : ''}
+      </div>
+    </div>
+    <div class="flex justify-between text-[11px] text-slate-500 mb-5">
+      <span>Home win</span>
+      <span>Draw</span>
+      <span>Away win</span>
+    </div>
+
+    <!-- Dominant outcome callout -->
+    <div class="bg-slate-800/50 rounded-xl px-4 py-3">
+      <div class="text-[11px] text-slate-500 mb-0.5">Model favors</div>
+      <div class="text-lg font-bold text-slate-100">
+        {dominant}
+        <span class="text-slate-400 font-normal text-base"> at {formatPct(domProb, 0)}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="flex items-center justify-between px-5 py-3 border-t border-slate-800/50">
+    <SignalBadge level={badgeLevel} size="sm" />
+    <span class="text-[11px] text-slate-600">
+      {hasMarketData ? 'Model + market' : 'Model only'} · Not betting advice
+    </span>
+  </div>
+</div>

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-17T06:00:19.257961+00:00",
+  "generated_at": "2026-06-18T03:06:16.192702+00:00",
   "n_teams": 32,
   "disclaimer": "Expected opponents are computed using the highest-Elo team in each bracket arm (greedy approximation). Actual opponents depend on match results.",
   "paths": [

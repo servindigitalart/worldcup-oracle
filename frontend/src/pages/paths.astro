@@ -54,11 +54,17 @@ const rounds: Array<{ key: StringPathKey; label: string; short: string }> = [
 
   <!-- Hero -->
   <div class="mb-10">
-    <span class="text-[10px] font-semibold uppercase tracking-widest text-slate-600 mb-3 block">Bracket Paths</span>
     <h1 class="text-3xl sm:text-4xl font-bold text-slate-100 tracking-tight mb-2">Road to the Final</h1>
-    <p class="text-slate-500 text-sm max-w-lg">
+    <p class="text-slate-500 text-sm max-w-lg mb-4">
       Projected opponents at every knockout round, ranked by the strength of their expected path.
     </p>
+    {hasData && toughestRoads.length > 0 && clearestPaths.length > 0 && (
+      <div class="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-slate-500">
+        <span>Toughest draw: <span class="text-slate-200 font-semibold">{formatTeamName(toughestRoads[0].team)}</span></span>
+        <span class="text-slate-800">·</span>
+        <span>Clearest path: <span class="text-slate-200 font-semibold">{formatTeamName(clearestPaths[0].team)}</span></span>
+      </div>
+    )}
   </div>
 
   {!hasData && (

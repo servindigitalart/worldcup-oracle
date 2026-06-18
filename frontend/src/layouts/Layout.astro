@@ -58,6 +58,16 @@ const canonicalUrl = Astro.url.href;
 </html>
 
 <style is:global>
+  /* ── Design tokens ────────────────────────────────────────────────────────── */
+  :root {
+    --oracle-bg: #06091A;
+    --oracle-surface: rgba(15, 22, 41, 0.6);
+    --oracle-border: rgba(30, 41, 59, 0.7);
+    --oracle-text-muted: #64748b;
+    --oracle-accent: #22d3ee;
+    --oracle-warning: #f59e0b;
+  }
+
   /* ── Reduced motion ───────────────────────────────────────────────────────── */
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {

@@ -124,38 +124,19 @@ const isOfficial = fixtureSource.is_official === true;
 
   <!-- Hero -->
   <div class="mb-10">
-    <div class="flex items-center gap-2 mb-3">
-      {isOfficial && (
+    {isOfficial && (
+      <div class="mb-3">
         <span class="text-[10px] font-semibold uppercase tracking-widest bg-emerald-950/60 text-emerald-400 border border-emerald-800/50 px-2 py-0.5 rounded">
           Official FIFA 2026
         </span>
-      )}
-      <span class="text-[10px] font-semibold uppercase tracking-widest text-slate-600">
-        Group Stage
-      </span>
-    </div>
+      </div>
+    )}
     <h1 class="text-3xl sm:text-4xl font-bold text-slate-100 tracking-tight mb-2">
       World Cup 2026 Fixtures
     </h1>
-    <p class="text-slate-500 text-sm mb-6 max-w-lg">
-      Model probabilities for every group-stage match. No market benchmark yet — all signals are model-only.
+    <p class="text-slate-500 text-sm max-w-lg">
+      {enriched.length} group-stage matches across {groupKeys.length} groups — model probabilities for every fixture.
     </p>
-
-    <!-- Stat pills -->
-    <div class="flex flex-wrap gap-2.5">
-      <span class="inline-flex items-center gap-1.5 text-xs text-slate-400 bg-slate-800/60 border border-slate-700/50 px-3 py-1.5 rounded-full">
-        <span class="font-semibold text-slate-200">{enriched.length}</span> Matches
-      </span>
-      <span class="inline-flex items-center gap-1.5 text-xs text-slate-400 bg-slate-800/60 border border-slate-700/50 px-3 py-1.5 rounded-full">
-        <span class="font-semibold text-slate-200">{groupKeys.length}</span> Groups
-      </span>
-      <span class="inline-flex items-center gap-1.5 text-xs text-slate-400 bg-slate-800/60 border border-slate-700/50 px-3 py-1.5 rounded-full">
-        <span class="font-semibold text-slate-200">{totalTeams}</span> Teams
-      </span>
-      <span class="inline-flex items-center gap-1.5 text-xs text-slate-500 bg-slate-800/40 border border-slate-800/50 px-3 py-1.5 rounded-full">
-        Model-only signals
-      </span>
-    </div>
   </div>
 
   <!-- Group Navigator -->
@@ -193,7 +174,7 @@ const isOfficial = fixtureSource.is_official === true;
   <!-- Featured Matches -->
   {featuredMatches.length > 0 && (
     <section class="mb-10" id="featured">
-      <h2 class="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-4">
+      <h2 class="text-base font-semibold text-slate-300 mb-4">
         {todayMatches.length > 0 ? 'Today & Upcoming' : 'Next Fixtures'}
       </h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">

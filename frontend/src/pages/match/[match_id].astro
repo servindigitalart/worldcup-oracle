@@ -2,11 +2,14 @@
 import Layout from '../../layouts/Layout.astro';
 import MatchHero from '../../components/MatchHero.astro';
 import OracleVerdictCard from '../../components/OracleVerdictCard.astro';
+import ShareableMatchCard from '../../components/ShareableMatchCard.astro';
+import SharePanel from '../../components/SharePanel.astro';
 import SignalBadge from '../../components/SignalBadge.astro';
 import TrustStrip from '../../components/TrustStrip.astro';
 import Disclaimer from '../../components/Disclaimer.astro';
 import { loadJson } from '../../utils/load';
 import { formatTeamName, formatPct, formatOdds, formatKickoff } from '../../utils/format';
+import { generateMatchSummary } from '../../utils/social';
 import type {
   MarketComparison,
   BlendedPrediction,
@@ -119,7 +122,22 @@ function edgeConfClass(ec: string): string {
   return 'text-slate-600';
 }
 
-const pageDescription = `Oracle analysis for ${homeLabel} vs ${awayLabel} — model probability signals for FIFA 2026 World Cup. Educational only.`;
+const domTeam = pHome >= pDraw && pHome >= pAway ? homeLabel
+  : pAway > pHome && pAway >= pDraw ? awayLabel : 'a draw';
+const domProbPct = Math.round(Math.max(pHome, pDraw, pAway) * 100);
+
+const matchSummary = generateMatchSummary({
+  homeLabel,
+  awayLabel,
+  group: mc.group,
+  pHome,
+  pDraw,
+  pAway,
+  signalLevel,
+  kickoffFormatted: kickoffFmt,
+});
+
+const pageDescription = `${homeLabel} vs ${awayLabel}: model gives ${domTeam} a ${domProbPct}% chance. 2026 World Cup Oracle analysis.`;
 ---
 
 <Layout
@@ -169,6 +187,26 @@ const pageDescription = `Oracle analysis for ${homeLabel} vs ${awayLabel} — mo
       <div class="mt-3">
         <Disclaimer compact />
       </div>
+    </section>
+
+    <!-- ── 2.5. Share Snapshot ──────────────────────────────────────────── -->
+    <section>
+      <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
+        <h2 class="text-sm font-semibold text-slate-400">Share this forecast</h2>
+        <SharePanel summaryText={matchSummary} />
+      </div>
+      <ShareableMatchCard
+        homeLabel={homeLabel}
+        awayLabel={awayLabel}
+        group={mc.group}
+        kickoffFormatted={kickoffFmt}
+        city={fix?.city ?? null}
+        pHome={pHome}
+        pDraw={pDraw}
+        pAway={pAway}
+        signalLevel={signalLevel}
+        hasMarketData={hasMarketData}
+      />
     </section>
 
     <!-- ── 3. Probability Snapshot ───────────────────────────────────────── -->

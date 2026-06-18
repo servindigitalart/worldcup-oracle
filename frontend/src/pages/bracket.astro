@@ -1,9 +1,12 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import ShareableBracketCard from '../components/ShareableBracketCard.astro';
+import SharePanel from '../components/SharePanel.astro';
 import TrustStrip from '../components/TrustStrip.astro';
 import RelatedLinks from '../components/RelatedLinks.astro';
 import { loadJson } from '../utils/load';
 import { formatTeamName, formatPct } from '../utils/format';
+import { generateTournamentSummary } from '../utils/social';
 import type { KnockoutProjection, TeamProb, SimSummary } from '../types';
 
 const projection = loadJson<KnockoutProjection | null>('knockout_projection.json', null);
@@ -27,6 +30,11 @@ const champMax = sorted.length > 0 ? sorted[0].champion : 1;
 const nSims = sim?.n_sims ?? 10000;
 const goalsModel = sim?.goals_model_version ?? 'dixon-coles';
 
+const bracketSummary = generateTournamentSummary({
+  topTeams: top5.map(t => ({ name: formatTeamName(t.team), champion: t.champion })),
+  nSims,
+});
+
 function champW(p: number): string {
   return 'width:' + ((p / champMax) * 100).toFixed(1) + '%';
 }
@@ -36,7 +44,6 @@ function champW(p: number): string {
 
   <!-- Hero -->
   <div class="mb-10">
-    <span class="text-[10px] font-semibold uppercase tracking-widest text-slate-600 mb-3 block">Knockout Stage</span>
     <h1 class="text-3xl sm:text-4xl font-bold text-slate-100 tracking-tight mb-2">Projected Bracket</h1>
     <p class="text-slate-500 text-sm max-w-lg">
       Official FIFA 2026 Round of 32 pairings. Each team's championship probability gives context for strength going in.
@@ -181,6 +188,17 @@ function champW(p: number): string {
               </div>
             ))}
           </div>
+        </section>
+      )}
+
+      <!-- Share card -->
+      {top5.length > 0 && (
+        <section class="mb-10">
+          <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+            <h2 class="text-lg font-bold text-slate-100">Share Projection</h2>
+            <SharePanel summaryText={bracketSummary} />
+          </div>
+          <ShareableBracketCard topTeams={top5} nSims={nSims} />
         </section>
       )}
 
