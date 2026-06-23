@@ -1,0 +1,46 @@
+{
+  "chains": {
+    "C-03": 1.09,
+    "G-07": 1.09,
+    "C-05": 1.09,
+    "B-05": 1.0822,
+    "G-01": 1.0615,
+    "S-03": 1.0525,
+    "K-02": 1.037,
+    "S-07": 0.9117
+  },
+  "scripts": {
+    "tactical_neutralization": 1.0511,
+    "defensive_siege": 1.0351,
+    "favorite_dominance": 1.0252,
+    "cagey_knockout": 1.0225,
+    "counter_attack_trap": 0.9984,
+    "high_press_feast": 0.9891,
+    "set_piece_war": 0.9768,
+    "late_equalizer_pressure": 0.9739,
+    "early_goal_chaos": 0.9647
+  },
+  "managers": {
+    "scaloni:disciplined_defense_first": 1.09,
+    "deschamps:conservative_lead_protection": 1.09,
+    "scaloni:counter_attack_precision": 1.0663,
+    "regragui:compact_defensive_shape": 1.0555,
+    "nagelsmann:high_press_system": 1.0387,
+    "deschamps:pragmatic_rotation": 1.0248,
+    "regragui:counter_through_flanks": 0.9981,
+    "nagelsmann:positional_flexibility": 0.979,
+    "bielsa:relentless_pressing": 0.97
+  },
+  "archetypes": {
+    "possession_control": 1.09,
+    "low_block": 1.09,
+    "high_press": 1.09,
+    "tournament_survival": 1.0826,
+    "counter_attack": 1.0758,
+    "direct_play": 1.004,
+    "set_piece_heavy": 1.0038,
+    "unknown": 0.9982,
+    "high_press_resistant": 0.9592
+  },
+  "generated_at": "2026-06-23T04:22:26.409715+00:00"
+}

@@ -1,0 +1,47 @@
+{
+  "generated_at": "2026-06-23T04:22:26.367777+00:00",
+  "n_matches": 72,
+  "n_with_full_profiles": 10,
+  "n_with_partial_profiles": 46,
+  "n_unknown_profiles": 16,
+  "n_chain_activations": 12,
+  "n_script_activations": 498,
+  "avg_knowledge_confidence": 0.413,
+  "most_common_scripts": [
+    [
+      "favorite_dominance",
+      69
+    ],
+    [
+      "counter_attack_trap",
+      2
+    ],
+    [
+      "tactical_neutralization",
+      1
+    ]
+  ],
+  "most_common_chains": [
+    [
+      "G-07",
+      4
+    ],
+    [
+      "G-01",
+      3
+    ],
+    [
+      "K-02",
+      2
+    ],
+    [
+      "C-03",
+      1
+    ],
+    [
+      "C-05",
+      1
+    ]
+  ],
+  "stage": "stage_1"
+}

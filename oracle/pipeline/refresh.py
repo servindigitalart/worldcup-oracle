@@ -315,6 +315,30 @@ def _step_grading() -> None:
     )
 
 
+def _step_knowledge() -> None:
+    from oracle.pipeline.knowledge import run as knowledge_run
+    summary = knowledge_run()
+    log.info(
+        "  matches=%d  chains=%d  scripts=%d  avg_conf=%.2f",
+        summary.get("n_matches", 0),
+        summary.get("n_chain_activations", 0),
+        summary.get("n_script_activations", 0),
+        summary.get("avg_knowledge_confidence", 0.0),
+    )
+
+
+def _step_knowledge_calibration() -> None:
+    from oracle.pipeline.knowledge_calibration import run as kc_run
+    kc_run()
+    log.info("  knowledge calibration complete")
+
+
+def _step_knowledge_learning() -> None:
+    from oracle.pipeline.knowledge_learning import run as kl_run
+    kl_run()
+    log.info("  knowledge learning complete")
+
+
 def _step_betting() -> None:
     from oracle.pipeline.betting import run as betting_run
     summary = betting_run()
@@ -323,6 +347,19 @@ def _step_betting() -> None:
         summary.get("n_matches", 0),
         summary.get("n_with_dc_grid", 0),
         summary.get("n_signals", 0),
+    )
+
+
+def _step_thesis() -> None:
+    from oracle.pipeline.thesis import run as thesis_run
+    summary = thesis_run()
+    log.info(
+        "  matches=%d  theses=%d  featured=%d  secondary=%d  watchlist=%d",
+        summary.get("n_matches", 0),
+        summary.get("n_theses", 0),
+        summary.get("n_featured", 0),
+        summary.get("n_secondary", 0),
+        summary.get("n_watchlist", 0),
     )
 
 
@@ -516,6 +553,58 @@ def refresh_tournament(
             "match_betting_cards.json",
             "betting_signals.json",
             "betting_summary.json",
+        ],
+    )
+
+    # ── 7c. Football Knowledge Engine (Week 25E) ──────────────────────────────
+    _try(
+        "knowledge",
+        _step_knowledge,
+        [
+            "knowledge_activations.json",
+            "causal_chain_activations.json",
+            "game_script_activations.json",
+            "knowledge_summary.json",
+        ],
+    )
+
+    # ── 7d. Knowledge Calibration Engine (Week 26) ───────────────────────────
+    _try(
+        "knowledge_calibration",
+        _step_knowledge_calibration,
+        [
+            "knowledge_chain_performance.json",
+            "knowledge_script_performance.json",
+            "knowledge_manager_performance.json",
+            "knowledge_archetype_performance.json",
+            "knowledge_weights.json",
+            "knowledge_calibration_summary.json",
+        ],
+    )
+
+    # ── 7e. Adaptive Knowledge Learning (Week 27) ────────────────────────────
+    _try(
+        "knowledge_learning",
+        _step_knowledge_learning,
+        [
+            "knowledge_evidence_log.json",
+            "knowledge_outcome_records.json",
+            "knowledge_contribution_scores.json",
+            "knowledge_weight_updates.json",
+            "knowledge_learning_history.json",
+            "knowledge_learning_summary.json",
+            "knowledge_effective_weights.json",
+        ],
+    )
+
+    # ── 7f. Betting Thesis Engine (Week 25D) ──────────────────────────────────
+    _try(
+        "thesis",
+        _step_thesis,
+        [
+            "betting_theses.json",
+            "betting_theses.parquet",
+            "thesis_summary.json",
         ],
     )
 

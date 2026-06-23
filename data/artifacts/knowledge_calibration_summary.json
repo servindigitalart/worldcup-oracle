@@ -1,0 +1,243 @@
+{
+  "generated_at": "2026-06-23T04:22:26.405102+00:00",
+  "stage": "stage_1",
+  "evidence_source": "seed_v1",
+  "total_chains_evaluated": 8,
+  "total_scripts_evaluated": 9,
+  "total_managers_evaluated": 9,
+  "total_archetypes_evaluated": 9,
+  "avg_knowledge_value_score": 57.3,
+  "avg_chain_weight": 1.0819,
+  "avg_script_weight": 1.0041,
+  "avg_manager_weight": 1.0364,
+  "avg_archetype_weight": 1.0568,
+  "top_chains": [
+    {
+      "chain_id": "C-03",
+      "name": "Possession \u2192 Corners",
+      "value_score": 80.5,
+      "weight": 1.2053,
+      "hit_rate": 0.7368,
+      "evidence_quality": "strong"
+    },
+    {
+      "chain_id": "G-07",
+      "name": "Low Block Stalemate",
+      "value_score": 79.9,
+      "weight": 1.1987,
+      "hit_rate": 0.7353,
+      "evidence_quality": "strong"
+    },
+    {
+      "chain_id": "C-05",
+      "name": "Low Block Deflections \u2192 Corners",
+      "value_score": 70.6,
+      "weight": 1.1059,
+      "hit_rate": 0.625,
+      "evidence_quality": "moderate"
+    }
+  ],
+  "weakest_chains": [
+    {
+      "chain_id": "S-07",
+      "name": "Late Tournament Fatigue \u2192 Simplification",
+      "value_score": 31.2,
+      "weight": 0.9117,
+      "hit_rate": 0.4,
+      "evidence_quality": "insufficient"
+    },
+    {
+      "chain_id": "K-02",
+      "name": "Press Failure \u2192 Tactical Foul",
+      "value_score": 57.4,
+      "weight": 1.037,
+      "hit_rate": 0.5556,
+      "evidence_quality": "weak"
+    },
+    {
+      "chain_id": "S-03",
+      "name": "Pragmatic Manager \u2192 Win-1-0 Protection",
+      "value_score": 60.5,
+      "weight": 1.0525,
+      "hit_rate": 0.6667,
+      "evidence_quality": "weak"
+    }
+  ],
+  "strongest_scripts": [
+    {
+      "script_id": "tactical_neutralization",
+      "display_name": "Tactical Neutralization",
+      "value_score": 60.2,
+      "weight": 1.0511,
+      "hit_rate": 0.7143,
+      "evidence_quality": "strong"
+    },
+    {
+      "script_id": "defensive_siege",
+      "display_name": "Defensive Siege",
+      "value_score": 57.0,
+      "weight": 1.0351,
+      "hit_rate": 0.68,
+      "evidence_quality": "moderate"
+    },
+    {
+      "script_id": "favorite_dominance",
+      "display_name": "Favorite Dominance",
+      "value_score": 55.0,
+      "weight": 1.0252,
+      "hit_rate": 0.65,
+      "evidence_quality": "moderate"
+    }
+  ],
+  "weakest_scripts": [
+    {
+      "script_id": "early_goal_chaos",
+      "display_name": "Early Goal Chaos",
+      "value_score": 39.4,
+      "weight": 0.9647,
+      "hit_rate": 0.5,
+      "evidence_quality": "insufficient"
+    },
+    {
+      "script_id": "late_equalizer_pressure",
+      "display_name": "Late Equalizer Pressure",
+      "value_score": 42.2,
+      "weight": 0.9739,
+      "hit_rate": 0.5,
+      "evidence_quality": "weak"
+    },
+    {
+      "script_id": "set_piece_war",
+      "display_name": "Set Piece War",
+      "value_score": 43.0,
+      "weight": 0.9768,
+      "hit_rate": 0.5833,
+      "evidence_quality": "weak"
+    }
+  ],
+  "strongest_managers": [
+    {
+      "manager_id": "scaloni",
+      "pattern_id": "disciplined_defense_first",
+      "manager_name": "Lionel Scaloni",
+      "value_score": 70.4,
+      "weight": 1.1036,
+      "hit_rate": 0.7222,
+      "evidence_quality": "strong"
+    },
+    {
+      "manager_id": "deschamps",
+      "pattern_id": "conservative_lead_protection",
+      "manager_name": "Didier Deschamps",
+      "value_score": 68.4,
+      "weight": 1.0918,
+      "hit_rate": 0.7143,
+      "evidence_quality": "strong"
+    },
+    {
+      "manager_id": "scaloni",
+      "pattern_id": "counter_attack_precision",
+      "manager_name": "Lionel Scaloni",
+      "value_score": 63.3,
+      "weight": 1.0663,
+      "hit_rate": 0.6667,
+      "evidence_quality": "moderate"
+    }
+  ],
+  "weakest_managers": [
+    {
+      "manager_id": "bielsa",
+      "pattern_id": "relentless_pressing",
+      "manager_name": "Marcelo Bielsa",
+      "value_score": 41.0,
+      "weight": 0.97,
+      "hit_rate": 0.5,
+      "evidence_quality": "weak"
+    },
+    {
+      "manager_id": "nagelsmann",
+      "pattern_id": "positional_flexibility",
+      "manager_name": "Julian Nagelsmann",
+      "value_score": 43.7,
+      "weight": 0.979,
+      "hit_rate": 0.5,
+      "evidence_quality": "weak"
+    },
+    {
+      "manager_id": "regragui",
+      "pattern_id": "counter_through_flanks",
+      "manager_name": "Walid Regragui",
+      "value_score": 49.4,
+      "weight": 0.9981,
+      "hit_rate": 0.6,
+      "evidence_quality": "weak"
+    }
+  ],
+  "strongest_archetypes": [
+    {
+      "archetype_id": "possession_control",
+      "display_name": "Possession Control",
+      "value_score": 78.4,
+      "weight": 1.1837,
+      "signal_success": 0.7143,
+      "evidence_quality": "strong"
+    },
+    {
+      "archetype_id": "low_block",
+      "display_name": "Low Block",
+      "value_score": 70.7,
+      "weight": 1.1066,
+      "signal_success": 0.7,
+      "evidence_quality": "strong"
+    },
+    {
+      "archetype_id": "high_press",
+      "display_name": "High Press",
+      "value_score": 69.5,
+      "weight": 1.0974,
+      "signal_success": 0.6667,
+      "evidence_quality": "moderate"
+    }
+  ],
+  "weakest_archetypes": [
+    {
+      "archetype_id": "high_press_resistant",
+      "display_name": "High Press Resistant",
+      "value_score": 37.8,
+      "weight": 0.9592,
+      "signal_success": 0.5,
+      "evidence_quality": "insufficient"
+    },
+    {
+      "archetype_id": "unknown",
+      "display_name": "Unknown",
+      "value_score": 49.4,
+      "weight": 0.9982,
+      "signal_success": 0.4,
+      "evidence_quality": "insufficient"
+    },
+    {
+      "archetype_id": "set_piece_heavy",
+      "display_name": "Set Piece Heavy",
+      "value_score": 50.8,
+      "weight": 1.0038,
+      "signal_success": 0.6,
+      "evidence_quality": "moderate"
+    }
+  ],
+  "recommendations": [
+    "C-03 (Possession \u2192 Corners) shows strong evidence (score 81, hit rate 74%) and should receive increased weight (1.21).",
+    "G-07 (Low Block Stalemate) shows strong evidence (score 80, hit rate 74%) and should receive increased weight (1.20).",
+    "C-05 (Low Block Deflections \u2192 Corners) shows strong evidence (score 71, hit rate 62%) and should receive increased weight (1.11).",
+    "B-05 (Elite Defence vs Weak Attack \u2192 BTTS No) shows strong evidence (score 66, hit rate 65%) and should receive increased weight (1.08).",
+    "S-07 (Late Tournament Fatigue \u2192 Simplification) shows weak or insufficient evidence (score 31) \u2014 weight held at neutral 0.91. Do not increase confidence contribution without measured outcomes.",
+    "Script 'Tactical Neutralization' has strong market alignment (73%) and receives elevated weight (1.05).",
+    "Lionel Scaloni pattern 'disciplined_defense_first' is well-evidenced (score 70, hit rate 72%). Pattern weight: 1.10.",
+    "Didier Deschamps pattern 'conservative_lead_protection' is well-evidenced (score 68, hit rate 71%). Pattern weight: 1.09.",
+    "Lionel Scaloni pattern 'counter_attack_precision' is well-evidenced (score 63, hit rate 67%). Pattern weight: 1.07.",
+    "Walid Regragui pattern 'compact_defensive_shape' is well-evidenced (score 61, hit rate 71%). Pattern weight: 1.06.",
+    "Archetype 'Possession Control' has reliable signal (score 78, weight 1.18). Prioritise in thesis generation.",
+    "Archetype 'Low Block' has reliable signal (score 71, weight 1.11). Prioritise in thesis generation."
+  ],
+  "notes": "Stage 1 calibration uses principled seed evidence from WC 2014/2018/2022 pattern analysis. Evidence is tagged seed_v1. Weights are conservative. All conclusions should be treated as prior estimates pending measured outcomes."
+}

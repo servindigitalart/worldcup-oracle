@@ -1,0 +1,56 @@
+{
+  "generated_at": "2026-06-23T04:22:28.683577+00:00",
+  "data_stage": "stage_1",
+  "n_matches": 0,
+  "n_matches_with_market": 0,
+  "n_theses": 0,
+  "n_featured": 0,
+  "n_secondary": 0,
+  "n_watchlist": 0,
+  "n_hidden": 0,
+  "n_model_only": 0,
+  "n_market_edge": 0,
+  "markets_supported": [
+    "1x2",
+    "double_chance",
+    "draw_no_bet",
+    "over_under_2_5",
+    "btts",
+    "correct_score"
+  ],
+  "markets_unavailable": [
+    "corners",
+    "cards",
+    "shots",
+    "player_props",
+    "anytime_scorer",
+    "over_under_1_5",
+    "over_under_3_5"
+  ],
+  "disclaimer": "These are educational probability signals only. Not betting advice. A model-market gap does not imply value or a winning selection. Market odds may be more accurate than model estimates.",
+  "language_policy": {
+    "safe_terms": [
+      "signal detected",
+      "model edge",
+      "watchlist",
+      "no opportunity",
+      "market aligned",
+      "high variance",
+      "insufficient data",
+      "model estimate",
+      "model-only"
+    ],
+    "forbidden_terms": [
+      "bet this",
+      "lock",
+      "guaranteed",
+      "sure thing",
+      "profit",
+      "free money",
+      "must bet",
+      "bet this now",
+      "risk-free"
+    ]
+  },
+  "match_summaries": []
+}

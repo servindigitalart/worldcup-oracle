@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-11T00:29:47.998587+00:00",
+  "generated_at": "2026-06-23T04:13:59.973080+00:00",
   "note": "CLV = model_prob \u2212 market_prob at prediction time. Positive CLV means model was more confident than market on that side. This uses snapshot probabilities, not guaranteed closing-line CLV.",
   "n": 0,
   "average_clv": null,

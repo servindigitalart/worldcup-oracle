@@ -1,0 +1,172 @@
+[
+  {
+    "match_id": "brazil_vs_morocco",
+    "home_team": "brazil",
+    "away_team": "morocco",
+    "chain_id": "C-03",
+    "name": "Possession \u2192 Corners",
+    "activation_confidence": 0.72,
+    "markets_affected": [
+      "corners_over",
+      "corners_home_over"
+    ],
+    "explanation_snippet": "When a possession-control team faces a compact block, wide play generates corners. Expect elevated corner volume."
+  },
+  {
+    "match_id": "brazil_vs_morocco",
+    "home_team": "brazil",
+    "away_team": "morocco",
+    "chain_id": "C-05",
+    "name": "Low Block Deflections \u2192 Corners",
+    "activation_confidence": 0.68,
+    "markets_affected": [
+      "corners_over"
+    ],
+    "explanation_snippet": "Low blocks absorb shots and deflect them behind \u2014 this mechanically inflates the corner count."
+  },
+  {
+    "match_id": "brazil_vs_morocco",
+    "home_team": "brazil",
+    "away_team": "morocco",
+    "chain_id": "G-07",
+    "name": "Low Block Stalemate",
+    "activation_confidence": 0.74,
+    "markets_affected": [
+      "under_goals",
+      "btts_no",
+      "draw",
+      "correct_score_0_0"
+    ],
+    "explanation_snippet": "When defensive compactness dominates both ends, the match tends toward low goal volume and drawn outcomes."
+  },
+  {
+    "match_id": "mexico_vs_south_korea",
+    "home_team": "mexico",
+    "away_team": "south_korea",
+    "chain_id": "G-01",
+    "name": "Counter Attack vs High Line",
+    "activation_confidence": 0.7,
+    "markets_affected": [
+      "1x2_underdog",
+      "btts_yes",
+      "over_under_2_5_over"
+    ],
+    "explanation_snippet": "High defensive lines are vulnerable to pace. Counter-attacking teams generate genuine goal threat through transitions."
+  },
+  {
+    "match_id": "mexico_vs_south_korea",
+    "home_team": "mexico",
+    "away_team": "south_korea",
+    "chain_id": "K-02",
+    "name": "Press Failure \u2192 Tactical Foul",
+    "activation_confidence": 0.66,
+    "markets_affected": [
+      "cards_over",
+      "cards_home_over",
+      "free_kicks"
+    ],
+    "explanation_snippet": "Aggressive pressing that fails generates tactical fouls \u2014 cards risk elevates for the pressing side."
+  },
+  {
+    "match_id": "mexico_vs_south_korea",
+    "home_team": "mexico",
+    "away_team": "south_korea",
+    "chain_id": "G-07",
+    "name": "Low Block Stalemate",
+    "activation_confidence": 0.74,
+    "markets_affected": [
+      "under_goals",
+      "btts_no",
+      "draw",
+      "correct_score_0_0"
+    ],
+    "explanation_snippet": "When defensive compactness dominates both ends, the match tends toward low goal volume and drawn outcomes."
+  },
+  {
+    "match_id": "netherlands_vs_japan",
+    "home_team": "netherlands",
+    "away_team": "japan",
+    "chain_id": "G-01",
+    "name": "Counter Attack vs High Line",
+    "activation_confidence": 0.7,
+    "markets_affected": [
+      "1x2_underdog",
+      "btts_yes",
+      "over_under_2_5_over"
+    ],
+    "explanation_snippet": "High defensive lines are vulnerable to pace. Counter-attacking teams generate genuine goal threat through transitions."
+  },
+  {
+    "match_id": "netherlands_vs_japan",
+    "home_team": "netherlands",
+    "away_team": "japan",
+    "chain_id": "K-02",
+    "name": "Press Failure \u2192 Tactical Foul",
+    "activation_confidence": 0.66,
+    "markets_affected": [
+      "cards_over",
+      "cards_home_over",
+      "free_kicks"
+    ],
+    "explanation_snippet": "Aggressive pressing that fails generates tactical fouls \u2014 cards risk elevates for the pressing side."
+  },
+  {
+    "match_id": "netherlands_vs_japan",
+    "home_team": "netherlands",
+    "away_team": "japan",
+    "chain_id": "G-07",
+    "name": "Low Block Stalemate",
+    "activation_confidence": 0.74,
+    "markets_affected": [
+      "under_goals",
+      "btts_no",
+      "draw",
+      "correct_score_0_0"
+    ],
+    "explanation_snippet": "When defensive compactness dominates both ends, the match tends toward low goal volume and drawn outcomes."
+  },
+  {
+    "match_id": "portugal_vs_colombia",
+    "home_team": "portugal",
+    "away_team": "colombia",
+    "chain_id": "G-01",
+    "name": "Counter Attack vs High Line",
+    "activation_confidence": 0.7,
+    "markets_affected": [
+      "1x2_underdog",
+      "btts_yes",
+      "over_under_2_5_over"
+    ],
+    "explanation_snippet": "High defensive lines are vulnerable to pace. Counter-attacking teams generate genuine goal threat through transitions."
+  },
+  {
+    "match_id": "portugal_vs_colombia",
+    "home_team": "portugal",
+    "away_team": "colombia",
+    "chain_id": "G-07",
+    "name": "Low Block Stalemate",
+    "activation_confidence": 0.74,
+    "markets_affected": [
+      "under_goals",
+      "btts_no",
+      "draw",
+      "correct_score_0_0"
+    ],
+    "explanation_snippet": "When defensive compactness dominates both ends, the match tends toward low goal volume and drawn outcomes."
+  },
+  {
+    "match_id": "portugal_vs_colombia",
+    "home_team": "portugal",
+    "away_team": "colombia",
+    "chain_id": "S-03",
+    "name": "Pragmatic Manager \u2192 Win-1-0 Protection",
+    "activation_confidence": 0.72,
+    "markets_affected": [
+      "correct_score_1_0",
+      "btts_no",
+      "under_goals",
+      "1x2_home"
+    ],
+    "explanation_snippet": "Pragmatic managers shift to a lead-protection setup after scoring, reducing second-half goal volume and BTTS probability."
+  }
+]

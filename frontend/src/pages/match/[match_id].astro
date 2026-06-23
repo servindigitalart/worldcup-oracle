@@ -16,6 +16,8 @@ import type {
   FixtureScheduleEntry,
   Recommendation,
   SimSummary,
+  BettingThesis,
+  KnowledgeActivation,
 } from '../../types';
 
 interface FixtureSource {
@@ -41,7 +43,10 @@ const { mc } = Astro.props;
 const schedule      = loadJson<Record<string, FixtureScheduleEntry>>('fixture_schedule.json', {});
 const blended       = loadJson<BlendedPrediction[]>('blended_predictions.json', []);
 const recs          = loadJson<Recommendation[]>('recommendations.json', []);
-const sim           = loadJson<SimSummary | null>('sim_summary.json', null);
+const allTheses      = loadJson<BettingThesis[]>('betting_theses.json', []);
+const allActivations    = loadJson<KnowledgeActivation[]>('knowledge_activations.json', []);
+const learningSummary   = loadJson<Record<string, any>>('knowledge_learning_summary.json', {});
+const sim            = loadJson<SimSummary | null>('sim_summary.json', null);
 const fixtureSource = loadJson<FixtureSource>('fixture_source.json', {
   source: null, is_official: false, is_placeholder: true,
   description: '', total_fixtures: 0, total_groups: 0,
@@ -53,6 +58,34 @@ const fix = schedule[`${mc.home_team}_vs_${mc.away_team}`]
 
 const bp  = blended.find((b) => b.match_id === mc.match_id) ?? null;
 const rec = recs.find((r)   => r.match_id === mc.match_id) ?? null;
+
+const matchTheses    = allTheses.filter((t) => t.match_id === mc.match_id);
+const topThesis      = matchTheses.find((t) => t.rank === 1) ?? null;
+const hasThesisData  = matchTheses.length > 0;
+const knowledge      = allActivations.find((a) => a.match_id === mc.match_id) ?? null;
+const hasKnowledge   = knowledge !== null && knowledge.knowledge_confidence > 0.30;
+
+// Parse active chains/scripts from the top thesis (stored as JSON strings)
+const topChains: Array<{chain_id: string; name: string}> =
+  topThesis ? (() => { try { return JSON.parse(topThesis.active_causal_chains); } catch { return []; } })() : [];
+const topScripts: Array<{script_id: string; display_name: string; probability: number}> =
+  topThesis ? (() => { try { return JSON.parse(topThesis.active_game_scripts); } catch { return []; } })() : [];
+
+// Week 27: trend map from learning system — "up" | "stable" | "down"
+const trendMap: Record<string, string> = learningSummary?.trend_map ?? {};
+const getTrend = (id: string): string => trendMap[id] ?? "stable";
+const trendGlyph = (id: string) => {
+  const t = getTrend(id);
+  if (t === "up")   return "↑";
+  if (t === "down") return "↓";
+  return "→";
+};
+const trendColor = (id: string) => {
+  const t = getTrend(id);
+  if (t === "up")   return "text-emerald-500";
+  if (t === "down") return "text-rose-500";
+  return "text-slate-500";
+};
 
 const homeLabel = formatTeamName(mc.home_team);
 const awayLabel = formatTeamName(mc.away_team);
@@ -125,6 +158,23 @@ function edgeConfClass(ec: string): string {
 const domTeam = pHome >= pDraw && pHome >= pAway ? homeLabel
   : pAway > pHome && pAway >= pDraw ? awayLabel : 'a draw';
 const domProbPct = Math.round(Math.max(pHome, pDraw, pAway) * 100);
+
+function formatMarket(marketType: string, selection: string, line: number | null): string {
+  if (marketType === '1x2') {
+    if (selection === 'home_win') return `${homeLabel} to win`;
+    if (selection === 'away_win') return `${awayLabel} to win`;
+    return 'Draw';
+  }
+  if (marketType === 'double_chance') return `Double chance: ${selection.replace(/_/g, '/')}`;
+  if (marketType === 'draw_no_bet') {
+    if (selection === 'home_win') return `DNB: ${homeLabel}`;
+    if (selection === 'away_win') return `DNB: ${awayLabel}`;
+  }
+  if (marketType === 'over_under_2_5') return `${selection === 'over' ? 'Over' : 'Under'} ${line ?? 2.5} goals`;
+  if (marketType === 'btts') return `Both teams to score: ${selection}`;
+  if (marketType === 'correct_score') return `Correct score ${selection}`;
+  return `${marketType} · ${selection}`;
+}
 
 const matchSummary = generateMatchSummary({
   homeLabel,
@@ -459,6 +509,117 @@ const pageDescription = `${homeLabel} vs ${awayLabel}: model gives ${domTeam} a 
         </p>
       </div>
     </section>
+
+    <!-- ── 5d. Oracle Thesis ─────────────────────────────────────────────── -->
+    {hasThesisData && (
+      <section>
+        <h2 class="text-[11px] font-semibold uppercase tracking-widest text-slate-500 mb-3">
+          Oracle Thesis
+        </h2>
+        {topThesis ? (
+          <div class="rounded-xl border border-slate-700/60 bg-slate-900/50 p-5 space-y-4">
+            <!-- Tier badge + market label -->
+            <div class="flex items-start justify-between gap-3 flex-wrap">
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class:list={[
+                  'text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full',
+                  topThesis.display_tier === 'featured'   ? 'bg-emerald-900/60 text-emerald-400 border border-emerald-700/50' :
+                  topThesis.display_tier === 'secondary'  ? 'bg-sky-900/60 text-sky-400 border border-sky-700/50' :
+                                                            'bg-slate-800/60 text-slate-400 border border-slate-700/50',
+                ]}>
+                  {topThesis.display_tier}
+                </span>
+                <span class="text-xs text-slate-400 font-medium">
+                  {formatMarket(topThesis.market_type, topThesis.selection, topThesis.line)}
+                </span>
+              </div>
+              <div class="flex items-center gap-3 text-xs text-slate-500">
+                <span>Score: <span class="text-slate-300 font-medium">{topThesis.opportunity_score}</span>/100</span>
+                <span class="capitalize">{topThesis.confidence_label.replace('_', ' ')} confidence</span>
+              </div>
+            </div>
+
+            <!-- Headline -->
+            <p class="text-sm font-medium text-slate-200 leading-snug">
+              {topThesis.human_headline}
+            </p>
+
+            <!-- Body -->
+            <p class="text-sm text-slate-400 leading-relaxed">
+              {topThesis.human_body}
+            </p>
+
+            <!-- Key risk -->
+            <div class="border-t border-slate-800/60 pt-3">
+              <div class="text-[10px] uppercase tracking-wider text-slate-600 mb-1">Key risk</div>
+              <p class="text-xs text-slate-500 leading-relaxed">{topThesis.key_risk_statement}</p>
+            </div>
+
+            <!-- Model-only label -->
+            {topThesis.contrarian_classification === 'model_only' && (
+              <div class="text-[10px] text-slate-600 border-t border-slate-800/40 pt-2">
+                Model-only · No market odds available for comparison
+              </div>
+            )}
+
+            <!-- ── Football context subsection ─────────────────────── -->
+            <div class="border-t border-slate-800/50 pt-4">
+              <div class="text-[10px] font-semibold uppercase tracking-wider text-slate-500 mb-3">
+                Football context
+              </div>
+              {hasKnowledge ? (
+                <div class="space-y-3">
+                  {knowledge!.knowledge_headline && (
+                    <p class="text-xs text-slate-400 leading-relaxed italic">
+                      {knowledge!.knowledge_headline}
+                    </p>
+                  )}
+                  {/* Active mechanisms */}
+                  {(topChains.length > 0 || topScripts.length > 0) && (
+                    <div>
+                      <div class="text-[10px] text-slate-600 mb-1.5">Active mechanisms</div>
+                      <div class="flex flex-wrap gap-1.5">
+                        {topScripts.slice(0, 2).map((s) => (
+                          <span class="text-[10px] px-2 py-0.5 rounded-full bg-indigo-900/40 text-indigo-400 border border-indigo-800/50 inline-flex items-center gap-1">
+                            {s.display_name}
+                            <span class={`text-[9px] font-bold ${trendColor(s.script_id)}`}>{trendGlyph(s.script_id)}</span>
+                          </span>
+                        ))}
+                        {topChains.slice(0, 2).map((c) => (
+                          <span class="text-[10px] px-2 py-0.5 rounded-full bg-slate-800/60 text-slate-400 border border-slate-700/50 inline-flex items-center gap-1">
+                            {c.name}
+                            <span class={`text-[9px] font-bold ${trendColor(c.chain_id)}`}>{trendGlyph(c.chain_id)}</span>
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  {/* Key risk from knowledge */}
+                  {knowledge!.knowledge_key_risk && (
+                    <p class="text-[11px] text-slate-500 leading-relaxed">
+                      <span class="text-slate-600">Risk: </span>{knowledge!.knowledge_key_risk}
+                    </p>
+                  )}
+                  <div class="text-[10px] text-slate-700">
+                    Knowledge confidence: {Math.round(knowledge!.knowledge_confidence * 100)}%
+                  </div>
+                </div>
+              ) : (
+                <p class="text-xs text-slate-600">
+                  Football context unavailable for this matchup.
+                </p>
+              )}
+            </div>
+          </div>
+        ) : (
+          <div class="rounded-xl border border-slate-800/50 bg-slate-900/30 px-5 py-4">
+            <p class="text-sm text-slate-500">
+              No meaningful model-market disagreement detected for this match.
+            </p>
+          </div>
+        )}
+      </section>
+    )}
 
     <!-- ── 6. Expected Goals Model Panel ─────────────────────────────────── -->
     <section class="rounded-xl border border-slate-800/50 bg-slate-900/30 p-5">

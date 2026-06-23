@@ -777,3 +777,131 @@ export interface BettingSummary {
   disclaimer: string;
   language_policy: { forbidden_terms: string[] };
 }
+
+// ── Week 25D: Betting Thesis Engine ───────────────────────────────────────────
+
+export type ContrarianClassification =
+  | 'model_only'
+  | 'aligned'
+  | 'slight_edge'
+  | 'moderate_edge'
+  | 'strong_edge'
+  | 'extreme_edge';
+
+export type DisplayTier = 'featured' | 'secondary' | 'watchlist' | 'hidden';
+
+export interface BettingThesis {
+  thesis_id: string;
+  match_id: string;
+  generated_at: string;
+  model_version: string;
+  data_stage: string;
+  market_type: string;
+  selection: string;
+  line: number | null;
+  model_probability: number;
+  market_implied_probability: number | null;
+  raw_edge: number | null;
+  edge_pct: number | null;
+  fair_odds: number;
+  market_quality: 'sufficient' | 'thin' | 'unavailable';
+  contrarian_classification: ContrarianClassification;
+  contrarian_score: number;
+  confidence_score: number;
+  confidence_label: 'very_low' | 'low' | 'medium' | 'high' | 'very_high';
+  risk_level: 'low' | 'medium' | 'high' | 'very_high';
+  supporting_factors: string;
+  counter_factors: string;
+  active_game_scripts: string;
+  active_causal_chains: string;
+  human_headline: string;
+  human_body: string;
+  key_risk_statement: string;
+  opportunity_score: number;
+  rank: number;
+  display_tier: DisplayTier;
+}
+
+export interface MatchThesisSummary {
+  match_id: string;
+  home_team: string;
+  away_team: string;
+  group: string;
+  n_theses_generated: number;
+  n_featured: number;
+  n_secondary: number;
+  n_watchlist: number;
+  n_hidden: number;
+  top_opportunity_score: number;
+  has_market_data: boolean;
+  no_opportunity_reason: string;
+  top_thesis: BettingThesis | null;
+  generated_at: string;
+}
+
+export interface ThesisSummary {
+  generated_at: string;
+  data_stage: string;
+  n_matches: number;
+  n_matches_with_market: number;
+  n_theses: number;
+  n_featured: number;
+  n_secondary: number;
+  n_watchlist: number;
+  n_hidden: number;
+  n_model_only: number;
+  n_market_edge: number;
+  markets_supported: string[];
+  markets_unavailable: string[];
+  disclaimer: string;
+  language_policy: { safe_terms: string[]; forbidden_terms: string[] };
+  match_summaries: MatchThesisSummary[];
+}
+
+// ── Week 25E: Football Knowledge Engine ───────────────────────────────────────
+
+export interface ActivatedChain {
+  chain_id: string;
+  name: string;
+  activation_confidence: number;
+  markets_affected: string[];
+  explanation_snippet: string;
+}
+
+export interface ActivatedScript {
+  script_id: string;
+  display_name: string;
+  probability: number;
+  markets_impacted: Record<string, string>;
+  volatility: string;
+}
+
+export interface KnowledgeActivation {
+  match_id: string;
+  home_team: string;
+  away_team: string;
+  home_archetype: string;
+  away_archetype: string;
+  home_confidence: number;
+  away_confidence: number;
+  activated_archetypes: string[];
+  activated_manager_patterns: Array<{
+    team_side: string;
+    manager_name: string;
+    pattern: string;
+    description: string;
+    supports_markets: string[];
+    confidence: number;
+  }>;
+  activated_chains: ActivatedChain[];
+  activated_scripts: ActivatedScript[];
+  supporting_context: string[];
+  counter_context: string[];
+  knowledge_confidence: number;
+  data_stage: string;
+  warnings: string[];
+  generated_at: string;
+  knowledge_headline?: string;
+  knowledge_body?: string;
+  knowledge_key_risk?: string;
+}

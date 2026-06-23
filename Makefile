@@ -1,4 +1,4 @@
-.PHONY: install test lint clean ingest-results ingest-fixtures holdout backtest simulate ingest-odds market-baseline blend capture-odds export-web dev-frontend build-frontend test-frontend ingest-results-2026 tournament-state recommendations methodology data-sources calibration-history reliability market-agreement transparency refresh refresh-build refresh-with-market results-feed refresh-live prediction-ledger grading closing-lines bracket betting
+.PHONY: install test lint clean ingest-results ingest-fixtures holdout backtest simulate ingest-odds market-baseline blend capture-odds export-web dev-frontend build-frontend test-frontend ingest-results-2026 tournament-state recommendations methodology data-sources calibration-history reliability market-agreement transparency refresh refresh-build refresh-with-market results-feed refresh-live prediction-ledger grading closing-lines bracket betting knowledge knowledge-calibration knowledge-learning thesis
 
 install:
 	pip install -e ".[dev]"
@@ -147,6 +147,61 @@ recommendations:
 #   data/artifacts/betting_summary.json       aggregate counts
 betting:
 	python3 -m oracle.pipeline.betting
+
+# Build Football Knowledge Engine artifacts (Week 25E).
+# Run 'make betting' first (match list required).
+#
+# Artifacts written:
+#   data/artifacts/knowledge_activations.json       per-match knowledge activation
+#   data/artifacts/causal_chain_activations.json    flat chain rows
+#   data/artifacts/game_script_activations.json     flat script rows
+#   data/artifacts/knowledge_summary.json           aggregate summary
+knowledge:
+	python3 -m oracle.pipeline.knowledge
+
+# Build Knowledge Calibration artifacts (Week 26).
+# Evaluates all causal chains, game scripts, manager patterns, and archetypes
+# against principled seed evidence (WC 2014/2018/2022 pattern estimates).
+# Run 'make knowledge' first (knowledge_activations.json required).
+#
+# Artifacts written:
+#   data/artifacts/knowledge_chain_performance.json
+#   data/artifacts/knowledge_script_performance.json
+#   data/artifacts/knowledge_manager_performance.json
+#   data/artifacts/knowledge_archetype_performance.json
+#   data/artifacts/knowledge_weights.json
+#   data/artifacts/knowledge_calibration_summary.json
+knowledge-calibration:
+	python3 -m oracle.pipeline.knowledge_calibration
+
+# Build Adaptive Knowledge Learning artifacts (Week 27).
+# Converts calibration seed + live WC 2026 results into dynamic weight updates.
+# Run 'make knowledge-calibration' first (knowledge_weights.json required).
+#
+# Artifacts written:
+#   data/artifacts/knowledge_evidence_log.json
+#   data/artifacts/knowledge_outcome_records.json
+#   data/artifacts/knowledge_contribution_scores.json
+#   data/artifacts/knowledge_weight_updates.json
+#   data/artifacts/knowledge_learning_history.json
+#   data/artifacts/knowledge_learning_summary.json
+#   data/artifacts/knowledge_effective_weights.json
+knowledge-learning:
+	python3 -m oracle.pipeline.knowledge_learning
+
+# Build betting thesis artifacts (Week 25D MVP).
+# Converts betting card signals into structured market thesis objects.
+# Run 'make betting' first (match_betting_cards.json required).
+#
+# Artifacts written:
+#   data/artifacts/betting_theses.json       all thesis objects (flat)
+#   data/artifacts/betting_theses.parquet    same as parquet
+#   data/artifacts/thesis_summary.json       aggregate counts + match summaries
+# Frontend exports:
+#   frontend/src/data/betting_theses.json
+#   frontend/src/data/thesis_summary.json
+thesis:
+	python3 -m oracle.pipeline.thesis
 
 # Validate and ingest WC 2026 match results from data/seed/wc2026_results.json.
 # Writes match_results.parquet and match_results_summary.json to data/artifacts/.

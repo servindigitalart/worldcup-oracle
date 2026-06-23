@@ -174,6 +174,23 @@ def export() -> None:
     _write("match_betting_cards.json",   _read_json(ARTIFACTS / "match_betting_cards.json", []))
     _write("betting_signals.json",       _read_json(ARTIFACTS / "betting_signals.json", []))
     _write("betting_summary.json",       _read_json(ARTIFACTS / "betting_summary.json", {}))
+    # Week 25D: betting thesis engine
+    _write("betting_theses.json",        _read_json(ARTIFACTS / "betting_theses.json", []))
+    _write("thesis_summary.json",        _read_json(ARTIFACTS / "thesis_summary.json", {}))
+    # Week 25E: football knowledge engine
+    _write("knowledge_activations.json",    _read_json(ARTIFACTS / "knowledge_activations.json", []))
+    _write("causal_chain_activations.json", _read_json(ARTIFACTS / "causal_chain_activations.json", []))
+    _write("game_script_activations.json",  _read_json(ARTIFACTS / "game_script_activations.json", []))
+    _write("knowledge_summary.json",        _read_json(ARTIFACTS / "knowledge_summary.json", {}))
+    # Week 26: knowledge calibration framework
+    _write("knowledge_chain_performance.json",    _read_json(ARTIFACTS / "knowledge_chain_performance.json", []))
+    _write("knowledge_script_performance.json",   _read_json(ARTIFACTS / "knowledge_script_performance.json", []))
+    _write("knowledge_manager_performance.json",  _read_json(ARTIFACTS / "knowledge_manager_performance.json", []))
+    _write("knowledge_archetype_performance.json", _read_json(ARTIFACTS / "knowledge_archetype_performance.json", []))
+    _write("knowledge_weights.json",              _read_json(ARTIFACTS / "knowledge_weights.json", {}))
+    _write("knowledge_calibration_summary.json",  _read_json(ARTIFACTS / "knowledge_calibration_summary.json", {}))
+    # Week 27: adaptive knowledge learning system
+    _write("knowledge_learning_summary.json",     _read_json(ARTIFACTS / "knowledge_learning_summary.json", {}))
 
 
 if __name__ == "__main__":

@@ -1,0 +1,29 @@
+{
+  "generated_at": "2026-06-23T04:22:26.409715+00:00",
+  "stage": "stage_1",
+  "evidence_source": "live_2026_and_bootstrap",
+  "bootstrap_updates": 105,
+  "live_updates": 0,
+  "components_gained": 0,
+  "components_lost": 0,
+  "components_stable": 0,
+  "chains_updated": 0,
+  "scripts_updated": 0,
+  "managers_updated": 0,
+  "archetypes_updated": 0,
+  "top_gaining_components": [],
+  "top_losing_components": [],
+  "trend_map": {},
+  "history_summary": {
+    "total_entries": 105,
+    "components_tracked": 35,
+    "largest_positive_delta": 0.03,
+    "largest_negative_delta": -0.0294,
+    "avg_delta": 0.011,
+    "bootstrap_entries": 105,
+    "live_entries": 0
+  },
+  "notes": [
+    "No live WC 2026 evidence yet \u2014 weights remain at calibration baseline."
+  ]
+}

@@ -1,0 +1,3241 @@
+[
+  {
+    "match_id": "algeria_vs_austria",
+    "home_team": "algeria",
+    "away_team": "austria",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "algeria_vs_austria",
+    "home_team": "algeria",
+    "away_team": "austria",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "algeria_vs_austria",
+    "home_team": "algeria",
+    "away_team": "austria",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "algeria_vs_jordan",
+    "home_team": "algeria",
+    "away_team": "jordan",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "algeria_vs_jordan",
+    "home_team": "algeria",
+    "away_team": "jordan",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "algeria_vs_jordan",
+    "home_team": "algeria",
+    "away_team": "jordan",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "argentina_vs_algeria",
+    "home_team": "argentina",
+    "away_team": "algeria",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "argentina_vs_algeria",
+    "home_team": "argentina",
+    "away_team": "algeria",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "argentina_vs_algeria",
+    "home_team": "argentina",
+    "away_team": "algeria",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "argentina_vs_austria",
+    "home_team": "argentina",
+    "away_team": "austria",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "argentina_vs_austria",
+    "home_team": "argentina",
+    "away_team": "austria",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "argentina_vs_austria",
+    "home_team": "argentina",
+    "away_team": "austria",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "argentina_vs_jordan",
+    "home_team": "argentina",
+    "away_team": "jordan",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "argentina_vs_jordan",
+    "home_team": "argentina",
+    "away_team": "jordan",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "argentina_vs_jordan",
+    "home_team": "argentina",
+    "away_team": "jordan",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "australia_vs_turkey",
+    "home_team": "australia",
+    "away_team": "turkey",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "australia_vs_turkey",
+    "home_team": "australia",
+    "away_team": "turkey",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "australia_vs_turkey",
+    "home_team": "australia",
+    "away_team": "turkey",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "austria_vs_jordan",
+    "home_team": "austria",
+    "away_team": "jordan",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "austria_vs_jordan",
+    "home_team": "austria",
+    "away_team": "jordan",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "austria_vs_jordan",
+    "home_team": "austria",
+    "away_team": "jordan",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "belgium_vs_egypt",
+    "home_team": "belgium",
+    "away_team": "egypt",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "belgium_vs_egypt",
+    "home_team": "belgium",
+    "away_team": "egypt",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "belgium_vs_egypt",
+    "home_team": "belgium",
+    "away_team": "egypt",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "belgium_vs_iran",
+    "home_team": "belgium",
+    "away_team": "iran",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "belgium_vs_iran",
+    "home_team": "belgium",
+    "away_team": "iran",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "belgium_vs_iran",
+    "home_team": "belgium",
+    "away_team": "iran",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "belgium_vs_new_zealand",
+    "home_team": "belgium",
+    "away_team": "new_zealand",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "belgium_vs_new_zealand",
+    "home_team": "belgium",
+    "away_team": "new_zealand",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "belgium_vs_new_zealand",
+    "home_team": "belgium",
+    "away_team": "new_zealand",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "bosnia_herzegovina_vs_qatar",
+    "home_team": "bosnia_herzegovina",
+    "away_team": "qatar",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "bosnia_herzegovina_vs_qatar",
+    "home_team": "bosnia_herzegovina",
+    "away_team": "qatar",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "bosnia_herzegovina_vs_qatar",
+    "home_team": "bosnia_herzegovina",
+    "away_team": "qatar",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "bosnia_herzegovina_vs_switzerland",
+    "home_team": "bosnia_herzegovina",
+    "away_team": "switzerland",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "bosnia_herzegovina_vs_switzerland",
+    "home_team": "bosnia_herzegovina",
+    "away_team": "switzerland",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "bosnia_herzegovina_vs_switzerland",
+    "home_team": "bosnia_herzegovina",
+    "away_team": "switzerland",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "brazil_vs_haiti",
+    "home_team": "brazil",
+    "away_team": "haiti",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "brazil_vs_haiti",
+    "home_team": "brazil",
+    "away_team": "haiti",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "brazil_vs_haiti",
+    "home_team": "brazil",
+    "away_team": "haiti",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "brazil_vs_morocco",
+    "home_team": "brazil",
+    "away_team": "morocco",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.35,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "brazil_vs_morocco",
+    "home_team": "brazil",
+    "away_team": "morocco",
+    "script_id": "defensive_siege",
+    "display_name": "Defensive Siege",
+    "probability": 0.25,
+    "markets_impacted": {
+      "under_goals": "up",
+      "corners": "up",
+      "btts_no": "up",
+      "draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "brazil_vs_morocco",
+    "home_team": "brazil",
+    "away_team": "morocco",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.18,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "brazil_vs_scotland",
+    "home_team": "brazil",
+    "away_team": "scotland",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "brazil_vs_scotland",
+    "home_team": "brazil",
+    "away_team": "scotland",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "brazil_vs_scotland",
+    "home_team": "brazil",
+    "away_team": "scotland",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "canada_vs_bosnia_herzegovina",
+    "home_team": "canada",
+    "away_team": "bosnia_herzegovina",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "canada_vs_bosnia_herzegovina",
+    "home_team": "canada",
+    "away_team": "bosnia_herzegovina",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "canada_vs_bosnia_herzegovina",
+    "home_team": "canada",
+    "away_team": "bosnia_herzegovina",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "canada_vs_qatar",
+    "home_team": "canada",
+    "away_team": "qatar",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "canada_vs_qatar",
+    "home_team": "canada",
+    "away_team": "qatar",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "canada_vs_qatar",
+    "home_team": "canada",
+    "away_team": "qatar",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "canada_vs_switzerland",
+    "home_team": "canada",
+    "away_team": "switzerland",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "canada_vs_switzerland",
+    "home_team": "canada",
+    "away_team": "switzerland",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "canada_vs_switzerland",
+    "home_team": "canada",
+    "away_team": "switzerland",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "cape_verde_vs_saudi_arabia",
+    "home_team": "cape_verde",
+    "away_team": "saudi_arabia",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "cape_verde_vs_saudi_arabia",
+    "home_team": "cape_verde",
+    "away_team": "saudi_arabia",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "cape_verde_vs_saudi_arabia",
+    "home_team": "cape_verde",
+    "away_team": "saudi_arabia",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "cape_verde_vs_uruguay",
+    "home_team": "cape_verde",
+    "away_team": "uruguay",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "cape_verde_vs_uruguay",
+    "home_team": "cape_verde",
+    "away_team": "uruguay",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "cape_verde_vs_uruguay",
+    "home_team": "cape_verde",
+    "away_team": "uruguay",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "cote_divoire_vs_ecuador",
+    "home_team": "cote_divoire",
+    "away_team": "ecuador",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "cote_divoire_vs_ecuador",
+    "home_team": "cote_divoire",
+    "away_team": "ecuador",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "cote_divoire_vs_ecuador",
+    "home_team": "cote_divoire",
+    "away_team": "ecuador",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "croatia_vs_ghana",
+    "home_team": "croatia",
+    "away_team": "ghana",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "croatia_vs_ghana",
+    "home_team": "croatia",
+    "away_team": "ghana",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "croatia_vs_ghana",
+    "home_team": "croatia",
+    "away_team": "ghana",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "croatia_vs_panama",
+    "home_team": "croatia",
+    "away_team": "panama",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "croatia_vs_panama",
+    "home_team": "croatia",
+    "away_team": "panama",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "croatia_vs_panama",
+    "home_team": "croatia",
+    "away_team": "panama",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "curacao_vs_cote_divoire",
+    "home_team": "curacao",
+    "away_team": "cote_divoire",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "curacao_vs_cote_divoire",
+    "home_team": "curacao",
+    "away_team": "cote_divoire",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "curacao_vs_cote_divoire",
+    "home_team": "curacao",
+    "away_team": "cote_divoire",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "curacao_vs_ecuador",
+    "home_team": "curacao",
+    "away_team": "ecuador",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "curacao_vs_ecuador",
+    "home_team": "curacao",
+    "away_team": "ecuador",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "curacao_vs_ecuador",
+    "home_team": "curacao",
+    "away_team": "ecuador",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "dr_congo_vs_colombia",
+    "home_team": "dr_congo",
+    "away_team": "colombia",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "dr_congo_vs_colombia",
+    "home_team": "dr_congo",
+    "away_team": "colombia",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "dr_congo_vs_colombia",
+    "home_team": "dr_congo",
+    "away_team": "colombia",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "dr_congo_vs_uzbekistan",
+    "home_team": "dr_congo",
+    "away_team": "uzbekistan",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "dr_congo_vs_uzbekistan",
+    "home_team": "dr_congo",
+    "away_team": "uzbekistan",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "dr_congo_vs_uzbekistan",
+    "home_team": "dr_congo",
+    "away_team": "uzbekistan",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "egypt_vs_iran",
+    "home_team": "egypt",
+    "away_team": "iran",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "egypt_vs_iran",
+    "home_team": "egypt",
+    "away_team": "iran",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "egypt_vs_iran",
+    "home_team": "egypt",
+    "away_team": "iran",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "egypt_vs_new_zealand",
+    "home_team": "egypt",
+    "away_team": "new_zealand",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "egypt_vs_new_zealand",
+    "home_team": "egypt",
+    "away_team": "new_zealand",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "egypt_vs_new_zealand",
+    "home_team": "egypt",
+    "away_team": "new_zealand",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "england_vs_croatia",
+    "home_team": "england",
+    "away_team": "croatia",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "england_vs_croatia",
+    "home_team": "england",
+    "away_team": "croatia",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "england_vs_croatia",
+    "home_team": "england",
+    "away_team": "croatia",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "england_vs_ghana",
+    "home_team": "england",
+    "away_team": "ghana",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "england_vs_ghana",
+    "home_team": "england",
+    "away_team": "ghana",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "england_vs_ghana",
+    "home_team": "england",
+    "away_team": "ghana",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "england_vs_panama",
+    "home_team": "england",
+    "away_team": "panama",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "england_vs_panama",
+    "home_team": "england",
+    "away_team": "panama",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "england_vs_panama",
+    "home_team": "england",
+    "away_team": "panama",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "france_vs_iraq",
+    "home_team": "france",
+    "away_team": "iraq",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "france_vs_iraq",
+    "home_team": "france",
+    "away_team": "iraq",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "france_vs_iraq",
+    "home_team": "france",
+    "away_team": "iraq",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "france_vs_norway",
+    "home_team": "france",
+    "away_team": "norway",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "france_vs_norway",
+    "home_team": "france",
+    "away_team": "norway",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "france_vs_norway",
+    "home_team": "france",
+    "away_team": "norway",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "france_vs_senegal",
+    "home_team": "france",
+    "away_team": "senegal",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "france_vs_senegal",
+    "home_team": "france",
+    "away_team": "senegal",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "france_vs_senegal",
+    "home_team": "france",
+    "away_team": "senegal",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "germany_vs_cote_divoire",
+    "home_team": "germany",
+    "away_team": "cote_divoire",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "germany_vs_cote_divoire",
+    "home_team": "germany",
+    "away_team": "cote_divoire",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "germany_vs_cote_divoire",
+    "home_team": "germany",
+    "away_team": "cote_divoire",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "germany_vs_curacao",
+    "home_team": "germany",
+    "away_team": "curacao",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "germany_vs_curacao",
+    "home_team": "germany",
+    "away_team": "curacao",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "germany_vs_curacao",
+    "home_team": "germany",
+    "away_team": "curacao",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "germany_vs_ecuador",
+    "home_team": "germany",
+    "away_team": "ecuador",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "germany_vs_ecuador",
+    "home_team": "germany",
+    "away_team": "ecuador",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "germany_vs_ecuador",
+    "home_team": "germany",
+    "away_team": "ecuador",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "ghana_vs_panama",
+    "home_team": "ghana",
+    "away_team": "panama",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "ghana_vs_panama",
+    "home_team": "ghana",
+    "away_team": "panama",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "ghana_vs_panama",
+    "home_team": "ghana",
+    "away_team": "panama",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "haiti_vs_scotland",
+    "home_team": "haiti",
+    "away_team": "scotland",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "haiti_vs_scotland",
+    "home_team": "haiti",
+    "away_team": "scotland",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "haiti_vs_scotland",
+    "home_team": "haiti",
+    "away_team": "scotland",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "iran_vs_new_zealand",
+    "home_team": "iran",
+    "away_team": "new_zealand",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "iran_vs_new_zealand",
+    "home_team": "iran",
+    "away_team": "new_zealand",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "iran_vs_new_zealand",
+    "home_team": "iran",
+    "away_team": "new_zealand",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "iraq_vs_norway",
+    "home_team": "iraq",
+    "away_team": "norway",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "iraq_vs_norway",
+    "home_team": "iraq",
+    "away_team": "norway",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "iraq_vs_norway",
+    "home_team": "iraq",
+    "away_team": "norway",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "japan_vs_sweden",
+    "home_team": "japan",
+    "away_team": "sweden",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "japan_vs_sweden",
+    "home_team": "japan",
+    "away_team": "sweden",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "japan_vs_sweden",
+    "home_team": "japan",
+    "away_team": "sweden",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "japan_vs_tunisia",
+    "home_team": "japan",
+    "away_team": "tunisia",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "japan_vs_tunisia",
+    "home_team": "japan",
+    "away_team": "tunisia",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "japan_vs_tunisia",
+    "home_team": "japan",
+    "away_team": "tunisia",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "mexico_vs_czech_republic",
+    "home_team": "mexico",
+    "away_team": "czech_republic",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "mexico_vs_czech_republic",
+    "home_team": "mexico",
+    "away_team": "czech_republic",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "mexico_vs_czech_republic",
+    "home_team": "mexico",
+    "away_team": "czech_republic",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "mexico_vs_south_africa",
+    "home_team": "mexico",
+    "away_team": "south_africa",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "mexico_vs_south_africa",
+    "home_team": "mexico",
+    "away_team": "south_africa",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "mexico_vs_south_africa",
+    "home_team": "mexico",
+    "away_team": "south_africa",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "mexico_vs_south_korea",
+    "home_team": "mexico",
+    "away_team": "south_korea",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "mexico_vs_south_korea",
+    "home_team": "mexico",
+    "away_team": "south_korea",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "mexico_vs_south_korea",
+    "home_team": "mexico",
+    "away_team": "south_korea",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "morocco_vs_haiti",
+    "home_team": "morocco",
+    "away_team": "haiti",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "morocco_vs_haiti",
+    "home_team": "morocco",
+    "away_team": "haiti",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "morocco_vs_haiti",
+    "home_team": "morocco",
+    "away_team": "haiti",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "morocco_vs_scotland",
+    "home_team": "morocco",
+    "away_team": "scotland",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "morocco_vs_scotland",
+    "home_team": "morocco",
+    "away_team": "scotland",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "morocco_vs_scotland",
+    "home_team": "morocco",
+    "away_team": "scotland",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "netherlands_vs_japan",
+    "home_team": "netherlands",
+    "away_team": "japan",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.32,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "netherlands_vs_japan",
+    "home_team": "netherlands",
+    "away_team": "japan",
+    "script_id": "high_press_feast",
+    "display_name": "High Press Feast",
+    "probability": 0.28,
+    "markets_impacted": {
+      "over_goals": "up",
+      "btts_yes": "up",
+      "cards_over": "up",
+      "corners": "up"
+    },
+    "volatility": "high"
+  },
+  {
+    "match_id": "netherlands_vs_japan",
+    "home_team": "netherlands",
+    "away_team": "japan",
+    "script_id": "early_goal_chaos",
+    "display_name": "Early Goal Chaos",
+    "probability": 0.15,
+    "markets_impacted": {
+      "over_goals": "up",
+      "btts_yes": "up",
+      "1x2_draw": "down"
+    },
+    "volatility": "high"
+  },
+  {
+    "match_id": "netherlands_vs_sweden",
+    "home_team": "netherlands",
+    "away_team": "sweden",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "netherlands_vs_sweden",
+    "home_team": "netherlands",
+    "away_team": "sweden",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "netherlands_vs_sweden",
+    "home_team": "netherlands",
+    "away_team": "sweden",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "netherlands_vs_tunisia",
+    "home_team": "netherlands",
+    "away_team": "tunisia",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "netherlands_vs_tunisia",
+    "home_team": "netherlands",
+    "away_team": "tunisia",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "netherlands_vs_tunisia",
+    "home_team": "netherlands",
+    "away_team": "tunisia",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "paraguay_vs_australia",
+    "home_team": "paraguay",
+    "away_team": "australia",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "paraguay_vs_australia",
+    "home_team": "paraguay",
+    "away_team": "australia",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "paraguay_vs_australia",
+    "home_team": "paraguay",
+    "away_team": "australia",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "paraguay_vs_turkey",
+    "home_team": "paraguay",
+    "away_team": "turkey",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "paraguay_vs_turkey",
+    "home_team": "paraguay",
+    "away_team": "turkey",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "paraguay_vs_turkey",
+    "home_team": "paraguay",
+    "away_team": "turkey",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "portugal_vs_colombia",
+    "home_team": "portugal",
+    "away_team": "colombia",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.3,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "portugal_vs_colombia",
+    "home_team": "portugal",
+    "away_team": "colombia",
+    "script_id": "cagey_knockout",
+    "display_name": "Cagey Knockout",
+    "probability": 0.25,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "draw": "up",
+      "corners": "neutral"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "portugal_vs_colombia",
+    "home_team": "portugal",
+    "away_team": "colombia",
+    "script_id": "high_press_feast",
+    "display_name": "High Press Feast",
+    "probability": 0.2,
+    "markets_impacted": {
+      "over_goals": "up",
+      "btts_yes": "up",
+      "cards_over": "up",
+      "corners": "up"
+    },
+    "volatility": "high"
+  },
+  {
+    "match_id": "portugal_vs_dr_congo",
+    "home_team": "portugal",
+    "away_team": "dr_congo",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "portugal_vs_dr_congo",
+    "home_team": "portugal",
+    "away_team": "dr_congo",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "portugal_vs_dr_congo",
+    "home_team": "portugal",
+    "away_team": "dr_congo",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "portugal_vs_uzbekistan",
+    "home_team": "portugal",
+    "away_team": "uzbekistan",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "portugal_vs_uzbekistan",
+    "home_team": "portugal",
+    "away_team": "uzbekistan",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "portugal_vs_uzbekistan",
+    "home_team": "portugal",
+    "away_team": "uzbekistan",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "qatar_vs_switzerland",
+    "home_team": "qatar",
+    "away_team": "switzerland",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "qatar_vs_switzerland",
+    "home_team": "qatar",
+    "away_team": "switzerland",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "qatar_vs_switzerland",
+    "home_team": "qatar",
+    "away_team": "switzerland",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "saudi_arabia_vs_uruguay",
+    "home_team": "saudi_arabia",
+    "away_team": "uruguay",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "saudi_arabia_vs_uruguay",
+    "home_team": "saudi_arabia",
+    "away_team": "uruguay",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "saudi_arabia_vs_uruguay",
+    "home_team": "saudi_arabia",
+    "away_team": "uruguay",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "senegal_vs_iraq",
+    "home_team": "senegal",
+    "away_team": "iraq",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "senegal_vs_iraq",
+    "home_team": "senegal",
+    "away_team": "iraq",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "senegal_vs_iraq",
+    "home_team": "senegal",
+    "away_team": "iraq",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "senegal_vs_norway",
+    "home_team": "senegal",
+    "away_team": "norway",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "senegal_vs_norway",
+    "home_team": "senegal",
+    "away_team": "norway",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "senegal_vs_norway",
+    "home_team": "senegal",
+    "away_team": "norway",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "south_africa_vs_czech_republic",
+    "home_team": "south_africa",
+    "away_team": "czech_republic",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "south_africa_vs_czech_republic",
+    "home_team": "south_africa",
+    "away_team": "czech_republic",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "south_africa_vs_czech_republic",
+    "home_team": "south_africa",
+    "away_team": "czech_republic",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "south_africa_vs_south_korea",
+    "home_team": "south_africa",
+    "away_team": "south_korea",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "south_africa_vs_south_korea",
+    "home_team": "south_africa",
+    "away_team": "south_korea",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "south_africa_vs_south_korea",
+    "home_team": "south_africa",
+    "away_team": "south_korea",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "south_korea_vs_czech_republic",
+    "home_team": "south_korea",
+    "away_team": "czech_republic",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "south_korea_vs_czech_republic",
+    "home_team": "south_korea",
+    "away_team": "czech_republic",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "south_korea_vs_czech_republic",
+    "home_team": "south_korea",
+    "away_team": "czech_republic",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "spain_vs_cape_verde",
+    "home_team": "spain",
+    "away_team": "cape_verde",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "spain_vs_cape_verde",
+    "home_team": "spain",
+    "away_team": "cape_verde",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "spain_vs_cape_verde",
+    "home_team": "spain",
+    "away_team": "cape_verde",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "spain_vs_saudi_arabia",
+    "home_team": "spain",
+    "away_team": "saudi_arabia",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "spain_vs_saudi_arabia",
+    "home_team": "spain",
+    "away_team": "saudi_arabia",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "spain_vs_saudi_arabia",
+    "home_team": "spain",
+    "away_team": "saudi_arabia",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "spain_vs_uruguay",
+    "home_team": "spain",
+    "away_team": "uruguay",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "spain_vs_uruguay",
+    "home_team": "spain",
+    "away_team": "uruguay",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "spain_vs_uruguay",
+    "home_team": "spain",
+    "away_team": "uruguay",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "sweden_vs_tunisia",
+    "home_team": "sweden",
+    "away_team": "tunisia",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "sweden_vs_tunisia",
+    "home_team": "sweden",
+    "away_team": "tunisia",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "sweden_vs_tunisia",
+    "home_team": "sweden",
+    "away_team": "tunisia",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "united_states_vs_australia",
+    "home_team": "united_states",
+    "away_team": "australia",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "united_states_vs_australia",
+    "home_team": "united_states",
+    "away_team": "australia",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "united_states_vs_australia",
+    "home_team": "united_states",
+    "away_team": "australia",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "united_states_vs_paraguay",
+    "home_team": "united_states",
+    "away_team": "paraguay",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "united_states_vs_paraguay",
+    "home_team": "united_states",
+    "away_team": "paraguay",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "united_states_vs_paraguay",
+    "home_team": "united_states",
+    "away_team": "paraguay",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "united_states_vs_turkey",
+    "home_team": "united_states",
+    "away_team": "turkey",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "united_states_vs_turkey",
+    "home_team": "united_states",
+    "away_team": "turkey",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "united_states_vs_turkey",
+    "home_team": "united_states",
+    "away_team": "turkey",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  },
+  {
+    "match_id": "uzbekistan_vs_colombia",
+    "home_team": "uzbekistan",
+    "away_team": "colombia",
+    "script_id": "favorite_dominance",
+    "display_name": "Favorite Dominance",
+    "probability": 0.2,
+    "markets_impacted": {
+      "1x2_home": "up",
+      "over_goals": "up",
+      "btts_yes": "neutral",
+      "corners": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "uzbekistan_vs_colombia",
+    "home_team": "uzbekistan",
+    "away_team": "colombia",
+    "script_id": "tactical_neutralization",
+    "display_name": "Tactical Neutralization",
+    "probability": 0.18,
+    "markets_impacted": {
+      "under_goals": "up",
+      "btts_no": "up",
+      "corners": "up",
+      "1x2_draw": "up"
+    },
+    "volatility": "low"
+  },
+  {
+    "match_id": "uzbekistan_vs_colombia",
+    "home_team": "uzbekistan",
+    "away_team": "colombia",
+    "script_id": "counter_attack_trap",
+    "display_name": "Counter Attack Trap",
+    "probability": 0.15,
+    "markets_impacted": {
+      "1x2_away": "up",
+      "btts_yes": "neutral",
+      "over_under_2_5": "neutral",
+      "correct_score_1_0": "up"
+    },
+    "volatility": "medium"
+  }
+]
