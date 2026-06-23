@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-23T04:22:26.601231+00:00",
+  "generated_at": "2026-06-23T20:49:19.636508+00:00",
   "data_stage": "stage_1",
   "n_matches": 72,
   "n_matches_with_market": 0,
@@ -69,7 +69,7 @@
       "top_thesis": {
         "thesis_id": "8a3bbe8c54ab1c9b",
         "match_id": "algeria_vs_austria",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -97,7 +97,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "algeria_vs_jordan",
@@ -115,7 +115,7 @@
       "top_thesis": {
         "thesis_id": "939082cb32c6dac2",
         "match_id": "algeria_vs_jordan",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -143,7 +143,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "argentina_vs_algeria",
@@ -161,7 +161,7 @@
       "top_thesis": {
         "thesis_id": "7f85b8210bff9ccc",
         "match_id": "argentina_vs_algeria",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -189,7 +189,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "argentina_vs_austria",
@@ -207,7 +207,7 @@
       "top_thesis": {
         "thesis_id": "6cf4ea7f684c4a0b",
         "match_id": "argentina_vs_austria",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -235,7 +235,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "argentina_vs_jordan",
@@ -253,7 +253,7 @@
       "top_thesis": {
         "thesis_id": "bb1c6cbf87d10866",
         "match_id": "argentina_vs_jordan",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -281,7 +281,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "australia_vs_turkey",
@@ -299,7 +299,7 @@
       "top_thesis": {
         "thesis_id": "f84d5bb487e606a8",
         "match_id": "australia_vs_turkey",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -327,7 +327,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "austria_vs_jordan",
@@ -345,7 +345,7 @@
       "top_thesis": {
         "thesis_id": "962f57da31758160",
         "match_id": "austria_vs_jordan",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -373,7 +373,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "belgium_vs_egypt",
@@ -391,7 +391,7 @@
       "top_thesis": {
         "thesis_id": "9ef2550b475102b8",
         "match_id": "belgium_vs_egypt",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -419,7 +419,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "belgium_vs_iran",
@@ -437,7 +437,7 @@
       "top_thesis": {
         "thesis_id": "da8e9aa053981762",
         "match_id": "belgium_vs_iran",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -465,7 +465,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "belgium_vs_new_zealand",
@@ -483,7 +483,7 @@
       "top_thesis": {
         "thesis_id": "a771fff6f070097b",
         "match_id": "belgium_vs_new_zealand",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -511,7 +511,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "bosnia_herzegovina_vs_qatar",
@@ -529,7 +529,7 @@
       "top_thesis": {
         "thesis_id": "dcea05438fc9d3d9",
         "match_id": "bosnia_herzegovina_vs_qatar",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -557,7 +557,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "bosnia_herzegovina_vs_switzerland",
@@ -575,7 +575,7 @@
       "top_thesis": {
         "thesis_id": "5b52f7cdef49492e",
         "match_id": "bosnia_herzegovina_vs_switzerland",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -603,7 +603,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "brazil_vs_haiti",
@@ -621,7 +621,7 @@
       "top_thesis": {
         "thesis_id": "23534eb39546b530",
         "match_id": "brazil_vs_haiti",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -649,7 +649,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "brazil_vs_morocco",
@@ -667,7 +667,7 @@
       "top_thesis": {
         "thesis_id": "d4e2e58b5055da71",
         "match_id": "brazil_vs_morocco",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -695,7 +695,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "brazil_vs_scotland",
@@ -713,7 +713,7 @@
       "top_thesis": {
         "thesis_id": "781222f6dd04bec8",
         "match_id": "brazil_vs_scotland",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -741,7 +741,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "canada_vs_bosnia_herzegovina",
@@ -759,7 +759,7 @@
       "top_thesis": {
         "thesis_id": "bc489f264f7cdb58",
         "match_id": "canada_vs_bosnia_herzegovina",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -787,7 +787,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "canada_vs_qatar",
@@ -805,7 +805,7 @@
       "top_thesis": {
         "thesis_id": "7b247b703fc2c23a",
         "match_id": "canada_vs_qatar",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -833,7 +833,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "canada_vs_switzerland",
@@ -851,7 +851,7 @@
       "top_thesis": {
         "thesis_id": "72d505166fe66411",
         "match_id": "canada_vs_switzerland",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -879,7 +879,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "cape_verde_vs_saudi_arabia",
@@ -897,7 +897,7 @@
       "top_thesis": {
         "thesis_id": "8264054ab9d97328",
         "match_id": "cape_verde_vs_saudi_arabia",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -925,7 +925,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "cape_verde_vs_uruguay",
@@ -943,7 +943,7 @@
       "top_thesis": {
         "thesis_id": "505a44bf69660b44",
         "match_id": "cape_verde_vs_uruguay",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -971,7 +971,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "cote_divoire_vs_ecuador",
@@ -989,7 +989,7 @@
       "top_thesis": {
         "thesis_id": "9465e94df36eb046",
         "match_id": "cote_divoire_vs_ecuador",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "over_under_2_5",
@@ -1017,7 +1017,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "croatia_vs_ghana",
@@ -1035,7 +1035,7 @@
       "top_thesis": {
         "thesis_id": "2270b2915f39b7ec",
         "match_id": "croatia_vs_ghana",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -1063,7 +1063,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "croatia_vs_panama",
@@ -1081,7 +1081,7 @@
       "top_thesis": {
         "thesis_id": "12f7a7a9f17be7c6",
         "match_id": "croatia_vs_panama",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -1109,7 +1109,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "curacao_vs_cote_divoire",
@@ -1127,7 +1127,7 @@
       "top_thesis": {
         "thesis_id": "c1e051818b3e09f8",
         "match_id": "curacao_vs_cote_divoire",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -1155,7 +1155,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "curacao_vs_ecuador",
@@ -1173,7 +1173,7 @@
       "top_thesis": {
         "thesis_id": "10768e6a9f880070",
         "match_id": "curacao_vs_ecuador",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -1201,7 +1201,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "dr_congo_vs_colombia",
@@ -1219,7 +1219,7 @@
       "top_thesis": {
         "thesis_id": "5a5cee815011eff5",
         "match_id": "dr_congo_vs_colombia",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -1247,7 +1247,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "dr_congo_vs_uzbekistan",
@@ -1265,7 +1265,7 @@
       "top_thesis": {
         "thesis_id": "c865576abb9fe8ab",
         "match_id": "dr_congo_vs_uzbekistan",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "over_under_2_5",
@@ -1293,7 +1293,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "egypt_vs_iran",
@@ -1311,7 +1311,7 @@
       "top_thesis": {
         "thesis_id": "1e63cb659a5bc7bd",
         "match_id": "egypt_vs_iran",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -1339,7 +1339,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "egypt_vs_new_zealand",
@@ -1357,7 +1357,7 @@
       "top_thesis": {
         "thesis_id": "b538e05e9d179593",
         "match_id": "egypt_vs_new_zealand",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -1385,7 +1385,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "england_vs_croatia",
@@ -1403,7 +1403,7 @@
       "top_thesis": {
         "thesis_id": "223019f06e25fd51",
         "match_id": "england_vs_croatia",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -1431,7 +1431,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "england_vs_ghana",
@@ -1449,7 +1449,7 @@
       "top_thesis": {
         "thesis_id": "44e047ef9303daf3",
         "match_id": "england_vs_ghana",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -1477,7 +1477,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "england_vs_panama",
@@ -1495,7 +1495,7 @@
       "top_thesis": {
         "thesis_id": "378b5ab780b3170d",
         "match_id": "england_vs_panama",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -1523,7 +1523,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "france_vs_iraq",
@@ -1541,7 +1541,7 @@
       "top_thesis": {
         "thesis_id": "05bc50ab1672737c",
         "match_id": "france_vs_iraq",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -1569,7 +1569,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "france_vs_norway",
@@ -1587,7 +1587,7 @@
       "top_thesis": {
         "thesis_id": "31453312eac05fcb",
         "match_id": "france_vs_norway",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -1615,7 +1615,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "france_vs_senegal",
@@ -1633,7 +1633,7 @@
       "top_thesis": {
         "thesis_id": "7a894c2dac744b6b",
         "match_id": "france_vs_senegal",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -1661,7 +1661,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "germany_vs_cote_divoire",
@@ -1679,7 +1679,7 @@
       "top_thesis": {
         "thesis_id": "4c19ce26198bfa5d",
         "match_id": "germany_vs_cote_divoire",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -1707,7 +1707,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "germany_vs_curacao",
@@ -1725,7 +1725,7 @@
       "top_thesis": {
         "thesis_id": "701d59530e0e455f",
         "match_id": "germany_vs_curacao",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -1753,7 +1753,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "germany_vs_ecuador",
@@ -1771,7 +1771,7 @@
       "top_thesis": {
         "thesis_id": "856ca846690d17a2",
         "match_id": "germany_vs_ecuador",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -1799,7 +1799,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "ghana_vs_panama",
@@ -1817,7 +1817,7 @@
       "top_thesis": {
         "thesis_id": "94fe6868be133e03",
         "match_id": "ghana_vs_panama",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -1845,7 +1845,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "haiti_vs_scotland",
@@ -1863,7 +1863,7 @@
       "top_thesis": {
         "thesis_id": "90b9679bd9c7ab44",
         "match_id": "haiti_vs_scotland",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -1891,7 +1891,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "iran_vs_new_zealand",
@@ -1909,7 +1909,7 @@
       "top_thesis": {
         "thesis_id": "5d4ff590269b2517",
         "match_id": "iran_vs_new_zealand",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -1937,7 +1937,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "iraq_vs_norway",
@@ -1955,7 +1955,7 @@
       "top_thesis": {
         "thesis_id": "f3afcbe47b230159",
         "match_id": "iraq_vs_norway",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -1983,7 +1983,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "japan_vs_sweden",
@@ -2001,7 +2001,7 @@
       "top_thesis": {
         "thesis_id": "5d0c2b14cb7d0259",
         "match_id": "japan_vs_sweden",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -2029,7 +2029,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "japan_vs_tunisia",
@@ -2047,7 +2047,7 @@
       "top_thesis": {
         "thesis_id": "f7470a221fda66d9",
         "match_id": "japan_vs_tunisia",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -2075,7 +2075,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "mexico_vs_czech_republic",
@@ -2093,7 +2093,7 @@
       "top_thesis": {
         "thesis_id": "8b98842836bed69d",
         "match_id": "mexico_vs_czech_republic",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -2121,7 +2121,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "mexico_vs_south_africa",
@@ -2139,7 +2139,7 @@
       "top_thesis": {
         "thesis_id": "065579ee507d1a62",
         "match_id": "mexico_vs_south_africa",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -2167,7 +2167,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "mexico_vs_south_korea",
@@ -2185,7 +2185,7 @@
       "top_thesis": {
         "thesis_id": "68e20aca903b6885",
         "match_id": "mexico_vs_south_korea",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -2213,7 +2213,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "morocco_vs_haiti",
@@ -2231,7 +2231,7 @@
       "top_thesis": {
         "thesis_id": "b603db0ffa82fc8c",
         "match_id": "morocco_vs_haiti",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -2259,7 +2259,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "morocco_vs_scotland",
@@ -2277,7 +2277,7 @@
       "top_thesis": {
         "thesis_id": "8ec92d2025928372",
         "match_id": "morocco_vs_scotland",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -2305,7 +2305,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "netherlands_vs_japan",
@@ -2323,7 +2323,7 @@
       "top_thesis": {
         "thesis_id": "60efbb98b979d5d9",
         "match_id": "netherlands_vs_japan",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -2351,7 +2351,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "netherlands_vs_sweden",
@@ -2369,7 +2369,7 @@
       "top_thesis": {
         "thesis_id": "3f7837f1a8c40b19",
         "match_id": "netherlands_vs_sweden",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -2397,7 +2397,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "netherlands_vs_tunisia",
@@ -2415,7 +2415,7 @@
       "top_thesis": {
         "thesis_id": "3595a2b3244db8eb",
         "match_id": "netherlands_vs_tunisia",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -2443,7 +2443,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "paraguay_vs_australia",
@@ -2461,7 +2461,7 @@
       "top_thesis": {
         "thesis_id": "045b65267a6a1d69",
         "match_id": "paraguay_vs_australia",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -2489,7 +2489,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "paraguay_vs_turkey",
@@ -2507,7 +2507,7 @@
       "top_thesis": {
         "thesis_id": "53ce2ed839fca90d",
         "match_id": "paraguay_vs_turkey",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -2535,7 +2535,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "portugal_vs_colombia",
@@ -2553,7 +2553,7 @@
       "top_thesis": {
         "thesis_id": "3bb9fc60b7e8eec5",
         "match_id": "portugal_vs_colombia",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -2581,7 +2581,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "portugal_vs_dr_congo",
@@ -2599,7 +2599,7 @@
       "top_thesis": {
         "thesis_id": "30eeb27e8044fa84",
         "match_id": "portugal_vs_dr_congo",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -2627,7 +2627,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "portugal_vs_uzbekistan",
@@ -2645,7 +2645,7 @@
       "top_thesis": {
         "thesis_id": "e2cfaf945b8ebe6e",
         "match_id": "portugal_vs_uzbekistan",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -2673,7 +2673,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "qatar_vs_switzerland",
@@ -2691,7 +2691,7 @@
       "top_thesis": {
         "thesis_id": "4d05b113a2a85809",
         "match_id": "qatar_vs_switzerland",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -2719,7 +2719,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "saudi_arabia_vs_uruguay",
@@ -2737,7 +2737,7 @@
       "top_thesis": {
         "thesis_id": "e471f69fc88991ef",
         "match_id": "saudi_arabia_vs_uruguay",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -2765,7 +2765,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "senegal_vs_iraq",
@@ -2783,7 +2783,7 @@
       "top_thesis": {
         "thesis_id": "b135e79d192c2128",
         "match_id": "senegal_vs_iraq",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -2811,7 +2811,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "senegal_vs_norway",
@@ -2829,7 +2829,7 @@
       "top_thesis": {
         "thesis_id": "fedfec937cde8942",
         "match_id": "senegal_vs_norway",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -2857,7 +2857,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "south_africa_vs_czech_republic",
@@ -2875,7 +2875,7 @@
       "top_thesis": {
         "thesis_id": "25b222945037fe6a",
         "match_id": "south_africa_vs_czech_republic",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -2903,7 +2903,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "south_africa_vs_south_korea",
@@ -2921,7 +2921,7 @@
       "top_thesis": {
         "thesis_id": "19d2c9d9b57417bf",
         "match_id": "south_africa_vs_south_korea",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -2949,7 +2949,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "south_korea_vs_czech_republic",
@@ -2967,7 +2967,7 @@
       "top_thesis": {
         "thesis_id": "d293fddd6a6fc525",
         "match_id": "south_korea_vs_czech_republic",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -2995,7 +2995,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "spain_vs_cape_verde",
@@ -3013,7 +3013,7 @@
       "top_thesis": {
         "thesis_id": "f8f1ed12d843326d",
         "match_id": "spain_vs_cape_verde",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -3041,7 +3041,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "spain_vs_saudi_arabia",
@@ -3059,7 +3059,7 @@
       "top_thesis": {
         "thesis_id": "2123227a4ec0841d",
         "match_id": "spain_vs_saudi_arabia",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -3087,7 +3087,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "spain_vs_uruguay",
@@ -3105,7 +3105,7 @@
       "top_thesis": {
         "thesis_id": "272fb9cb9797ae17",
         "match_id": "spain_vs_uruguay",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -3133,7 +3133,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "sweden_vs_tunisia",
@@ -3151,7 +3151,7 @@
       "top_thesis": {
         "thesis_id": "a05a3364ffef3c29",
         "match_id": "sweden_vs_tunisia",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -3179,7 +3179,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "united_states_vs_australia",
@@ -3197,7 +3197,7 @@
       "top_thesis": {
         "thesis_id": "9fff966c4df5e718",
         "match_id": "united_states_vs_australia",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -3225,7 +3225,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "united_states_vs_paraguay",
@@ -3243,7 +3243,7 @@
       "top_thesis": {
         "thesis_id": "9a6b34d401733941",
         "match_id": "united_states_vs_paraguay",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -3271,7 +3271,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "united_states_vs_turkey",
@@ -3289,7 +3289,7 @@
       "top_thesis": {
         "thesis_id": "65e382d83bd47e66",
         "match_id": "united_states_vs_turkey",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -3317,7 +3317,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     },
     {
       "match_id": "uzbekistan_vs_colombia",
@@ -3335,7 +3335,7 @@
       "top_thesis": {
         "thesis_id": "1569b0c7a12ecdc9",
         "match_id": "uzbekistan_vs_colombia",
-        "generated_at": "2026-06-23T04:22:26.474819+00:00",
+        "generated_at": "2026-06-23T20:49:19.523555+00:00",
         "model_version": "oracle-v2-stage1",
         "data_stage": "stage_1",
         "market_type": "double_chance",
@@ -3363,7 +3363,7 @@
         "rank": 1,
         "display_tier": "watchlist"
       },
-      "generated_at": "2026-06-23T04:22:26.474819+00:00"
+      "generated_at": "2026-06-23T20:49:19.523555+00:00"
     }
   ]
 }

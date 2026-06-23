@@ -191,6 +191,9 @@ def export() -> None:
     _write("knowledge_calibration_summary.json",  _read_json(ARTIFACTS / "knowledge_calibration_summary.json", {}))
     # Week 27: adaptive knowledge learning system
     _write("knowledge_learning_summary.json",     _read_json(ARTIFACTS / "knowledge_learning_summary.json", {}))
+    # Week 28: market intelligence engine
+    _write("market_intelligence_cards.json",      _read_json(ARTIFACTS / "market_intelligence_cards.json",   []))
+    _write("market_intelligence_summary.json",    _read_json(ARTIFACTS / "market_intelligence_summary.json", {}))
 
 
 if __name__ == "__main__":

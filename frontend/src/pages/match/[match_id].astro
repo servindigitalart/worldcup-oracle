@@ -46,6 +46,7 @@ const recs          = loadJson<Recommendation[]>('recommendations.json', []);
 const allTheses      = loadJson<BettingThesis[]>('betting_theses.json', []);
 const allActivations    = loadJson<KnowledgeActivation[]>('knowledge_activations.json', []);
 const learningSummary   = loadJson<Record<string, any>>('knowledge_learning_summary.json', {});
+const allMiCards        = loadJson<Record<string, any>[]>('market_intelligence_cards.json', []);
 const sim            = loadJson<SimSummary | null>('sim_summary.json', null);
 const fixtureSource = loadJson<FixtureSource>('fixture_source.json', {
   source: null, is_official: false, is_placeholder: true,
@@ -85,6 +86,31 @@ const trendColor = (id: string) => {
   if (t === "up")   return "text-emerald-500";
   if (t === "down") return "text-rose-500";
   return "text-slate-500";
+};
+
+// Week 28: market intelligence cards for this match
+const miCards = allMiCards.filter((c) => c.match_id === mc.match_id);
+const miCorners = miCards.find((c) => c.market_type === "corners") ?? null;
+const miCards_  = miCards.find((c) => c.market_type === "cards")   ?? null;
+const miShots   = miCards.find((c) => c.market_type === "shots")   ?? null;
+const hasMi     = miCards.length > 0;
+
+const miEnvColor = (env: string) => {
+  if (env === "very_high" || env === "high") return "text-amber-400";
+  if (env === "very_low"  || env === "low")  return "text-sky-400";
+  return "text-slate-400";
+};
+const miSignalBadge = (signal: string) => {
+  if (signal === "strong_signal")   return "bg-amber-900/40 text-amber-400 border-amber-800/50";
+  if (signal === "moderate_signal") return "bg-indigo-900/40 text-indigo-400 border-indigo-800/50";
+  if (signal === "watchlist")       return "bg-slate-800/60 text-slate-400 border-slate-700/50";
+  return "bg-slate-900/40 text-slate-600 border-slate-800/30";
+};
+const miSignalLabel = (signal: string) => {
+  if (signal === "strong_signal")   return "signal detected";
+  if (signal === "moderate_signal") return "model edge";
+  if (signal === "watchlist")       return "watchlist";
+  return "no signal";
 };
 
 const homeLabel = formatTeamName(mc.home_team);
@@ -621,7 +647,62 @@ const pageDescription = `${homeLabel} vs ${awayLabel}: model gives ${domTeam} a 
       </section>
     )}
 
-    <!-- ── 6. Expected Goals Model Panel ─────────────────────────────────── -->
+    <!-- ── 6. Market Intelligence Panel (Week 28) ───────────────────────── -->
+    {hasMi && (
+      <section class="rounded-xl border border-slate-800/50 bg-slate-900/30 p-5">
+        <h2 class="text-[11px] font-semibold uppercase tracking-widest text-slate-500 mb-4">
+          Market Intelligence
+        </h2>
+        <div class="space-y-4">
+          {[
+            { label: "Corners",  card: miCorners },
+            { label: "Cards",    card: miCards_  },
+            { label: "Shots",    card: miShots   },
+          ].map(({ label, card }) => card && (
+            <div class="border-t border-slate-800/40 pt-3 first:border-t-0 first:pt-0">
+              <!-- Market row header -->
+              <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-2">
+                  <span class="text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+                    {label}
+                  </span>
+                  <span class={`text-[10px] px-1.5 py-0.5 rounded border ${miSignalBadge(card.signal_level)}`}>
+                    {miSignalLabel(card.signal_level)}
+                  </span>
+                </div>
+                <span class={`text-[11px] font-medium ${miEnvColor(card.environment)}`}>
+                  {card.environment.replace('_', ' ')}
+                </span>
+              </div>
+              <!-- Headline -->
+              {card.signal_level !== "no_signal" && (
+                <p class="text-[11px] text-slate-400 leading-relaxed italic mb-2">
+                  {card.headline}
+                </p>
+              )}
+              <!-- Mechanisms -->
+              {card.supporting_mechanisms.length > 0 && card.signal_level !== "no_signal" && (
+                <div class="flex flex-wrap gap-1 mb-2">
+                  {card.supporting_mechanisms.slice(0, 3).map((m: string) => (
+                    <span class="text-[9px] px-1.5 py-0.5 rounded-full bg-slate-800/50 text-slate-500 border border-slate-700/40">
+                      {m}
+                    </span>
+                  ))}
+                </div>
+              )}
+              <!-- Key risk -->
+              {card.key_risk && card.signal_level !== "no_signal" && (
+                <p class="text-[10px] text-slate-600 leading-relaxed">
+                  <span class="text-slate-700">Risk: </span>{card.key_risk}
+                </p>
+              )}
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- ── 7. Expected Goals Model Panel ─────────────────────────────────── -->
     <section class="rounded-xl border border-slate-800/50 bg-slate-900/30 p-5">
       <h2 class="text-[11px] font-semibold uppercase tracking-widest text-slate-500 mb-3">
         Goal Model

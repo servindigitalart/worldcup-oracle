@@ -339,6 +339,16 @@ def _step_knowledge_learning() -> None:
     log.info("  knowledge learning complete")
 
 
+def _step_market_intelligence() -> None:
+    from oracle.pipeline.market_intelligence import run as mi_run
+    summary = mi_run()
+    log.info(
+        "  market intelligence: %d matches | %d cards | %d strong | %d moderate",
+        summary.get("n_matches", 0), summary.get("n_cards", 0),
+        summary.get("n_strong", 0), summary.get("n_moderate", 0),
+    )
+
+
 def _step_betting() -> None:
     from oracle.pipeline.betting import run as betting_run
     summary = betting_run()
@@ -597,7 +607,17 @@ def refresh_tournament(
         ],
     )
 
-    # ── 7f. Betting Thesis Engine (Week 25D) ──────────────────────────────────
+    # ── 7f. Market Intelligence (Week 28) ────────────────────────────────────
+    _try(
+        "market_intelligence",
+        _step_market_intelligence,
+        [
+            "market_intelligence_cards.json",
+            "market_intelligence_summary.json",
+        ],
+    )
+
+    # ── 7g. Betting Thesis Engine (Week 25D) ──────────────────────────────────
     _try(
         "thesis",
         _step_thesis,

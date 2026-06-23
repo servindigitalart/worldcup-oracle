@@ -2,7 +2,7 @@
   {
     "match_id": "wc2026_B_01",
     "status": "latest_available",
-    "n_snapshots": 864,
+    "n_snapshots": 1320,
     "opening_captured_at": "2026-06-11T08:00:00Z",
     "latest_captured_at": "2026-06-11T15:00:00Z",
     "hours_of_coverage": 7.0,
@@ -11,7 +11,7 @@
   {
     "match_id": "wc2026_C_01",
     "status": "opening_only",
-    "n_snapshots": 432,
+    "n_snapshots": 660,
     "opening_captured_at": "2026-06-12T10:00:00Z",
     "latest_captured_at": "2026-06-12T10:00:00Z",
     "hours_of_coverage": 0.0,

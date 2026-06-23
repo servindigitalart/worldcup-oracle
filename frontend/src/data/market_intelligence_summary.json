@@ -1,0 +1,118 @@
+{
+  "generated_at": "2026-06-23T14:12:29.703981+00:00",
+  "stage": "stage_1",
+  "n_matches": 72,
+  "n_cards": 216,
+  "n_strong_signals": 13,
+  "n_moderate_signals": 24,
+  "n_watchlist": 35,
+  "n_no_signal": 144,
+  "top_corners_signals": [
+    {
+      "match_id": "brazil_vs_morocco",
+      "signal": "strong_signal",
+      "score": 98.89,
+      "direction": "elevated"
+    },
+    {
+      "match_id": "mexico_vs_south_korea",
+      "signal": "strong_signal",
+      "score": 75.83,
+      "direction": "elevated"
+    },
+    {
+      "match_id": "england_vs_croatia",
+      "signal": "strong_signal",
+      "score": 72.65,
+      "direction": "elevated"
+    },
+    {
+      "match_id": "england_vs_ghana",
+      "signal": "strong_signal",
+      "score": 71.15,
+      "direction": "elevated"
+    },
+    {
+      "match_id": "england_vs_panama",
+      "signal": "strong_signal",
+      "score": 71.15,
+      "direction": "elevated"
+    }
+  ],
+  "top_cards_signals": [
+    {
+      "match_id": "netherlands_vs_japan",
+      "signal": "strong_signal",
+      "score": 91.49,
+      "direction": "elevated"
+    },
+    {
+      "match_id": "portugal_vs_colombia",
+      "signal": "strong_signal",
+      "score": 72.26,
+      "direction": "elevated"
+    },
+    {
+      "match_id": "canada_vs_switzerland",
+      "signal": "strong_signal",
+      "score": 71.94,
+      "direction": "elevated"
+    },
+    {
+      "match_id": "spain_vs_uruguay",
+      "signal": "strong_signal",
+      "score": 71.74,
+      "direction": "elevated"
+    },
+    {
+      "match_id": "united_states_vs_australia",
+      "signal": "moderate_signal",
+      "score": 68.64,
+      "direction": "elevated"
+    }
+  ],
+  "top_shots_signals": [
+    {
+      "match_id": "netherlands_vs_japan",
+      "signal": "strong_signal",
+      "score": 83.75,
+      "direction": "elevated"
+    },
+    {
+      "match_id": "united_states_vs_australia",
+      "signal": "strong_signal",
+      "score": 75.55,
+      "direction": "elevated"
+    },
+    {
+      "match_id": "spain_vs_uruguay",
+      "signal": "strong_signal",
+      "score": 72.95,
+      "direction": "elevated"
+    },
+    {
+      "match_id": "germany_vs_ecuador",
+      "signal": "strong_signal",
+      "score": 70.55,
+      "direction": "elevated"
+    },
+    {
+      "match_id": "mexico_vs_south_korea",
+      "signal": "moderate_signal",
+      "score": 67.89,
+      "direction": "elevated"
+    }
+  ],
+  "dominant_mechanisms": [
+    "Counter Attack Trap \u2192 elevated cards",
+    "Counter Attack Trap \u2192 elevated shots",
+    "Favorite Dominance script",
+    "Cagey Knockout script",
+    "Defensive Siege script"
+  ],
+  "notes": [
+    "Generated 216 cards across 72 matches.",
+    "Strong signals: 13 | Moderate: 24 | Watchlist: 35.",
+    "No live learning trends yet \u2014 weights at calibration baseline."
+  ]
+}

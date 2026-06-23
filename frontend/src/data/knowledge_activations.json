@@ -108,7 +108,7 @@
       "No knowledge profile available for away team: austria.",
       "No archetype interaction rule for unknown vs unknown."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Algeria vs Austria: limited football context available.",
     "knowledge_body": "Neither Algeria nor Austria has a seeded knowledge profile. The knowledge layer cannot add football context to this matchup at Stage 1. Thesis signals are model-probability only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -222,7 +222,7 @@
       "No knowledge profile available for away team: jordan.",
       "No archetype interaction rule for unknown vs unknown."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Algeria vs Jordan: limited football context available.",
     "knowledge_body": "Neither Algeria nor Jordan has a seeded knowledge profile. The knowledge layer cannot add football context to this matchup at Stage 1. Thesis signals are model-probability only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -366,7 +366,7 @@
       "No knowledge profile available for away team: algeria.",
       "No archetype interaction rule for counter_attack vs unknown."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Argentina vs Algeria: limited football context available.",
     "knowledge_body": "Argentina are profiled as a counter-attacking side, while Algeria operate as a uncharacterised team. That interaction most commonly produces the Favorite Dominance script (estimated probability 20%). When ahead, Scaloni compresses shape and absorbs pressure to protect leads. Argentina (counter attack) vs Algeria (unknown) \u2014 no specific interaction pattern identified. Note: knowledge confidence is limited for this matchup \u2014 treat football context as indicative only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -510,7 +510,7 @@
       "No knowledge profile available for away team: austria.",
       "No archetype interaction rule for counter_attack vs unknown."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Argentina vs Austria: limited football context available.",
     "knowledge_body": "Argentina are profiled as a counter-attacking side, while Austria operate as a uncharacterised team. That interaction most commonly produces the Favorite Dominance script (estimated probability 20%). When ahead, Scaloni compresses shape and absorbs pressure to protect leads. Argentina (counter attack) vs Austria (unknown) \u2014 no specific interaction pattern identified. Note: knowledge confidence is limited for this matchup \u2014 treat football context as indicative only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -654,7 +654,7 @@
       "No knowledge profile available for away team: jordan.",
       "No archetype interaction rule for counter_attack vs unknown."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Argentina vs Jordan: limited football context available.",
     "knowledge_body": "Argentina are profiled as a counter-attacking side, while Jordan operate as a uncharacterised team. That interaction most commonly produces the Favorite Dominance script (estimated probability 20%). When ahead, Scaloni compresses shape and absorbs pressure to protect leads. Argentina (counter attack) vs Jordan (unknown) \u2014 no specific interaction pattern identified. Note: knowledge confidence is limited for this matchup \u2014 treat football context as indicative only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -767,7 +767,7 @@
       "No knowledge profile available for away team: turkey.",
       "No archetype interaction rule for direct_play vs unknown."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Australia vs Turkey: limited football context available.",
     "knowledge_body": "Australia are profiled as a direct-play side, while Turkey operate as a uncharacterised team. That interaction most commonly produces the Favorite Dominance script (estimated probability 20%). Australia (direct play) vs Turkey (unknown) \u2014 no specific interaction pattern identified. Note: knowledge confidence is limited for this matchup \u2014 treat football context as indicative only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -881,7 +881,7 @@
       "No knowledge profile available for away team: jordan.",
       "No archetype interaction rule for unknown vs unknown."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Austria vs Jordan: limited football context available.",
     "knowledge_body": "Neither Austria nor Jordan has a seeded knowledge profile. The knowledge layer cannot add football context to this matchup at Stage 1. Thesis signals are model-probability only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -994,7 +994,7 @@
       "No knowledge profile available for away team: egypt.",
       "No archetype interaction rule for possession_control vs unknown."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Belgium vs Egypt: limited football context available.",
     "knowledge_body": "Belgium are profiled as a possession-control side, while Egypt operate as a uncharacterised team. That interaction most commonly produces the Favorite Dominance script (estimated probability 20%). Belgium (possession control) vs Egypt (unknown) \u2014 no specific interaction pattern identified. Note: knowledge confidence is limited for this matchup \u2014 treat football context as indicative only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -1107,7 +1107,7 @@
       "No knowledge profile available for away team: iran.",
       "No archetype interaction rule for possession_control vs unknown."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Belgium vs Iran: limited football context available.",
     "knowledge_body": "Belgium are profiled as a possession-control side, while Iran operate as a uncharacterised team. That interaction most commonly produces the Favorite Dominance script (estimated probability 20%). Belgium (possession control) vs Iran (unknown) \u2014 no specific interaction pattern identified. Note: knowledge confidence is limited for this matchup \u2014 treat football context as indicative only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -1220,7 +1220,7 @@
       "No knowledge profile available for away team: new_zealand.",
       "No archetype interaction rule for possession_control vs unknown."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Belgium vs New Zealand: limited football context available.",
     "knowledge_body": "Belgium are profiled as a possession-control side, while New Zealand operate as a uncharacterised team. That interaction most commonly produces the Favorite Dominance script (estimated probability 20%). Belgium (possession control) vs New Zealand (unknown) \u2014 no specific interaction pattern identified. Note: knowledge confidence is limited for this matchup \u2014 treat football context as indicative only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -1334,7 +1334,7 @@
       "No knowledge profile available for away team: qatar.",
       "No archetype interaction rule for unknown vs unknown."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Bosnia Herzegovina vs Qatar: limited football context available.",
     "knowledge_body": "Neither Bosnia Herzegovina nor Qatar has a seeded knowledge profile. The knowledge layer cannot add football context to this matchup at Stage 1. Thesis signals are model-probability only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -1447,7 +1447,7 @@
       "No knowledge profile available for home team: bosnia_herzegovina.",
       "No archetype interaction rule for unknown vs tournament_survival."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Bosnia Herzegovina vs Switzerland: limited football context available.",
     "knowledge_body": "Bosnia Herzegovina are profiled as a uncharacterised side, while Switzerland operate as a tournament-survival team. That interaction most commonly produces the Favorite Dominance script (estimated probability 20%). Bosnia Herzegovina (unknown) vs Switzerland (tournament survival) \u2014 no specific interaction pattern identified. Note: knowledge confidence is limited for this matchup \u2014 treat football context as indicative only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -1560,7 +1560,7 @@
       "No knowledge profile available for away team: haiti.",
       "No archetype interaction rule for possession_control vs unknown."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Brazil vs Haiti: limited football context available.",
     "knowledge_body": "Brazil are profiled as a possession-control side, while Haiti operate as a uncharacterised team. That interaction most commonly produces the Favorite Dominance script (estimated probability 20%). Brazil (possession control) vs Haiti (unknown) \u2014 no specific interaction pattern identified. Note: knowledge confidence is limited for this matchup \u2014 treat football context as indicative only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -1717,7 +1717,7 @@
     "knowledge_confidence": 0.95,
     "data_stage": "stage_1",
     "warnings": [],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Brazil's possession-control identity meets Morocco's tournament-survival approach \u2014 Tactical Neutralization script likely.",
     "knowledge_body": "Brazil are profiled as a possession-control side, while Morocco operate as a tournament-survival team. That interaction most commonly produces the Tactical Neutralization script (estimated probability 35%). When a possession-control team faces a compact block, wide play generates corners. Expect elevated corner volume. Low blocks absorb shots and deflect them behind \u2014 this mechanically inflates the corner count. Regragui's Morocco maintain elite low-block compactness, suppressing opponent shot quality. Possession side will dominate territory and corners.",
     "knowledge_key_risk": "If the block breaks early, the script reverses rapidly."
@@ -1830,7 +1830,7 @@
       "No knowledge profile available for away team: scotland.",
       "No archetype interaction rule for possession_control vs unknown."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Brazil vs Scotland: limited football context available.",
     "knowledge_body": "Brazil are profiled as a possession-control side, while Scotland operate as a uncharacterised team. That interaction most commonly produces the Favorite Dominance script (estimated probability 20%). Brazil (possession control) vs Scotland (unknown) \u2014 no specific interaction pattern identified. Note: knowledge confidence is limited for this matchup \u2014 treat football context as indicative only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -1943,7 +1943,7 @@
       "No knowledge profile available for away team: bosnia_herzegovina.",
       "No archetype interaction rule for high_press vs unknown."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Canada vs Bosnia Herzegovina: limited football context available.",
     "knowledge_body": "Canada are profiled as a high-press side, while Bosnia Herzegovina operate as a uncharacterised team. That interaction most commonly produces the Favorite Dominance script (estimated probability 20%). Canada (high press) vs Bosnia Herzegovina (unknown) \u2014 no specific interaction pattern identified. Note: knowledge confidence is limited for this matchup \u2014 treat football context as indicative only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -2056,7 +2056,7 @@
       "No knowledge profile available for away team: qatar.",
       "No archetype interaction rule for high_press vs unknown."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Canada vs Qatar: limited football context available.",
     "knowledge_body": "Canada are profiled as a high-press side, while Qatar operate as a uncharacterised team. That interaction most commonly produces the Favorite Dominance script (estimated probability 20%). Canada (high press) vs Qatar (unknown) \u2014 no specific interaction pattern identified. Note: knowledge confidence is limited for this matchup \u2014 treat football context as indicative only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -2168,7 +2168,7 @@
     "warnings": [
       "No archetype interaction rule for high_press vs tournament_survival."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Canada's high-press identity meets Switzerland's tournament-survival approach \u2014 Favorite Dominance script likely.",
     "knowledge_body": "Canada are profiled as a high-press side, while Switzerland operate as a tournament-survival team. That interaction most commonly produces the Favorite Dominance script (estimated probability 20%). Canada (high press) vs Switzerland (tournament survival) \u2014 no specific interaction pattern identified.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -2282,7 +2282,7 @@
       "No knowledge profile available for away team: saudi_arabia.",
       "No archetype interaction rule for unknown vs unknown."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Cape Verde vs Saudi Arabia: limited football context available.",
     "knowledge_body": "Neither Cape Verde nor Saudi Arabia has a seeded knowledge profile. The knowledge layer cannot add football context to this matchup at Stage 1. Thesis signals are model-probability only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -2427,7 +2427,7 @@
       "No knowledge profile available for home team: cape_verde.",
       "No archetype interaction rule for unknown vs high_press."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Cape Verde vs Uruguay: limited football context available.",
     "knowledge_body": "Cape Verde are profiled as a uncharacterised side, while Uruguay operate as a high-press team. That interaction most commonly produces the Favorite Dominance script (estimated probability 20%). Bielsa's extreme pressing creates a chaotic, high-tempo match with elevated card and corner risk. Cape Verde (unknown) vs Uruguay (high press) \u2014 no specific interaction pattern identified. Note: knowledge confidence is limited for this matchup \u2014 treat football context as indicative only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -2540,7 +2540,7 @@
       "No knowledge profile available for home team: cote_divoire.",
       "No archetype interaction rule for unknown vs direct_play."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Cote Divoire vs Ecuador: limited football context available.",
     "knowledge_body": "Cote Divoire are profiled as a uncharacterised side, while Ecuador operate as a direct-play team. That interaction most commonly produces the Favorite Dominance script (estimated probability 20%). Cote Divoire (unknown) vs Ecuador (direct play) \u2014 no specific interaction pattern identified. Note: knowledge confidence is limited for this matchup \u2014 treat football context as indicative only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -2653,7 +2653,7 @@
       "No knowledge profile available for away team: ghana.",
       "No archetype interaction rule for possession_control vs unknown."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Croatia vs Ghana: limited football context available.",
     "knowledge_body": "Croatia are profiled as a possession-control side, while Ghana operate as a uncharacterised team. That interaction most commonly produces the Favorite Dominance script (estimated probability 20%). Croatia (possession control) vs Ghana (unknown) \u2014 no specific interaction pattern identified. Note: knowledge confidence is limited for this matchup \u2014 treat football context as indicative only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -2766,7 +2766,7 @@
       "No knowledge profile available for away team: panama.",
       "No archetype interaction rule for possession_control vs unknown."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Croatia vs Panama: limited football context available.",
     "knowledge_body": "Croatia are profiled as a possession-control side, while Panama operate as a uncharacterised team. That interaction most commonly produces the Favorite Dominance script (estimated probability 20%). Croatia (possession control) vs Panama (unknown) \u2014 no specific interaction pattern identified. Note: knowledge confidence is limited for this matchup \u2014 treat football context as indicative only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -2880,7 +2880,7 @@
       "No knowledge profile available for away team: cote_divoire.",
       "No archetype interaction rule for unknown vs unknown."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Curacao vs Cote Divoire: limited football context available.",
     "knowledge_body": "Neither Curacao nor Cote Divoire has a seeded knowledge profile. The knowledge layer cannot add football context to this matchup at Stage 1. Thesis signals are model-probability only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -2993,7 +2993,7 @@
       "No knowledge profile available for home team: curacao.",
       "No archetype interaction rule for unknown vs direct_play."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Curacao vs Ecuador: limited football context available.",
     "knowledge_body": "Curacao are profiled as a uncharacterised side, while Ecuador operate as a direct-play team. That interaction most commonly produces the Favorite Dominance script (estimated probability 20%). Curacao (unknown) vs Ecuador (direct play) \u2014 no specific interaction pattern identified. Note: knowledge confidence is limited for this matchup \u2014 treat football context as indicative only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -3106,7 +3106,7 @@
       "No knowledge profile available for home team: dr_congo.",
       "No archetype interaction rule for unknown vs possession_control."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Dr Congo vs Colombia: limited football context available.",
     "knowledge_body": "Dr Congo are profiled as a uncharacterised side, while Colombia operate as a possession-control team. That interaction most commonly produces the Favorite Dominance script (estimated probability 20%). Dr Congo (unknown) vs Colombia (possession control) \u2014 no specific interaction pattern identified. Note: knowledge confidence is limited for this matchup \u2014 treat football context as indicative only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -3220,7 +3220,7 @@
       "No knowledge profile available for away team: uzbekistan.",
       "No archetype interaction rule for unknown vs unknown."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Dr Congo vs Uzbekistan: limited football context available.",
     "knowledge_body": "Neither Dr Congo nor Uzbekistan has a seeded knowledge profile. The knowledge layer cannot add football context to this matchup at Stage 1. Thesis signals are model-probability only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -3334,7 +3334,7 @@
       "No knowledge profile available for away team: iran.",
       "No archetype interaction rule for unknown vs unknown."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Egypt vs Iran: limited football context available.",
     "knowledge_body": "Neither Egypt nor Iran has a seeded knowledge profile. The knowledge layer cannot add football context to this matchup at Stage 1. Thesis signals are model-probability only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -3448,7 +3448,7 @@
       "No knowledge profile available for away team: new_zealand.",
       "No archetype interaction rule for unknown vs unknown."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Egypt vs New Zealand: limited football context available.",
     "knowledge_body": "Neither Egypt nor New Zealand has a seeded knowledge profile. The knowledge layer cannot add football context to this matchup at Stage 1. Thesis signals are model-probability only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -3560,7 +3560,7 @@
     "warnings": [
       "No archetype interaction rule for set_piece_heavy vs possession_control."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "England's set-piece-heavy identity meets Croatia's possession-control approach \u2014 Favorite Dominance script likely.",
     "knowledge_body": "England are profiled as a set-piece-heavy side, while Croatia operate as a possession-control team. That interaction most commonly produces the Favorite Dominance script (estimated probability 20%). England (set piece heavy) vs Croatia (possession control) \u2014 no specific interaction pattern identified.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -3673,7 +3673,7 @@
       "No knowledge profile available for away team: ghana.",
       "No archetype interaction rule for set_piece_heavy vs unknown."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "England vs Ghana: limited football context available.",
     "knowledge_body": "England are profiled as a set-piece-heavy side, while Ghana operate as a uncharacterised team. That interaction most commonly produces the Favorite Dominance script (estimated probability 20%). England (set piece heavy) vs Ghana (unknown) \u2014 no specific interaction pattern identified. Note: knowledge confidence is limited for this matchup \u2014 treat football context as indicative only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -3786,7 +3786,7 @@
       "No knowledge profile available for away team: panama.",
       "No archetype interaction rule for set_piece_heavy vs unknown."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "England vs Panama: limited football context available.",
     "knowledge_body": "England are profiled as a set-piece-heavy side, while Panama operate as a uncharacterised team. That interaction most commonly produces the Favorite Dominance script (estimated probability 20%). England (set piece heavy) vs Panama (unknown) \u2014 no specific interaction pattern identified. Note: knowledge confidence is limited for this matchup \u2014 treat football context as indicative only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -3930,7 +3930,7 @@
       "No knowledge profile available for away team: iraq.",
       "No archetype interaction rule for counter_attack vs unknown."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "France vs Iraq: limited football context available.",
     "knowledge_body": "France are profiled as a counter-attacking side, while Iraq operate as a uncharacterised team. That interaction most commonly produces the Favorite Dominance script (estimated probability 20%). Deschamps' France typically open cautiously, suppressing first-half goal output. France (counter attack) vs Iraq (unknown) \u2014 no specific interaction pattern identified. Note: knowledge confidence is limited for this matchup \u2014 treat football context as indicative only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -4074,7 +4074,7 @@
       "No knowledge profile available for away team: norway.",
       "No archetype interaction rule for counter_attack vs unknown."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "France vs Norway: limited football context available.",
     "knowledge_body": "France are profiled as a counter-attacking side, while Norway operate as a uncharacterised team. That interaction most commonly produces the Favorite Dominance script (estimated probability 20%). Deschamps' France typically open cautiously, suppressing first-half goal output. France (counter attack) vs Norway (unknown) \u2014 no specific interaction pattern identified. Note: knowledge confidence is limited for this matchup \u2014 treat football context as indicative only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -4217,7 +4217,7 @@
     "warnings": [
       "No archetype interaction rule for counter_attack vs direct_play."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "France's counter-attacking identity meets Senegal's direct-play approach \u2014 Favorite Dominance script likely.",
     "knowledge_body": "France are profiled as a counter-attacking side, while Senegal operate as a direct-play team. That interaction most commonly produces the Favorite Dominance script (estimated probability 20%). Deschamps' France typically open cautiously, suppressing first-half goal output. France (counter attack) vs Senegal (direct play) \u2014 no specific interaction pattern identified.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -4362,7 +4362,7 @@
       "No knowledge profile available for away team: cote_divoire.",
       "No archetype interaction rule for high_press vs unknown."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Germany vs Cote Divoire: limited football context available.",
     "knowledge_body": "Germany are profiled as a high-press side, while Cote Divoire operate as a uncharacterised team. That interaction most commonly produces the Favorite Dominance script (estimated probability 20%). Germany's high press drops intensity in second half, creating late-game volatility. Germany (high press) vs Cote Divoire (unknown) \u2014 no specific interaction pattern identified. Note: knowledge confidence is limited for this matchup \u2014 treat football context as indicative only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -4507,7 +4507,7 @@
       "No knowledge profile available for away team: curacao.",
       "No archetype interaction rule for high_press vs unknown."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Germany vs Curacao: limited football context available.",
     "knowledge_body": "Germany are profiled as a high-press side, while Curacao operate as a uncharacterised team. That interaction most commonly produces the Favorite Dominance script (estimated probability 20%). Germany's high press drops intensity in second half, creating late-game volatility. Germany (high press) vs Curacao (unknown) \u2014 no specific interaction pattern identified. Note: knowledge confidence is limited for this matchup \u2014 treat football context as indicative only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -4651,7 +4651,7 @@
     "warnings": [
       "No archetype interaction rule for high_press vs direct_play."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Germany's high-press identity meets Ecuador's direct-play approach \u2014 Favorite Dominance script likely.",
     "knowledge_body": "Germany are profiled as a high-press side, while Ecuador operate as a direct-play team. That interaction most commonly produces the Favorite Dominance script (estimated probability 20%). Germany's high press drops intensity in second half, creating late-game volatility. Germany (high press) vs Ecuador (direct play) \u2014 no specific interaction pattern identified.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -4765,7 +4765,7 @@
       "No knowledge profile available for away team: panama.",
       "No archetype interaction rule for unknown vs unknown."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Ghana vs Panama: limited football context available.",
     "knowledge_body": "Neither Ghana nor Panama has a seeded knowledge profile. The knowledge layer cannot add football context to this matchup at Stage 1. Thesis signals are model-probability only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -4879,7 +4879,7 @@
       "No knowledge profile available for away team: scotland.",
       "No archetype interaction rule for unknown vs unknown."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Haiti vs Scotland: limited football context available.",
     "knowledge_body": "Neither Haiti nor Scotland has a seeded knowledge profile. The knowledge layer cannot add football context to this matchup at Stage 1. Thesis signals are model-probability only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -4993,7 +4993,7 @@
       "No knowledge profile available for away team: new_zealand.",
       "No archetype interaction rule for unknown vs unknown."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Iran vs New Zealand: limited football context available.",
     "knowledge_body": "Neither Iran nor New Zealand has a seeded knowledge profile. The knowledge layer cannot add football context to this matchup at Stage 1. Thesis signals are model-probability only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -5107,7 +5107,7 @@
       "No knowledge profile available for away team: norway.",
       "No archetype interaction rule for unknown vs unknown."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Iraq vs Norway: limited football context available.",
     "knowledge_body": "Neither Iraq nor Norway has a seeded knowledge profile. The knowledge layer cannot add football context to this matchup at Stage 1. Thesis signals are model-probability only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -5220,7 +5220,7 @@
       "No knowledge profile available for away team: sweden.",
       "No archetype interaction rule for counter_attack vs unknown."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Japan vs Sweden: limited football context available.",
     "knowledge_body": "Japan are profiled as a counter-attacking side, while Sweden operate as a uncharacterised team. That interaction most commonly produces the Favorite Dominance script (estimated probability 20%). Japan (counter attack) vs Sweden (unknown) \u2014 no specific interaction pattern identified. Note: knowledge confidence is limited for this matchup \u2014 treat football context as indicative only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -5333,7 +5333,7 @@
       "No knowledge profile available for away team: tunisia.",
       "No archetype interaction rule for counter_attack vs unknown."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Japan vs Tunisia: limited football context available.",
     "knowledge_body": "Japan are profiled as a counter-attacking side, while Tunisia operate as a uncharacterised team. That interaction most commonly produces the Favorite Dominance script (estimated probability 20%). Japan (counter attack) vs Tunisia (unknown) \u2014 no specific interaction pattern identified. Note: knowledge confidence is limited for this matchup \u2014 treat football context as indicative only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -5446,7 +5446,7 @@
       "No knowledge profile available for away team: czech_republic.",
       "No archetype interaction rule for possession_control vs unknown."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Mexico vs Czech Republic: limited football context available.",
     "knowledge_body": "Mexico are profiled as a possession-control side, while Czech Republic operate as a uncharacterised team. That interaction most commonly produces the Favorite Dominance script (estimated probability 20%). Mexico (possession control) vs Czech Republic (unknown) \u2014 no specific interaction pattern identified. Note: knowledge confidence is limited for this matchup \u2014 treat football context as indicative only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -5559,7 +5559,7 @@
       "No knowledge profile available for away team: south_africa.",
       "No archetype interaction rule for possession_control vs unknown."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Mexico vs South Africa: limited football context available.",
     "knowledge_body": "Mexico are profiled as a possession-control side, while South Africa operate as a uncharacterised team. That interaction most commonly produces the Favorite Dominance script (estimated probability 20%). Mexico (possession control) vs South Africa (unknown) \u2014 no specific interaction pattern identified. Note: knowledge confidence is limited for this matchup \u2014 treat football context as indicative only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -5709,7 +5709,7 @@
     "knowledge_confidence": 0.84,
     "data_stage": "stage_1",
     "warnings": [],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Mexico's possession-control identity meets South Korea's counter-attacking approach \u2014 Favorite Dominance script likely.",
     "knowledge_body": "Mexico are profiled as a possession-control side, while South Korea operate as a counter-attacking team. That interaction most commonly produces the Favorite Dominance script (estimated probability 20%). High defensive lines are vulnerable to pace. Counter-attacking teams generate genuine goal threat through transitions. Aggressive pressing that fails generates tactical fouls \u2014 cards risk elevates for the pressing side. Home press creates turnovers but leaves space behind for counter.",
     "knowledge_key_risk": "If home press is sustained without conceding, counter-attack script weakens."
@@ -5854,7 +5854,7 @@
       "No knowledge profile available for away team: haiti.",
       "No archetype interaction rule for tournament_survival vs unknown."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Morocco vs Haiti: limited football context available.",
     "knowledge_body": "Morocco are profiled as a tournament-survival side, while Haiti operate as a uncharacterised team. That interaction most commonly produces the Favorite Dominance script (estimated probability 20%). Regragui's Morocco maintain elite low-block compactness, suppressing opponent shot quality. Morocco (tournament survival) vs Haiti (unknown) \u2014 no specific interaction pattern identified. Note: knowledge confidence is limited for this matchup \u2014 treat football context as indicative only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -5999,7 +5999,7 @@
       "No knowledge profile available for away team: scotland.",
       "No archetype interaction rule for tournament_survival vs unknown."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Morocco vs Scotland: limited football context available.",
     "knowledge_body": "Morocco are profiled as a tournament-survival side, while Scotland operate as a uncharacterised team. That interaction most commonly produces the Favorite Dominance script (estimated probability 20%). Regragui's Morocco maintain elite low-block compactness, suppressing opponent shot quality. Morocco (tournament survival) vs Scotland (unknown) \u2014 no specific interaction pattern identified. Note: knowledge confidence is limited for this matchup \u2014 treat football context as indicative only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -6125,7 +6125,7 @@
     "knowledge_confidence": 0.9,
     "data_stage": "stage_1",
     "warnings": [],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Netherlands's high-press identity meets Japan's counter-attacking approach \u2014 Counter Attack Trap script likely.",
     "knowledge_body": "Netherlands are profiled as a high-press side, while Japan operate as a counter-attacking team. That interaction most commonly produces the Counter Attack Trap script (estimated probability 32%). High defensive lines are vulnerable to pace. Counter-attacking teams generate genuine goal threat through transitions. Aggressive pressing that fails generates tactical fouls \u2014 cards risk elevates for the pressing side. Home press creates turnovers but leaves space behind for counter.",
     "knowledge_key_risk": "If home press is sustained without conceding, counter-attack script weakens."
@@ -6238,7 +6238,7 @@
       "No knowledge profile available for away team: sweden.",
       "No archetype interaction rule for high_press vs unknown."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Netherlands vs Sweden: limited football context available.",
     "knowledge_body": "Netherlands are profiled as a high-press side, while Sweden operate as a uncharacterised team. That interaction most commonly produces the Favorite Dominance script (estimated probability 20%). Netherlands (high press) vs Sweden (unknown) \u2014 no specific interaction pattern identified. Note: knowledge confidence is limited for this matchup \u2014 treat football context as indicative only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -6351,7 +6351,7 @@
       "No knowledge profile available for away team: tunisia.",
       "No archetype interaction rule for high_press vs unknown."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Netherlands vs Tunisia: limited football context available.",
     "knowledge_body": "Netherlands are profiled as a high-press side, while Tunisia operate as a uncharacterised team. That interaction most commonly produces the Favorite Dominance script (estimated probability 20%). Netherlands (high press) vs Tunisia (unknown) \u2014 no specific interaction pattern identified. Note: knowledge confidence is limited for this matchup \u2014 treat football context as indicative only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -6464,7 +6464,7 @@
       "No knowledge profile available for home team: paraguay.",
       "No archetype interaction rule for unknown vs direct_play."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Paraguay vs Australia: limited football context available.",
     "knowledge_body": "Paraguay are profiled as a uncharacterised side, while Australia operate as a direct-play team. That interaction most commonly produces the Favorite Dominance script (estimated probability 20%). Paraguay (unknown) vs Australia (direct play) \u2014 no specific interaction pattern identified. Note: knowledge confidence is limited for this matchup \u2014 treat football context as indicative only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -6578,7 +6578,7 @@
       "No knowledge profile available for away team: turkey.",
       "No archetype interaction rule for unknown vs unknown."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Paraguay vs Turkey: limited football context available.",
     "knowledge_body": "Neither Paraguay nor Turkey has a seeded knowledge profile. The knowledge layer cannot add football context to this matchup at Stage 1. Thesis signals are model-probability only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -6706,7 +6706,7 @@
     "knowledge_confidence": 0.86,
     "data_stage": "stage_1",
     "warnings": [],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Portugal's counter-attacking identity meets Colombia's possession-control approach \u2014 Counter Attack Trap script likely.",
     "knowledge_body": "Portugal are profiled as a counter-attacking side, while Colombia operate as a possession-control team. That interaction most commonly produces the Counter Attack Trap script (estimated probability 30%). High defensive lines are vulnerable to pace. Counter-attacking teams generate genuine goal threat through transitions. When defensive compactness dominates both ends, the match tends toward low goal volume and drawn outcomes. Counter-attack identity exploits space left by away team's aggressive press.",
     "knowledge_key_risk": "If home side cannot absorb early pressure, the trap script fails."
@@ -6819,7 +6819,7 @@
       "No knowledge profile available for away team: dr_congo.",
       "No archetype interaction rule for counter_attack vs unknown."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Portugal vs Dr Congo: limited football context available.",
     "knowledge_body": "Portugal are profiled as a counter-attacking side, while Dr Congo operate as a uncharacterised team. That interaction most commonly produces the Favorite Dominance script (estimated probability 20%). Portugal (counter attack) vs Dr Congo (unknown) \u2014 no specific interaction pattern identified. Note: knowledge confidence is limited for this matchup \u2014 treat football context as indicative only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -6932,7 +6932,7 @@
       "No knowledge profile available for away team: uzbekistan.",
       "No archetype interaction rule for counter_attack vs unknown."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Portugal vs Uzbekistan: limited football context available.",
     "knowledge_body": "Portugal are profiled as a counter-attacking side, while Uzbekistan operate as a uncharacterised team. That interaction most commonly produces the Favorite Dominance script (estimated probability 20%). Portugal (counter attack) vs Uzbekistan (unknown) \u2014 no specific interaction pattern identified. Note: knowledge confidence is limited for this matchup \u2014 treat football context as indicative only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -7045,7 +7045,7 @@
       "No knowledge profile available for home team: qatar.",
       "No archetype interaction rule for unknown vs tournament_survival."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Qatar vs Switzerland: limited football context available.",
     "knowledge_body": "Qatar are profiled as a uncharacterised side, while Switzerland operate as a tournament-survival team. That interaction most commonly produces the Favorite Dominance script (estimated probability 20%). Qatar (unknown) vs Switzerland (tournament survival) \u2014 no specific interaction pattern identified. Note: knowledge confidence is limited for this matchup \u2014 treat football context as indicative only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -7190,7 +7190,7 @@
       "No knowledge profile available for home team: saudi_arabia.",
       "No archetype interaction rule for unknown vs high_press."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Saudi Arabia vs Uruguay: limited football context available.",
     "knowledge_body": "Saudi Arabia are profiled as a uncharacterised side, while Uruguay operate as a high-press team. That interaction most commonly produces the Favorite Dominance script (estimated probability 20%). Bielsa's extreme pressing creates a chaotic, high-tempo match with elevated card and corner risk. Saudi Arabia (unknown) vs Uruguay (high press) \u2014 no specific interaction pattern identified. Note: knowledge confidence is limited for this matchup \u2014 treat football context as indicative only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -7303,7 +7303,7 @@
       "No knowledge profile available for away team: iraq.",
       "No archetype interaction rule for direct_play vs unknown."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Senegal vs Iraq: limited football context available.",
     "knowledge_body": "Senegal are profiled as a direct-play side, while Iraq operate as a uncharacterised team. That interaction most commonly produces the Favorite Dominance script (estimated probability 20%). Senegal (direct play) vs Iraq (unknown) \u2014 no specific interaction pattern identified. Note: knowledge confidence is limited for this matchup \u2014 treat football context as indicative only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -7416,7 +7416,7 @@
       "No knowledge profile available for away team: norway.",
       "No archetype interaction rule for direct_play vs unknown."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Senegal vs Norway: limited football context available.",
     "knowledge_body": "Senegal are profiled as a direct-play side, while Norway operate as a uncharacterised team. That interaction most commonly produces the Favorite Dominance script (estimated probability 20%). Senegal (direct play) vs Norway (unknown) \u2014 no specific interaction pattern identified. Note: knowledge confidence is limited for this matchup \u2014 treat football context as indicative only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -7530,7 +7530,7 @@
       "No knowledge profile available for away team: czech_republic.",
       "No archetype interaction rule for unknown vs unknown."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "South Africa vs Czech Republic: limited football context available.",
     "knowledge_body": "Neither South Africa nor Czech Republic has a seeded knowledge profile. The knowledge layer cannot add football context to this matchup at Stage 1. Thesis signals are model-probability only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -7643,7 +7643,7 @@
       "No knowledge profile available for home team: south_africa.",
       "No archetype interaction rule for unknown vs counter_attack."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "South Africa vs South Korea: limited football context available.",
     "knowledge_body": "South Africa are profiled as a uncharacterised side, while South Korea operate as a counter-attacking team. That interaction most commonly produces the Favorite Dominance script (estimated probability 20%). South Africa (unknown) vs South Korea (counter attack) \u2014 no specific interaction pattern identified. Note: knowledge confidence is limited for this matchup \u2014 treat football context as indicative only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -7756,7 +7756,7 @@
       "No knowledge profile available for away team: czech_republic.",
       "No archetype interaction rule for counter_attack vs unknown."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "South Korea vs Czech Republic: limited football context available.",
     "knowledge_body": "South Korea are profiled as a counter-attacking side, while Czech Republic operate as a uncharacterised team. That interaction most commonly produces the Favorite Dominance script (estimated probability 20%). South Korea (counter attack) vs Czech Republic (unknown) \u2014 no specific interaction pattern identified. Note: knowledge confidence is limited for this matchup \u2014 treat football context as indicative only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -7869,7 +7869,7 @@
       "No knowledge profile available for away team: cape_verde.",
       "No archetype interaction rule for possession_control vs unknown."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Spain vs Cape Verde: limited football context available.",
     "knowledge_body": "Spain are profiled as a possession-control side, while Cape Verde operate as a uncharacterised team. That interaction most commonly produces the Favorite Dominance script (estimated probability 20%). Spain (possession control) vs Cape Verde (unknown) \u2014 no specific interaction pattern identified. Note: knowledge confidence is limited for this matchup \u2014 treat football context as indicative only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -7982,7 +7982,7 @@
       "No knowledge profile available for away team: saudi_arabia.",
       "No archetype interaction rule for possession_control vs unknown."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Spain vs Saudi Arabia: limited football context available.",
     "knowledge_body": "Spain are profiled as a possession-control side, while Saudi Arabia operate as a uncharacterised team. That interaction most commonly produces the Favorite Dominance script (estimated probability 20%). Spain (possession control) vs Saudi Arabia (unknown) \u2014 no specific interaction pattern identified. Note: knowledge confidence is limited for this matchup \u2014 treat football context as indicative only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -8126,7 +8126,7 @@
     "warnings": [
       "No archetype interaction rule for possession_control vs high_press."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Spain's possession-control identity meets Uruguay's high-press approach \u2014 Favorite Dominance script likely.",
     "knowledge_body": "Spain are profiled as a possession-control side, while Uruguay operate as a high-press team. That interaction most commonly produces the Favorite Dominance script (estimated probability 20%). Bielsa's extreme pressing creates a chaotic, high-tempo match with elevated card and corner risk. Spain (possession control) vs Uruguay (high press) \u2014 no specific interaction pattern identified.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -8240,7 +8240,7 @@
       "No knowledge profile available for away team: tunisia.",
       "No archetype interaction rule for unknown vs unknown."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Sweden vs Tunisia: limited football context available.",
     "knowledge_body": "Neither Sweden nor Tunisia has a seeded knowledge profile. The knowledge layer cannot add football context to this matchup at Stage 1. Thesis signals are model-probability only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -8352,7 +8352,7 @@
     "warnings": [
       "No archetype interaction rule for high_press vs direct_play."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "United States's high-press identity meets Australia's direct-play approach \u2014 Favorite Dominance script likely.",
     "knowledge_body": "United States are profiled as a high-press side, while Australia operate as a direct-play team. That interaction most commonly produces the Favorite Dominance script (estimated probability 20%). United States (high press) vs Australia (direct play) \u2014 no specific interaction pattern identified.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -8465,7 +8465,7 @@
       "No knowledge profile available for away team: paraguay.",
       "No archetype interaction rule for high_press vs unknown."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "United States vs Paraguay: limited football context available.",
     "knowledge_body": "United States are profiled as a high-press side, while Paraguay operate as a uncharacterised team. That interaction most commonly produces the Favorite Dominance script (estimated probability 20%). United States (high press) vs Paraguay (unknown) \u2014 no specific interaction pattern identified. Note: knowledge confidence is limited for this matchup \u2014 treat football context as indicative only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -8578,7 +8578,7 @@
       "No knowledge profile available for away team: turkey.",
       "No archetype interaction rule for high_press vs unknown."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "United States vs Turkey: limited football context available.",
     "knowledge_body": "United States are profiled as a high-press side, while Turkey operate as a uncharacterised team. That interaction most commonly produces the Favorite Dominance script (estimated probability 20%). United States (high press) vs Turkey (unknown) \u2014 no specific interaction pattern identified. Note: knowledge confidence is limited for this matchup \u2014 treat football context as indicative only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."
@@ -8691,7 +8691,7 @@
       "No knowledge profile available for home team: uzbekistan.",
       "No archetype interaction rule for unknown vs possession_control."
     ],
-    "generated_at": "2026-06-23T04:22:26.367777+00:00",
+    "generated_at": "2026-06-23T20:49:19.389378+00:00",
     "knowledge_headline": "Uzbekistan vs Colombia: limited football context available.",
     "knowledge_body": "Uzbekistan are profiled as a uncharacterised side, while Colombia operate as a possession-control team. That interaction most commonly produces the Favorite Dominance script (estimated probability 20%). Uzbekistan (unknown) vs Colombia (possession control) \u2014 no specific interaction pattern identified. Note: knowledge confidence is limited for this matchup \u2014 treat football context as indicative only.",
     "knowledge_key_risk": "Limited football context available for this archetype pair."

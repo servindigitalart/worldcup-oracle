@@ -1,4 +1,4 @@
-.PHONY: install test lint clean ingest-results ingest-fixtures holdout backtest simulate ingest-odds market-baseline blend capture-odds export-web dev-frontend build-frontend test-frontend ingest-results-2026 tournament-state recommendations methodology data-sources calibration-history reliability market-agreement transparency refresh refresh-build refresh-with-market results-feed refresh-live prediction-ledger grading closing-lines bracket betting knowledge knowledge-calibration knowledge-learning thesis
+.PHONY: install test lint clean ingest-results ingest-fixtures holdout backtest simulate ingest-odds market-baseline blend capture-odds export-web dev-frontend build-frontend test-frontend ingest-results-2026 tournament-state recommendations methodology data-sources calibration-history reliability market-agreement transparency refresh refresh-build refresh-with-market results-feed refresh-live prediction-ledger grading closing-lines bracket betting knowledge knowledge-calibration knowledge-learning market-intelligence thesis
 
 install:
 	pip install -e ".[dev]"
@@ -188,6 +188,17 @@ knowledge-calibration:
 #   data/artifacts/knowledge_effective_weights.json
 knowledge-learning:
 	python3 -m oracle.pipeline.knowledge_learning
+
+# Build Market Intelligence artifacts (Week 28).
+# Generates corners, cards, and shots intelligence from football mechanisms.
+# Run 'make knowledge-learning' first (knowledge_effective_weights.json required).
+#
+# Artifacts written:
+#   data/artifacts/market_intelligence_cards.json
+#   data/artifacts/market_intelligence_summary.json
+#   data/artifacts/market_intelligence.parquet
+market-intelligence:
+	python3 -m oracle.pipeline.market_intelligence
 
 # Build betting thesis artifacts (Week 25D MVP).
 # Converts betting card signals into structured market thesis objects.

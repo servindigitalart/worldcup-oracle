@@ -14,7 +14,7 @@
     "evidence_quality": "strong",
     "evidence_source": "seed_v1",
     "stage": "stage_1",
-    "generated_at": "2026-06-23T04:22:26.405102+00:00"
+    "generated_at": "2026-06-23T20:49:19.424219+00:00"
   },
   {
     "script_id": "defensive_siege",
@@ -31,7 +31,7 @@
     "evidence_quality": "moderate",
     "evidence_source": "seed_v1",
     "stage": "stage_1",
-    "generated_at": "2026-06-23T04:22:26.405102+00:00"
+    "generated_at": "2026-06-23T20:49:19.424219+00:00"
   },
   {
     "script_id": "favorite_dominance",
@@ -48,7 +48,7 @@
     "evidence_quality": "moderate",
     "evidence_source": "seed_v1",
     "stage": "stage_1",
-    "generated_at": "2026-06-23T04:22:26.405102+00:00"
+    "generated_at": "2026-06-23T20:49:19.424219+00:00"
   },
   {
     "script_id": "cagey_knockout",
@@ -65,7 +65,7 @@
     "evidence_quality": "moderate",
     "evidence_source": "seed_v1",
     "stage": "stage_1",
-    "generated_at": "2026-06-23T04:22:26.405102+00:00"
+    "generated_at": "2026-06-23T20:49:19.424219+00:00"
   },
   {
     "script_id": "counter_attack_trap",
@@ -82,7 +82,7 @@
     "evidence_quality": "moderate",
     "evidence_source": "seed_v1",
     "stage": "stage_1",
-    "generated_at": "2026-06-23T04:22:26.405102+00:00"
+    "generated_at": "2026-06-23T20:49:19.424219+00:00"
   },
   {
     "script_id": "high_press_feast",
@@ -99,7 +99,7 @@
     "evidence_quality": "moderate",
     "evidence_source": "seed_v1",
     "stage": "stage_1",
-    "generated_at": "2026-06-23T04:22:26.405102+00:00"
+    "generated_at": "2026-06-23T20:49:19.424219+00:00"
   },
   {
     "script_id": "set_piece_war",
@@ -116,7 +116,7 @@
     "evidence_quality": "weak",
     "evidence_source": "seed_v1",
     "stage": "stage_1",
-    "generated_at": "2026-06-23T04:22:26.405102+00:00"
+    "generated_at": "2026-06-23T20:49:19.424219+00:00"
   },
   {
     "script_id": "late_equalizer_pressure",
@@ -133,7 +133,7 @@
     "evidence_quality": "weak",
     "evidence_source": "seed_v1",
     "stage": "stage_1",
-    "generated_at": "2026-06-23T04:22:26.405102+00:00"
+    "generated_at": "2026-06-23T20:49:19.424219+00:00"
   },
   {
     "script_id": "early_goal_chaos",
@@ -150,6 +150,6 @@
     "evidence_quality": "insufficient",
     "evidence_source": "seed_v1",
     "stage": "stage_1",
-    "generated_at": "2026-06-23T04:22:26.405102+00:00"
+    "generated_at": "2026-06-23T20:49:19.424219+00:00"
   }
 ]
